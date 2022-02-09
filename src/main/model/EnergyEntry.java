@@ -13,11 +13,10 @@ public class EnergyEntry {
         this.energyLevel = energyLevel;
     }
 
-    // REQUIRES: neededHours > 0
     // MODIFIES: this
-    // EFFECTS: adds a new task to the collection of tasks to be completed
-    public void editDate(String className, int neededHours) {
-        // stub
+    // EFFECTS: changes value of date
+    public void editDate(Date date) {
+        this.date = date;
     }
 
     // REQUIRES: energyLevel is [1, 10]
