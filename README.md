@@ -20,15 +20,16 @@ such as checking emails into a time when energy levels are the lowest.
 *Why is this project of interest to you?*
 
 This projects interests me as i read the book *When: The Scientific Secrets of Perfect Timing* by Daniel H. Pink, 
-which made me want to track my energy levels so that I can use my time more efficiently by planning my day around these patterns.
+which made me want to track my energy levels so that I can use my time more efficiently by planning my day around 
+these patterns.
 
 ## User Stories
-- As a user, I want to be able to log energy level out of 10 for a certain time of day
-- As a user, I want to be able to quickly log my energy level for my current time of day
-- As a user, I want to be able to view my past logs, ordered by date of energy log
-- As a user, I want to be able to edit and delete my past energy entry logs
-- As a user, I want to be able to view my peak and trough energy times
-- As a user, I want to be able to visualize patterns in my energy levels through graphing my energy levels by time of day
+- As a user, I want to be able to log energy, focus and motivation levels out of 10 for a certain time of day
+- As a user, I want to be able to quickly log my productivity levels for my current time of day
+- As a user, I want to be able to view my past logs, ordered by date of log
+- As a user, I want to be able to edit and delete my past productivity entry logs
+- As a user, I want to be able to view my peak and trough productivity times
+- As a user, I want to be able to visualize patterns in my energy levels through graphs
 
 ### Sources for methods of tracking energy levels
 - https://alifeofproductivity.com/calculate-biological-prime-time/
