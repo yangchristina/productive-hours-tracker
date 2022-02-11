@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
 
-public abstract class ProductivityLog {
+public abstract class ProductivityEntry {
     private LocalDate date;
     private LocalTime time;
     protected int level;
@@ -12,7 +12,7 @@ public abstract class ProductivityLog {
 
     // EFFECTS: creates a new productivity log with current date and uses scanner to take in user entered values
     // for time and level
-    public ProductivityLog() {
+    public ProductivityEntry() {
         scanner = new Scanner(System.in);
         this.date = LocalDate.now(); // cannot be modified
         this.time = enterTime();
@@ -22,9 +22,15 @@ public abstract class ProductivityLog {
     // Effect: returns the label for the log
     public abstract String label();
 
-    // EFFECTS: print out details for the entry
-    public void showDetails() {
-        System.out.println(label() + " level of " + level + " at " + time.toString() + " on " + date.toString());
+    // EFFECTS: print out details for the entry with key
+    public void showDetails(int key) {
+        System.out.println(label() + " level of " + level + " at " + time.toString() + " on " + date.toString()
+                + ". Key: " + key);
+    }
+
+    // EFFECTS: returns details for the entry without key
+    public String showDetails() {
+        return label() + " level of " + level + " at " + time.toString() + " on " + date.toString() + ".";
     }
 
     // MODIFIES: this
