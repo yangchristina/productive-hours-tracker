@@ -2,48 +2,44 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Scanner;
 
 public abstract class ProductivityEntry {
     private LocalDate date;
     private LocalTime time;
     protected int level;
-    protected Scanner scanner;
 
-    // EFFECTS: creates a new productivity log with current date and uses scanner to take in user entered values
-    // for time and level
-    public ProductivityEntry() {
-        scanner = new Scanner(System.in);
-        this.date = LocalDate.now(); // cannot be modified
-        this.time = enterTime();
-        this.level = enterLevel();
+    // EFFECTS: creates a new productivity log given values for date, time and level
+    public ProductivityEntry(LocalDate localDate, LocalTime localTime, int level) {
+        this.date = localDate; // cannot be modified
+        this.time = localTime;
+        this.level = level;
     }
 
-    // Effect: returns the label for the log
+    // EFFECTS: returns the type of entry as a string
     public abstract String label();
 
     // EFFECTS: print out details for the entry with key
-    public void showDetails(int key) {
-        System.out.println(label() + " level of " + level + " at " + time.toString() + " on " + date.toString()
-                + ". Key: " + key);
+    public String description(int key) {
+        return label() + " level of " + level + " at " + time.toString() + " on " + date.toString() + ". Key: " + key;
     }
 
     // EFFECTS: returns details for the entry without key
-    public String showDetails() {
+    public String description() {
         return label() + " level of " + level + " at " + time.toString() + " on " + date.toString() + ".";
     }
 
+    // REQUIRES: time.getMinute() == 0
     // MODIFIES: this
-    // EFFECTS: changes value hour of energy log
-    public void editTime() {
-        this.time = enterTime();
+    // EFFECTS: sets the time to the given value
+    public void editTime(LocalTime time) {
+        this.time = time;
     }
 
     // REQUIRES: energyLevel is [1, 10]
     // MODIFIES: this
-    // EFFECTS: changes value of energy level
-    public void editLevel() {
-        this.level = enterLevel();
+    // EFFECTS: sets the level to the given value
+    public void editLevel(int level) {
+        this.level = level;
     }
 
 // GETTERS
@@ -60,35 +56,5 @@ public abstract class ProductivityEntry {
     // EFFECTS: returns energy level
     public int getLevel() {
         return level;
-    }
-
-// Scanner operations
-    // EFFECTS: Asks user to input a time of day and returns it
-    private LocalTime enterTime() {
-        while (true) {
-            System.out.println("Enter -1 to select right now, otherwise enter the hour [0, 23] you would like to log)");
-            int hour = scanner.nextInt();
-            if (hour == -1) {
-                return LocalTime.of(LocalTime.now().getHour(), 0);
-            } else if (hour >= 0 && hour < 24) {
-                return LocalTime.of(hour, 0);
-            } else {
-                System.out.println("Invalid hour. Please try again.");
-            }
-        }
-    }
-
-    // EFFECTS: Asks user to input value for level and returns it
-    private int enterLevel() {
-        while (true) {
-            System.out.println("Enter your " + label() + " level, out of 10");
-            level = scanner.nextInt();
-            if (level <= 10 && level >= 0) {
-                return level;
-            } else {
-                System.out.println("Invalid " + label() + " level, please try again.");
-            }
-            scanner.nextLine();
-        }
     }
 }
