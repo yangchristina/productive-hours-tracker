@@ -6,10 +6,12 @@ import java.util.Scanner;
 public class UserScanner {
     private Scanner scanner;
 
+    // EFFECTS: constructs a scanner with given scanner
     public UserScanner(Scanner scanner) {
         this.scanner = scanner;
     }
 
+    // EFFECTS: displays and returns operation inputted
     public String operation() {
         String operation = "";
         while (operation.isEmpty()) {
@@ -19,6 +21,7 @@ public class UserScanner {
         return operation;
     }
 
+    // EFFECTS: returns "level", "time" or "quit" depending on input
     public String entryValueToEdit() {
         while (true) {
             System.out.println("Select level, time, or quit");
@@ -31,6 +34,7 @@ public class UserScanner {
         }
     }
 
+    // EFFECTS: returns "all", "energy", "focus", or "motivation", or "cancel" depending on input
     public String entryType() {
         String entryType = "";
         while (!entryType.equals("all") && !entryType.equals("energy") && !entryType.equals("focus")
@@ -41,6 +45,7 @@ public class UserScanner {
         return entryType;
     }
 
+    // EFFECTS: returns the key value of an entry
     public int itemKey() {
         System.out.println("Enter key of item");
         return scanner.nextInt();
