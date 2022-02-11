@@ -5,6 +5,8 @@ import model.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class UserOperations {
@@ -86,8 +88,12 @@ public class UserOperations {
 
     // EFFECTS: selects an entry based on category and key input by user
     private ProductivityEntry selectEntry() {
+        String[] inputOptions = new String[]{"energy", "focus", "motivation", "cancel"};
+        List<String> options = Arrays.asList(inputOptions);
+
         while (true) {
-            String category = input.entryType();
+            String category = input.validateInput(options);
+            System.out.println(category);
             int key = input.itemKey();
 
             try {
@@ -98,11 +104,11 @@ public class UserOperations {
                         return user.getFocusEntries().get(key - 1);
                     case "motivation":
                         return user.getMotivationEntries().get(key - 1);
-                    case "cancel":
+                    default:
                         return null;
                 }
-                invalidInputMessage();
             } catch (Exception e) {
+                System.out.println("exception");
                 invalidInputMessage();
             }
         }
@@ -115,7 +121,10 @@ public class UserOperations {
 
         edit:
         while (true) {
-            String entryValue = input.entryValueToEdit();
+            String[] inputOptions = new String[]{"level", "time", "quit"};
+            List<String> options = Arrays.asList(inputOptions);
+
+            String entryValue = input.validateInput(options);
             switch (entryValue) {
                 case "quit":
                     break edit;
@@ -153,7 +162,10 @@ public class UserOperations {
 
 // Show entries
     private void processShowEntries() {
-        String entryType = input.entryType();
+        String[] inputOptions = new String[]{"all", "energy", "focus", "motivation"};
+        List<String> options = Arrays.asList(inputOptions);
+
+        String entryType = input.validateInput(options);
         switch (entryType) {
             case "all":
                 showAllEntries();
@@ -174,7 +186,7 @@ public class UserOperations {
         System.out.println(productivityEntries.get(0).label() + " entries:");
         int key = 1;
         for (ProductivityEntry entry : productivityEntries) {
-            entry.description(key);
+            System.out.println(entry.description(key));
             key++;
         }
     }
