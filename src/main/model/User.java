@@ -54,21 +54,27 @@ public class User {
 
     // EFFECTS: calculates and returns your biological prime time (calculation method needs work)
     public LocalTime calculateBPT() {
-        int averageHour = (peakHour(energyEntries).getHour() + peakHour(focusEntries).getHour()
-                + peakHour(motivationEntries).getHour()) / 3;
-
-        return LocalTime.of(averageHour, 0);
+        if (peakHour(energyEntries) != null && peakHour(focusEntries) != null
+                && peakHour(motivationEntries) != null) {
+            int averageHour = (peakHour(energyEntries).getHour() + peakHour(focusEntries).getHour()
+                    + peakHour(motivationEntries).getHour()) / 3;
+            return LocalTime.of(averageHour, 0);
+        }
+        return null;
     }
 
     // EFFECTS: returns the first value for time with the max value for level
     private LocalTime peakHour(ArrayList<ProductivityEntry> entries) {
-        ProductivityEntry maxEntry = entries.get(0);
-        for (ProductivityEntry entry : entries) {
-            if (entry.getLevel() > maxEntry.getLevel()) {
-                maxEntry = entry;
+        if (!entries.isEmpty()) {
+            ProductivityEntry maxEntry = entries.get(0);
+            for (ProductivityEntry entry : entries) {
+                if (entry.getLevel() > maxEntry.getLevel()) {
+                    maxEntry = entry;
+                }
             }
+            return maxEntry.getTime();
         }
-        return maxEntry.getTime();
+        return null;
     }
 
     // EFFECTS: returns name

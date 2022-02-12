@@ -1,7 +1,5 @@
 package model;
 
-import ui.UserListScanner;
-
 import java.util.ArrayList;
 
 public class UserList {

@@ -80,4 +80,14 @@ public class UserTest {
 
         assertEquals(0, user.getMotivationEntries().size());
     }
+
+    @Test
+    void testCalculateBPT() {
+        assertNull(user.calculateBPT());
+
+        user.addEntry(energyEntry);
+        user.addEntry(focusEntry);
+        user.addEntry(motivationEntry);
+        assertEquals(9, user.calculateBPT());
+    }
 }
