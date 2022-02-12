@@ -45,6 +45,8 @@ public class UserListTest {
         assertTrue(users.isEmpty());
         users.add(user);
         assertFalse(users.isEmpty());
+
+        assertEquals(users.isEmpty(), users.getUsers().isEmpty());
     }
 
     @Test
@@ -54,5 +56,7 @@ public class UserListTest {
         assertEquals(1, users.size());
         users.add(user);
         assertEquals(2, users.size());
+
+        assertEquals(users.size() ,users.getUsers().size());
     }
 }

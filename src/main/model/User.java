@@ -39,19 +39,14 @@ public class User {
     // MODIFIES: this
     // EFFECTS: removes entry from list
     public boolean removeEntry(ProductivityEntry entry) {
-        try {
-            switch (entry.label()) {
-                case "energy":
-                    return energyEntries.remove(entry);
-                case "focus":
-                    return focusEntries.remove(entry);
-                case "motivation":
-                    return motivationEntries.remove(entry);
-            }
-        } catch (Exception e) {
-            return false;
+        switch (entry.label()) {
+            case "energy":
+                return energyEntries.remove(entry);
+            case "focus":
+                return focusEntries.remove(entry);
+            default:
+                return motivationEntries.remove(entry);
         }
-        return false;
     }
 
 

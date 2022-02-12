@@ -30,6 +30,7 @@ these patterns.
 - As a user, I want to be able to edit and delete my past productivity entry logs
 - As a user, I want to be able to view my peak and trough productivity times
 - As a user, I want to be able to visualize patterns in my energy levels through graphs 
+(cannot be done with console-based application)
 - As a user, I want to be able to log in and log out of my account
 
 ### Sources for methods of tracking energy levels
