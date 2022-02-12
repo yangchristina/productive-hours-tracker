@@ -2,6 +2,9 @@ package model;
 
 import ui.UserListScanner;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ValueRange;
 import java.util.ArrayList;
 
 public class User {
@@ -49,6 +52,24 @@ public class User {
         }
     }
 
+    // EFFECTS: calculates and returns your biological prime time (calculation method needs work)
+    public LocalTime calculateBPT() {
+        int averageHour = (peakHour(energyEntries).getHour() + peakHour(focusEntries).getHour()
+                + peakHour(motivationEntries).getHour()) / 3;
+
+        return LocalTime.of(averageHour, 0);
+    }
+
+    // EFFECTS: returns the first value for time with the max value for level
+    private LocalTime peakHour(ArrayList<ProductivityEntry> entries) {
+        ProductivityEntry maxEntry = entries.get(0);
+        for (ProductivityEntry entry : entries) {
+            if (entry.getLevel() > maxEntry.getLevel()) {
+                maxEntry = entry;
+            }
+        }
+        return maxEntry.getTime();
+    }
 
     // EFFECTS: returns name
     public String getName() {

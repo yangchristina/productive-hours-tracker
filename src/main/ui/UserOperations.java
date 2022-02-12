@@ -154,10 +154,9 @@ public class UserOperations {
         }
     }
 
-    // EFFECTS: calculates and shows your biological prime time
+    // EFFECTS: calculates and shows your biological prime time (method of calculation needs improvement)
     private void showBPT() {
-        System.out.println("Your biological prime time is from ___ to ___");
-        // ...
+        System.out.println("Your biological prime time is at " + user.calculateBPT());
     }
 
 // Show entries
