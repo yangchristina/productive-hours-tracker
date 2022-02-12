@@ -3,6 +3,8 @@ package ui;
 import model.User;
 import model.UserList;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class UserListOperations {
@@ -20,26 +22,28 @@ public class UserListOperations {
 
     // EFFECTS: processes commands input by users
     private void processOperations() {
-        String operation;
-        String loginMessage = "";
+        String[] inputOptions = new String[]{"register", "login", "show users", "quit"};
+        List<String> options = Arrays.asList(inputOptions);
+
+        session:
         while (true) {
+            String operation = input.validateInput(options);
             User user = null;
-            if (!users.isEmpty()) {
-                loginMessage = "login, show users, ";
-            }
-            System.out.println("Please select an option (register, " + loginMessage + "or quit):");
-            operation = input.operation();
-            if (operation.equals("quit")) {
-                break;
-            } else if (operation.equals("register")) {
-                user = registerUser();
-            } else if (operation.equals("login") && !users.isEmpty()) {
-                user = loginUser();
-            } else if (operation.equals("show users") && !users.isEmpty()) {
-                listUsers();
+            switch (operation) {
+                case "quit":  //end process
+                    break session;
+                case "register":
+                    user = registerUser(); // ask again
+                    break;
+                case "login":
+                    user = loginUser();
+                    break;
+                case "show users":
+                    listUsers();
+                    continue;
             }
             if (user != null) {
-                UserOperations userOperations = new UserOperations(user, scanner);
+                new UserOperations(user, scanner);
             }
         }
     }
@@ -70,5 +74,6 @@ public class UserListOperations {
         for (User user : users.getUsers()) {
             System.out.println(user.getName());
         }
+        System.out.println();
     }
 }

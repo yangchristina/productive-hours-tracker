@@ -2,20 +2,13 @@ package ui;
 
 import java.util.Scanner;
 
-public class UserListScanner {
-    private Scanner scanner;
+public class UserListScanner extends ScannerOperations {
 
     // EFFECTS: constructs a scanner with given scanner
     public UserListScanner(Scanner scanner) {
-        this.scanner = scanner;
+        super(scanner);
     }
 
-    // EFFECTS: displays and returns operation inputted
-    public String operation() {
-        String operation = scanner.nextLine();
-        System.out.println("Operation: " + operation);
-        return operation;
-    }
 
     // EFFECTS: asks for and returns input value for name
     public String name() {

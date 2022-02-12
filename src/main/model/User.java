@@ -4,7 +4,6 @@ import ui.UserListScanner;
 
 import java.util.ArrayList;
 
-// contains functions for adding, editing, deleting entries
 public class User {
     private String name;
     private ArrayList<ProductivityEntry> energyEntries;
@@ -19,8 +18,6 @@ public class User {
         this.motivationEntries = new ArrayList<>();
     }
 
-
-// Add entry
     // MODIFIES: this
     // EFFECTS: add given entry to the array it belongs in
     public ProductivityEntry addEntry(ProductivityEntry entry) {
