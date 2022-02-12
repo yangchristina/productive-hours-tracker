@@ -88,6 +88,6 @@ public class UserTest {
         user.addEntry(energyEntry);
         user.addEntry(focusEntry);
         user.addEntry(motivationEntry);
-        assertEquals(9, user.calculateBPT());
+        assertEquals(LocalTime.of(17, 0), user.calculateBPT());
     }
 }
