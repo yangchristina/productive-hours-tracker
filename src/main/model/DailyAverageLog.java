@@ -36,7 +36,8 @@ public class DailyAverageLog {
         log.put(newEntry.getTime(), list);
     }
 
-    // EFFECTS: returns a hashmap like log, but the values are the average of the values of log
+    // MODIFIES: this
+    // EFFECTS: remake averageLog by finding the average for each key in log
     private void updateAveragedLog() {
         TreeMap<LocalTime, Double> averagedLog = new TreeMap<>();
 
@@ -71,8 +72,8 @@ public class DailyAverageLog {
             if (e1 != null && e2.getValue() >= e1.getValue() && e2.getValue() > e.getValue()) {
                 peakHours.add(e2.getKey());
             }
-            e2 = e;
             e1 = e2;
+            e2 = e;
         }
         return peakHours;
     }
