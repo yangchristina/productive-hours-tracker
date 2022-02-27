@@ -41,10 +41,7 @@ public class UserOperations {
                     addEntries();
                     break;
                 case "peak":
-                    showBPT();
-                    break;
-                case "trough":
-                    // ...
+                    showPeakHours();
                     break;
                 case "show":
                     processShowEntries();
@@ -56,7 +53,7 @@ public class UserOperations {
                     removeEntry();
                     break;
                 case "help":
-                    System.out.println("logout, add, peak, trough, show, edit, delete, help");
+                    System.out.println("logout, add, peak, show, edit, delete, help");
                     break;
             }
             System.out.println();
@@ -155,8 +152,14 @@ public class UserOperations {
     }
 
     // EFFECTS: calculates and shows your biological prime time (method of calculation needs improvement)
-    private void showBPT() {
-        System.out.println("Your biological prime time is at " + user.calculateBPT());
+    private void showPeakHours() {
+        String label = input.entryType();
+        ArrayList<LocalTime> peakHours = user.getPeakHours(label);
+        if (peakHours == null) {
+            System.out.println("Not enough " + label + " entries");
+        } else {
+            System.out.println("Your peak " + label + " hours are at " + peakHours);
+        }
     }
 
 // Show entries

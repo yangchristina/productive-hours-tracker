@@ -27,9 +27,6 @@ public class UserTest {
     @Test
     void testConstructor() {
         assertEquals("Chris", user.getName());
-        assertTrue(user.getEnergyEntries().isEmpty());
-        assertTrue(user.getFocusEntries().isEmpty());
-        assertTrue(user.getMotivationEntries().isEmpty());
     }
 
     @Test
@@ -82,12 +79,9 @@ public class UserTest {
     }
 
     @Test
-    void testCalculateBPT() {
-        assertNull(user.calculateBPT());
-
-        user.addEntry(energyEntry);
-        user.addEntry(focusEntry);
-        user.addEntry(motivationEntry);
-        assertEquals(LocalTime.of(17, 0), user.calculateBPT());
+    void testGetPeakHours() {
+        assertNull(user.getPeakHours("energy"));
+        assertNull(user.getPeakHours("focus"));
+        assertNull(user.getPeakHours("motivation"));
     }
 }

@@ -16,6 +16,19 @@ public class UserScanner extends ScannerOperations {
         return key;
     }
 
+    // EFFECTS: returns the key value of an entry
+    public String entryType() {
+        while (true) {
+            System.out.println("Select energy, focus, or motivation");
+            String label = scanner.nextLine();
+            if (label.equals("energy") || label.equals("focus") || label.equals("motivation")) {
+                return label;
+            }
+            System.out.println("Invalid entry. Please try again");
+            System.out.println();
+        }
+    }
+
     // EFFECTS: Asks user to input a time of day and returns it
     public LocalTime time() {
         while (true) {
