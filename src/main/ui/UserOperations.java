@@ -9,10 +9,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+// calls user methods through scanner inputs
 public class UserOperations {
     private User user;
     private UserScanner input;
 
+    // EFFECTS: constructs a UserOperations with a given user and a UserScanner
     public UserOperations(User user, Scanner scanner) {
         this.user = user;
         input = new UserScanner(scanner);
@@ -21,11 +23,13 @@ public class UserOperations {
         System.out.println("End operations");
     }
 
+    // EFFECTS: prints out a message for when the input is invalid
     private void invalidInputMessage() {
         System.out.println("Invalid input. Please try again");
     }
 
     @SuppressWarnings("methodlength")
+    // EFFECTS: calls a method depending on the input value
     private void processOperations() {
         String operation;
 
@@ -60,7 +64,8 @@ public class UserOperations {
         }
     }
 
-    // EFFECTS:
+    // MODIFIES: this
+    // EFFECTS: lets the user enter values to create a new productivity entry, and add it  to the user's log
     private void addEntries() {
         LocalDate localDate = LocalDate.now();
         LocalTime localTime = input.time();
@@ -140,7 +145,7 @@ public class UserOperations {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes selected entry from its array list
+    // EFFECTS: removes selected entry from the productivity log
     public void removeEntry() {
         System.out.println("Operation: remove");
         ProductivityEntry entry = selectEntry();
@@ -151,7 +156,7 @@ public class UserOperations {
         }
     }
 
-    // EFFECTS: calculates and shows your biological prime time (method of calculation needs improvement)
+    // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
     private void showPeakHours() {
         String label = input.entryType();
         ArrayList<LocalTime> peakHours = user.getPeakHours(label);
@@ -162,7 +167,7 @@ public class UserOperations {
         }
     }
 
-// Show entries
+    // EFFECTS: shows the user log indicated by the input options, by calling a method depending on the input
     private void processShowEntries() {
         String[] inputOptions = new String[]{"all", "energy", "focus", "motivation"};
         List<String> options = Arrays.asList(inputOptions);
@@ -184,6 +189,7 @@ public class UserOperations {
         }
     }
 
+    // EFFECTS: prints out the given arraylist for the user to see
     private void showEntries(ArrayList<ProductivityEntry> productivityEntries) {
         System.out.println(productivityEntries.get(0).label() + " entries:");
         int key = 1;
@@ -200,17 +206,17 @@ public class UserOperations {
         showAllMotivationEntries();
     }
 
-    // EFFECTS: shows details for all energy logs !!! try to make these sorted by date??
+    // EFFECTS: shows details for all energy logs
     private void showAllEnergyEntries() { // !!!
         showEntries(user.getEnergyEntries());
     }
 
-    // EFFECTS: shows details for all focus logs !!! try to make these sorted by date??
+    // EFFECTS: shows details for all focus logs
     private void showAllFocusEntries() {
         showEntries(user.getFocusEntries());
     }
 
-    // EFFECTS: shows details for all motivation logs !!! try to make these sorted by date??
+    // EFFECTS: shows details for all motivation logs
     private void showAllMotivationEntries() {
         showEntries(user.getMotivationEntries());
     }

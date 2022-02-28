@@ -9,7 +9,6 @@ public class UserListScanner extends ScannerOperations {
         super(scanner);
     }
 
-
     // EFFECTS: asks for and returns input value for name
     public String name() {
         String name;

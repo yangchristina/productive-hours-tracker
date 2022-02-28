@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 public class UserScanner extends ScannerOperations {
+    // EFFECTS: constructs a UserScanner
     public UserScanner(Scanner scanner) {
         super(scanner);
     }
@@ -55,7 +56,6 @@ public class UserScanner extends ScannerOperations {
     // EFFECTS: Asks user to input value for level and returns it
     public int level(String entryType) {
         while (true) {
-//            int level;
             System.out.println("Enter your " + entryType + " level, out of 10");
             try {
                 int level = scanner.nextInt();

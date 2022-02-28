@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+// the list of all users
 public class UserList {
     private ArrayList<User> users;
 

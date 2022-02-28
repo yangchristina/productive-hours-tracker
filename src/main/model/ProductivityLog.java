@@ -3,6 +3,7 @@ package model;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+// a log of all information related to productivity entries
 public class ProductivityLog {
     private ArrayList<ProductivityEntry> energyEntries;
     private ArrayList<ProductivityEntry> motivationEntries;
@@ -12,6 +13,8 @@ public class ProductivityLog {
     private DailyAverageLog motivationAverages;
     private DailyAverageLog focusAverages;
 
+    // EFFECTS: constructs a ProductivityLog with an empty list of energy entries, focus entreis, and motivation entries
+    //          creates a new DailyAverageLog for each of energy, focus, and motivation
     public ProductivityLog() {
         energyEntries = new ArrayList<>();
         focusEntries = new ArrayList<>();
@@ -23,7 +26,7 @@ public class ProductivityLog {
     }
 
     // MODIFIES: this
-    // EFFECTS: add given entry to the array it belongs in
+    // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
     public void add(ProductivityEntry entry) { //must add it to correct slot!!!
         String entryType = entry.label();
         switch (entryType) {
@@ -43,7 +46,7 @@ public class ProductivityLog {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes entry from list
+    // EFFECTS: removes entry from list, and removes it to DailyAverageLog
     public boolean remove(ProductivityEntry entry) {
         boolean isRemoved;
         switch (entry.label()) {

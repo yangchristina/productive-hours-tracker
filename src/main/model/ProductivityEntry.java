@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+// abstract class for productivity entries, which contain date, time of day, and level
 public abstract class ProductivityEntry {
     private LocalDate date;
     private LocalTime time;

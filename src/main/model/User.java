@@ -1,9 +1,9 @@
 package model;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+// Creates a new user
 public class User {
     private String name;
     private ProductivityLog log;
@@ -26,6 +26,7 @@ public class User {
         return log.remove(entry);
     }
 
+    // EFFECTS: returns an array list of the user's peak hours
     public ArrayList<LocalTime> getPeakHours(String label) {
         return log.getPeakHours(label);
     }

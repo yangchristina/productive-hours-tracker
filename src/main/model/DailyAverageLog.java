@@ -3,7 +3,7 @@ package model;
 import java.time.LocalTime;
 import java.util.*;
 
-//!!!
+// all the entries sorted by time of day, used for calculating patterns such as peak hours
 public class DailyAverageLog {
     private TreeMap<LocalTime, ArrayList<Integer>> log;
     private TreeMap<LocalTime, Double> averagedLog;
