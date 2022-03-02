@@ -1,10 +1,13 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 // abstract class for productivity entries, which contain date, time of day, and level
-public abstract class ProductivityEntry {
+public abstract class ProductivityEntry implements Writable {
     private LocalDate date;
     private LocalTime time;
     protected int level;
@@ -56,5 +59,14 @@ public abstract class ProductivityEntry {
     // EFFECTS: returns level of the entry
     public int getLevel() {
         return level;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("date", date);
+        json.put("time", time);
+        json.put("level", level);
+        return json;
     }
 }

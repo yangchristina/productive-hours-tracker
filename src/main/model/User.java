@@ -1,53 +1,44 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.UUID;
 
 // Creates a new user
-public class User {
+public class User extends ProductivityLog implements Writable {
     private String name;
-    private ProductivityLog log;
+    private UUID id;
 
     // EFFECTS: constructs a user with given name and empty energy, focus and motivation lists
     public User(String name) {
         this.name = name;
-        log = new ProductivityLog();
+        id = UUID.randomUUID();
     }
 
-    // MODIFIES: this
-    // EFFECTS: add given entry to the array it belongs in
-    public void addEntry(ProductivityEntry entry) { //must add it to correct slot!!!
-        log.add(entry);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: removes entry from list
-    public boolean removeEntry(ProductivityEntry entry) {
-        return log.remove(entry);
-    }
-
-    // EFFECTS: returns an array list of the user's peak hours
-    public ArrayList<LocalTime> getPeakHours(String label) {
-        return log.getPeakHours(label);
-    }
-
-    // EFFECTS: returns name
     public String getName() {
         return name;
     }
 
-    // EFFECTS: returns energyEntries
-    public ArrayList<ProductivityEntry> getEnergyEntries() {
-        return log.getEnergyEntries();
+    public UUID getId() {
+        return id;
     }
 
-    // EFFECTS: returns focusEntries
-    public ArrayList<ProductivityEntry> getFocusEntries() {
-        return log.getFocusEntries();
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("id", id);
+        json.put("log", super.toJson());
+        return json;
     }
 
-    // EFFECTS: returns motivationEntries
-    public ArrayList<ProductivityEntry> getMotivationEntries() {
-        return log.getMotivationEntries();
+    public JSONObject idToJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("id", id);
+        return json;
     }
 }

@@ -1,17 +1,21 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 // a log of all information related to productivity entries
-public class ProductivityLog {
-    private ArrayList<ProductivityEntry> energyEntries;
-    private ArrayList<ProductivityEntry> motivationEntries;
-    private ArrayList<ProductivityEntry> focusEntries;
+public class ProductivityLog implements Writable {
+    protected ArrayList<ProductivityEntry> energyEntries;
+    protected ArrayList<ProductivityEntry> motivationEntries;
+    protected ArrayList<ProductivityEntry> focusEntries;
 
-    private DailyAverageLog energyAverages;
-    private DailyAverageLog motivationAverages;
-    private DailyAverageLog focusAverages;
+    protected DailyAverageLog energyAverages;
+    protected DailyAverageLog motivationAverages;
+    protected DailyAverageLog focusAverages;
 
     // EFFECTS: constructs a ProductivityLog with an empty list of energy entries, focus entreis, and motivation entries
     //          creates a new DailyAverageLog for each of energy, focus, and motivation
@@ -107,5 +111,25 @@ public class ProductivityLog {
 
     public ArrayList<ProductivityEntry> getMotivationEntries() {
         return motivationEntries;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("energy", logToJson(energyEntries));
+        json.put("focus", logToJson(focusEntries));
+        json.put("motivation", logToJson(motivationEntries));
+        return json;
+    }
+
+    // EFFECTS: returns items in this log as a JSON array
+    private JSONArray logToJson(ArrayList<ProductivityEntry> log) {
+        JSONArray jsonArray = new JSONArray();
+
+        for (ProductivityEntry entry : log) {
+            jsonArray.put(entry.toJson());
+        }
+
+        return jsonArray;
     }
 }

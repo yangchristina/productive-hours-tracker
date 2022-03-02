@@ -1,9 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
 // the list of all users
-public class UserList {
+public class UserList implements Writable {
     private ArrayList<User> users;
 
     // EFFECTS: constructs an empty user list
@@ -40,5 +44,23 @@ public class UserList {
     // EFFECTS: returns users
     public ArrayList<User> getUsers() {
         return users;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("users", userListToJson());
+        return json;
+    }
+
+    // EFFECTS: returns things in this workroom as a JSON array
+    private JSONArray userListToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (User u : users) {
+            jsonArray.put(u.idToJson());
+        }
+
+        return jsonArray;
     }
 }

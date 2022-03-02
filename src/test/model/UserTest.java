@@ -31,49 +31,49 @@ public class UserTest {
 
     @Test
     void testAddEntry() {
-        user.addEntry(energyEntry);
+        user.add(energyEntry);
         assertEquals(1, user.getEnergyEntries().size());
         assertEquals(energyEntry, user.getEnergyEntries().get(0));
 
-        user.addEntry(focusEntry);
+        user.add(focusEntry);
         assertEquals(1, user.getFocusEntries().size());
         assertEquals(focusEntry, user.getFocusEntries().get(0));
 
-        user.addEntry(motivationEntry);
+        user.add(motivationEntry);
         assertEquals(1, user.getMotivationEntries().size());
         assertEquals(motivationEntry, user.getMotivationEntries().get(0));
 
-        user.addEntry(energyEntry);
+        user.add(energyEntry);
         assertEquals(2, user.getEnergyEntries().size());
     }
 
     @Test
     void testRemoveEntry() {
-        user.addEntry(energyEntry);
-        user.addEntry(energyEntry2);
-        user.addEntry(focusEntry);
-        user.addEntry(motivationEntry);
+        user.add(energyEntry);
+        user.add(energyEntry2);
+        user.add(focusEntry);
+        user.add(motivationEntry);
 
-        assertTrue(user.removeEntry(energyEntry));
+        assertTrue(user.remove(energyEntry));
         assertEquals(1, user.getEnergyEntries().size());
 
-        assertTrue(user.removeEntry(focusEntry));
+        assertTrue(user.remove(focusEntry));
         assertEquals(0, user.getFocusEntries().size());
 
-        assertTrue(user.removeEntry(motivationEntry));
+        assertTrue(user.remove(motivationEntry));
         assertEquals(0, user.getMotivationEntries().size());
     }
 
     @Test
     void testRemoveEntryNotFound() {
-        assertFalse(user.removeEntry(energyEntry));
+        assertFalse(user.remove(energyEntry));
         assertEquals(0, user.getEnergyEntries().size());
 
-        assertFalse(user.removeEntry(focusEntry));
+        assertFalse(user.remove(focusEntry));
         assertEquals(0, user.getFocusEntries().size());
 
-        user.addEntry(focusEntry);
-        assertFalse(user.removeEntry(motivationEntry));
+        user.add(focusEntry);
+        assertFalse(user.remove(motivationEntry));
 
         assertEquals(0, user.getMotivationEntries().size());
     }

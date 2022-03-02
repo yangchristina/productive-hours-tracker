@@ -79,9 +79,9 @@ public class UserOperations {
         int motivationLevel = input.level("motivation");
         MotivationEntry motivationEntry = new MotivationEntry(localDate, localTime, motivationLevel);
 
-        user.addEntry(energyEntry);
-        user.addEntry(focusEntry);
-        user.addEntry(motivationEntry);
+        user.add(energyEntry);
+        user.add(focusEntry);
+        user.add(motivationEntry);
 
         System.out.println("You have added " + energyEntry.description());
         System.out.println("You have added " + focusEntry.description());
@@ -149,7 +149,7 @@ public class UserOperations {
     public void removeEntry() {
         System.out.println("Operation: remove");
         ProductivityEntry entry = selectEntry();
-        boolean isRemoved = user.removeEntry(entry);
+        boolean isRemoved = user.remove(entry);
 
         if (isRemoved) {
             System.out.println("Removed " + entry.description());
