@@ -29,6 +29,20 @@ public class ProductivityLog implements Writable {
         focusAverages = new DailyAverageLog();
     }
 
+    // EFFECTS: constructs a ProductivityLog with an empty list of energy entries, focus entreis, and motivation entries
+    //          creates a new DailyAverageLog for each of energy, focus, and motivation
+    public ProductivityLog(ArrayList<ProductivityEntry> energyEntries,
+                           ArrayList<ProductivityEntry> focusEntries,
+                           ArrayList<ProductivityEntry> motivationEntries) {
+        this.energyEntries = energyEntries;
+        this.focusEntries = focusEntries;
+        this.motivationEntries = motivationEntries;
+
+        energyAverages = new DailyAverageLog(); // !!! don't forget these
+        motivationAverages = new DailyAverageLog();
+        focusAverages = new DailyAverageLog();
+    }
+
     // MODIFIES: this
     // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
     public void add(ProductivityEntry entry) { //must add it to correct slot!!!
@@ -87,6 +101,11 @@ public class ProductivityLog implements Writable {
             default:
                 return motivationAverages.getPeakHours();
         }
+    }
+
+    // EFFECTS: returns true if energyEntries, focusEntries, and motivationEntries are all empty
+    public boolean isEmpty() {
+        return energyEntries.isEmpty() && focusEntries.isEmpty() && motivationEntries.isEmpty();
     }
 
     public DailyAverageLog getEnergyAverages() {

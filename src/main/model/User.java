@@ -12,10 +12,18 @@ public class User extends ProductivityLog implements Writable {
     private String name;
     private UUID id;
 
-    // EFFECTS: constructs a user with given name and empty energy, focus and motivation lists
+    // EFFECTS: constructs a user with given name, a random id, and empty energy, focus and motivation lists
     public User(String name) {
         this.name = name;
         id = UUID.randomUUID();
+    }
+
+    // EFFECTS: constructs a user with given name and id, and empty energy, focus and motivation lists
+    public User(String name, UUID id, ArrayList<ProductivityEntry> energy,
+                ArrayList<ProductivityEntry> focus, ArrayList<ProductivityEntry> motivation) {
+        super(energy, focus, motivation);
+        this.name = name;
+        this.id = id;
     }
 
     public String getName() {

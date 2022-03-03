@@ -15,8 +15,8 @@ public class JsonWriter {
     private String destination;
 
     // EFFECTS: constructs writer to write to destination file
-    public JsonWriter(User user) {
-        destination = "./data/" + user.getId().toString() + ".json";
+    public JsonWriter(String fileName) {
+        destination = "./data/" + fileName + ".json";
     }
 
     // MODIFIES: this
