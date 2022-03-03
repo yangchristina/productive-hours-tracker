@@ -39,7 +39,7 @@ class JsonWriterTest extends JsonTest {
             writer.write(user);
             writer.close();
 
-            JsonReader reader = new JsonReader("testWriterEmptyUser");
+            JsonReadUser reader = new JsonReadUser("testWriterEmptyUser");
             user = reader.read();
             assertEquals("chris", user.getName());
             assertTrue(user.isEmpty());

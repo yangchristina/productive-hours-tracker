@@ -1,5 +1,7 @@
 package ui;
 
+import ui.exceptions.InvalidInputException;
+
 import java.time.LocalTime;
 import java.util.Scanner;
 
@@ -15,6 +17,19 @@ public class UserScanner extends ScannerOperations {
         int key = scanner.nextInt();
         scanner.nextLine();
         return key;
+    }
+
+    // EFFECTS: returns yes or no, depending on userInput
+    public Boolean yesOrNo() throws InvalidInputException {
+        System.out.println(" (enter yes or no)");
+        String ans = scanner.nextLine();
+        if (ans.equals("yes")) {
+            return true;
+        } else if (ans.equals("no")) {
+            return false;
+        } else {
+            throw new InvalidInputException();
+        }
     }
 
     // EFFECTS: returns the key value of an entry

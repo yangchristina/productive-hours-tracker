@@ -28,8 +28,8 @@ public class JsonWriter {
 
     // MODIFIES: this
     // EFFECTS: writes JSON representation of workroom to file
-    public void write(User user) {
-        JSONObject json = user.toJson();
+    public void write(Writable w) {
+        JSONObject json = w.toJson();
         saveToFile(json.toString(TAB));
     }
 

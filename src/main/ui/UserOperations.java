@@ -1,7 +1,10 @@
 package ui;
 
 import model.*;
+import persistence.JsonWriter;
+import ui.exceptions.InvalidInputException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ public class UserOperations {
 
             switch (operation) {
                 case "logout":
+                    promptSave();
                     break session;
                 case "add":
                     addEntries();
@@ -56,8 +60,11 @@ public class UserOperations {
                 case "delete":
                     removeEntry();
                     break;
+                case "save":
+                    save();
+                    break;
                 case "help":
-                    System.out.println("logout, add, peak, show, edit, delete, help");
+                    System.out.println("logout, add, peak, show, edit, delete, save, help");
                     break;
             }
             System.out.println();
@@ -156,6 +163,33 @@ public class UserOperations {
         }
     }
 
+    // EFFECTS: saves user to file
+    public void save() {
+        try {
+            JsonWriter writer = new JsonWriter(user.getId().toString());
+
+            writer.open();
+            writer.write(user);
+            writer.close();
+        } catch (IOException e) {
+            // idk what yet, shouldn't every be thrown cuz no illegal file names, all filenames are uuid
+        }
+    }
+
+    // asks user if they would like to save their session
+    // EFFECTS: if user inputs true, save session, if false don't save, else ask again
+    private void promptSave() {
+        System.out.println("Would you like to save?");
+        try {
+            boolean ans = input.yesOrNo();
+            if (ans) {
+                save();
+            }
+        } catch (InvalidInputException e) {
+            promptSave();
+        }
+    }
+
     // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
     private void showPeakHours() {
         String label = input.entryType();
@@ -191,6 +225,9 @@ public class UserOperations {
 
     // EFFECTS: prints out the given arraylist for the user to see
     private void showEntries(ArrayList<ProductivityEntry> productivityEntries) {
+        if (productivityEntries.isEmpty()) {
+            return;
+        }
         System.out.println(productivityEntries.get(0).label() + " entries:");
         int key = 1;
         for (ProductivityEntry entry : productivityEntries) {
@@ -201,9 +238,11 @@ public class UserOperations {
 
     // EFFECTS: shows details for all entries
     private void showAllEntries() {
+        System.out.println("Your entries are: ");
         showAllEnergyEntries();
         showAllFocusEntries();
         showAllMotivationEntries();
+        System.out.println();
     }
 
     // EFFECTS: shows details for all energy logs
@@ -220,7 +259,5 @@ public class UserOperations {
     private void showAllMotivationEntries() {
         showEntries(user.getMotivationEntries());
     }
-
-
 
 }

@@ -13,8 +13,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class JsonReaderTest extends JsonTest {
 
     @Test
+    // EFFECTS: Read user list from users.json
+    void testReaderUserList() {
+        JsonReadUser reader = new JsonReadUser("users");
+        try {
+            User user = reader.read();
+            assertEquals("name testReaderEmptyUser", user.getName());
+            assertEquals(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), user.getId());
+            assertTrue(user.isEmpty());
+        } catch (IOException e) {
+            fail("Couldn't read from file");
+        }
+    }
+
+
+    @Test
     void testReaderNonExistentFile() {
-        JsonReader reader = new JsonReader("noSuchFile");
+        JsonReadUser reader = new JsonReadUser("noSuchFile");
         try {
             User user = reader.read();
             fail("IOException expected");
@@ -25,7 +40,7 @@ class JsonReaderTest extends JsonTest {
 
     @Test
     void testReaderEmptyUser() {
-        JsonReader reader = new JsonReader("testReaderEmptyUser");
+        JsonReadUser reader = new JsonReadUser("testReaderEmptyUser");
         try {
             User user = reader.read();
             assertEquals("name testReaderEmptyUser", user.getName());
@@ -38,7 +53,7 @@ class JsonReaderTest extends JsonTest {
 
     @Test
     void testReaderGeneralUser() {
-        JsonReader reader = new JsonReader("testReaderGeneralUser");
+        JsonReadUser reader = new JsonReadUser("testReaderGeneralUser");
         try {
             User user = reader.read();
             assertEquals("name testReaderGeneralUser", user.getName());
