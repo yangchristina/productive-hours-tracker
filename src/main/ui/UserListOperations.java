@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserListOperations {
+    private static final List<String> OPTIONS = Arrays.asList(new String[]{"register", "login", "show users", "quit"});
+
     private UserList users;
     private UserListScanner input;
     private Scanner scanner;
@@ -21,18 +23,14 @@ public class UserListOperations {
         users = new UserList(); //!!! read data here
         input = new UserListScanner(scanner);
         processOperations();
-        save();
     }
 
     // MODIFIES: this
-    // EFFECTS: processes commands input by users
+    // EFFECTS: processes operations input by users
     private void processOperations() {
-        String[] inputOptions = new String[]{"register", "login", "show users", "quit"};
-        List<String> options = Arrays.asList(inputOptions);
-
         session:
         while (true) {
-            String operation = input.validateInput(options);
+            String operation = input.validateInput(OPTIONS);
             User user = null;
             switch (operation) {
                 case "quit":  //end process
@@ -47,8 +45,16 @@ public class UserListOperations {
                     listUsers();
                     continue;
             }
-            if (user != null) {
-                new UserOperations(user, scanner);
+            startSessionIfUserValid(user);
+        }
+    }
+
+    // EFFECTS: if user is not null, starts the session for the user. After session, if user was saved, save user list
+    private void startSessionIfUserValid(User user) {
+        if (user != null) {
+            UserOperations operationRecord = new UserOperations(user, scanner);
+            if (operationRecord.wasSaved()) {
+                save();
             }
         }
     }

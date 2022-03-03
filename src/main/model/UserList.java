@@ -13,6 +13,8 @@ import java.util.*;
 
 // the list of all users
 public class UserList implements Writable {
+    public static final String JSON_USER_LIST = "./data/users.json";
+
     private HashMap<String, UUID> users;
 
     // EFFECTS: constructs an empty user list
@@ -30,15 +32,6 @@ public class UserList implements Writable {
     // EFFECTS: adds user's name and id to end of users
     public void add(User user) {
         users.put(user.getName(), user.getId());
-        try {
-            JsonWriter writer = new JsonWriter(user.getId().toString());
-
-            writer.open();
-            writer.write(user);
-            writer.close();
-        } catch (IOException e) {
-            // idk what yet, shouldn't every be thrown cuz no illegal file names, all filenames are uuid
-        }
     }
 
     public User loadUser(String name) throws InvalidUserException {

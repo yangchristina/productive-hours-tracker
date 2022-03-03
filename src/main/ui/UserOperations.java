@@ -16,11 +16,13 @@ import java.util.Scanner;
 public class UserOperations {
     private User user;
     private UserScanner input;
+    private boolean wasSaved;
 
     // EFFECTS: constructs a UserOperations with a given user and a UserScanner
     public UserOperations(User user, Scanner scanner) {
         this.user = user;
         input = new UserScanner(scanner);
+        wasSaved = false;
         System.out.println("Welcome " + user.getName() + "!");
         processOperations();
         System.out.println("End operations");
@@ -34,12 +36,13 @@ public class UserOperations {
     @SuppressWarnings("methodlength")
     // EFFECTS: calls a method depending on the input value
     private void processOperations() {
-        String operation;
+        String[] inputOptions = new String[]{"logout", "add", "peak", "show", "edit", "delete", "save", "help"};
+        List<String> options = Arrays.asList(inputOptions);
 
         session:
         while (true) {
             System.out.println("Type command or enter help to see commands:");
-            operation = input.operation();
+            String operation = input.validateInput(options);
 
             switch (operation) {
                 case "logout":
@@ -171,6 +174,8 @@ public class UserOperations {
             writer.open();
             writer.write(user);
             writer.close();
+
+            wasSaved = true;
         } catch (IOException e) {
             // idk what yet, shouldn't every be thrown cuz no illegal file names, all filenames are uuid
         }
@@ -260,4 +265,7 @@ public class UserOperations {
         showEntries(user.getMotivationEntries());
     }
 
+    public boolean wasSaved() {
+        return wasSaved;
+    }
 }

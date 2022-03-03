@@ -11,7 +11,7 @@ import java.util.UUID;
 public class JsonReadUserList extends JsonReader {
 
     public JsonReadUserList() {
-        super("./data/users.json");
+        super(UserList.JSON_USER_LIST);
     }
 
     // EFFECTS: reads user list from file, parses it, and returns it;
