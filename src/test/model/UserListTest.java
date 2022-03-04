@@ -1,6 +1,7 @@
 package model;
 
 import model.exceptions.InvalidUserException;
+import model.exceptions.UserAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReadUserList;
@@ -56,6 +57,30 @@ public class UserListTest {
             assertEquals(USER2_ID, users.getUserId("test user 2"));
         } catch (InvalidUserException e) {
             fail("User wasn't added to list");
+        }
+    }
+
+    @Test
+    void testRegisterNewUser() {
+        clearUsers(users);
+
+        try {
+            users.register(user);
+            assertTrue(users.getNames().contains(user.getName()));
+            assertEquals(1, users.size());
+        } catch (UserAlreadyExistsException e) {
+            fail("user already there");
+        }
+    }
+
+    @Test
+    void testRegisterOldUser() {
+        users.add(user);
+        try {
+            users.register(user);
+            fail("Exception should have been thrown");
+        } catch (UserAlreadyExistsException e) {
+            // expected
         }
     }
 

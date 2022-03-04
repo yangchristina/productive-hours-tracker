@@ -1,6 +1,7 @@
 package model;
 
 import model.exceptions.InvalidUserException;
+import model.exceptions.UserAlreadyExistsException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.JsonReadUser;
@@ -18,6 +19,14 @@ public class UserList implements Writable {
     // EFFECTS: constructs an empty user list
     public UserList(HashMap<String, UUID> userList) {
         users = userList;
+    }
+
+    // EFFECTS: if user is not in users, then add it to users, else throw
+    public void register(User user) throws UserAlreadyExistsException {
+        if (users.get(user.getName()) != null) {
+            throw new UserAlreadyExistsException();
+        }
+        add(user);
     }
 
     // MODIFIES: this

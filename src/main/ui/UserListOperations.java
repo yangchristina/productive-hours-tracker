@@ -3,6 +3,7 @@ package ui;
 import model.User;
 import model.UserList;
 import model.exceptions.InvalidUserException;
+import model.exceptions.UserAlreadyExistsException;
 import persistence.JsonReadUserList;
 import persistence.JsonWriter;
 import java.io.IOException;
@@ -74,7 +75,12 @@ public class UserListOperations {
     public User registerUser() { //put in UserList
         String name = input.name();
         User user = new User(name);
-        users.add(user);
+        try {
+            users.register(user);
+        } catch (UserAlreadyExistsException e) {
+            user = null;
+        }
+
         return user;
     }
 
