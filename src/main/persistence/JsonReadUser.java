@@ -10,6 +10,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
+// code based on JsonSerializationDemo repository, link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+// Reads data for user
 public class JsonReadUser extends JsonReader {
     // EFFECTS: constructs reader to read from a user's source file
     public JsonReadUser(String fileName) {

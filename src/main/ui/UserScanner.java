@@ -5,6 +5,7 @@ import ui.exceptions.InvalidInputException;
 import java.time.LocalTime;
 import java.util.Scanner;
 
+// all the scanner operations used by UserOperations
 public class UserScanner extends ScannerOperations {
     // EFFECTS: constructs a UserScanner
     public UserScanner(Scanner scanner) {

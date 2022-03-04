@@ -3,16 +3,17 @@ package model;
 import java.time.LocalTime;
 import java.util.*;
 
-// all the entries sorted by time of day, used for calculating patterns such as peak hours
+// includes a log of all levels sorted by entry type and time of day
 public class DailyAverageLog extends ProductivityLog {
     private HashMap<String, TreeMap<LocalTime, ArrayList<Integer>>> log;
     
-    // EFFECTS: constructs AverageLevelsByTime with an empty list of productivity entries
+    // EFFECTS: constructs DailyAverageLog with an empty list of productivity entries and empty log
     public DailyAverageLog() {
         log = createEmptyLog();
     }
 
-    // EFFECTS: constructs AverageLevelsByTime with an given list of productivity entries
+    // EFFECTS: constructs DailyAverageLog with a given list of productivity entries,
+    //          and a log of levels by time of day, which is calculated from the productivity entries
     public DailyAverageLog(ArrayList<ProductivityEntry> energy,
                            ArrayList<ProductivityEntry> focus, 
                            ArrayList<ProductivityEntry> motivation) {
@@ -41,6 +42,7 @@ public class DailyAverageLog extends ProductivityLog {
         return log;
     }
 
+    // MODIFIES: this
     // EFFECTS: constructs and returns a new array sorted by entry type, and containing all levels for each hour of day
     private HashMap<String, TreeMap<LocalTime, ArrayList<Integer>>> initiateLog(ArrayList<ProductivityEntry> entries) {
         log = createEmptyLog();
@@ -66,7 +68,6 @@ public class DailyAverageLog extends ProductivityLog {
     }
 
     @Override
-    // REQUIRES: log.get(newEntry.getTime()) contains newEntry.getLevel()
     // MODIFIES: this
     // EFFECTS: adds an entry log for its time of day
     public boolean remove(ProductivityEntry entry) {
@@ -75,9 +76,6 @@ public class DailyAverageLog extends ProductivityLog {
             ArrayList<Integer> levels = getLevels(entry);
             levels.remove(Integer.valueOf(entry.getLevel()));
         }
-//        ArrayList<Integer> list = log.get(newEntry.getTime());
-//        list.remove(Integer.valueOf(newEntry.getLevel()));
-//        log.put(newEntry.getTime(), list);
         return isRemoved;
     }
 
@@ -91,25 +89,7 @@ public class DailyAverageLog extends ProductivityLog {
         return log.get(entryType).get(time);
     }
 
-    //!!! i am here
-    // MODIFIES: this
-    // EFFECTS: remake averageLog by finding the average for each key in log
-//    private void updateAveragedLog() {
-//        TreeMap<LocalTime, Double> averagedLog = new TreeMap<>();
-//
-//        for (Map.Entry<LocalTime, ArrayList<Integer>> e : log.entrySet()) {
-//            OptionalDouble average = e.getValue()
-//                    .stream()
-//                    .mapToDouble(a -> a)
-//                    .average();
-//            if (!average.isPresent()) {
-//                continue;
-//            }
-//            averagedLog.put(e.getKey(), average.getAsDouble());
-//        }
-//        this.averagedLog = averagedLog;
-//    }
-
+    // EFFECTS: returns a map of the average level for each time and entry type
     public HashMap<String, TreeMap<LocalTime, Integer>> getAverageLog() {
         HashMap<String, TreeMap<LocalTime, Integer>> averageLog = new HashMap<>();
 
@@ -120,7 +100,9 @@ public class DailyAverageLog extends ProductivityLog {
         return averageLog;
     }
 
-    private TreeMap<LocalTime, Integer> getDailyAverages(String entryType, TreeMap<LocalTime, ArrayList<Integer>> tree) {
+    // EFFECTS: returns map of tree where each value in array list is averaged
+    private TreeMap<LocalTime, Integer> getDailyAverages(String entryType, TreeMap<LocalTime,
+            ArrayList<Integer>> tree) {
         TreeMap<LocalTime, Integer> averagedTree = new TreeMap<>();
 
         Set<LocalTime> keys = tree.keySet();
@@ -141,14 +123,6 @@ public class DailyAverageLog extends ProductivityLog {
             sum += i;
         }
         return sum / levels.size();
-//        OptionalDouble average = levels
-//                    .stream()
-//                    .mapToDouble(a -> a)
-//                    .average();
-//        if (average.isPresent()) {
-//            return average.getAsDouble();
-//        }
-//        return 0;
     }
 
     // EFFECTS: gets peaks and troughs for all entry types
@@ -186,26 +160,6 @@ public class DailyAverageLog extends ProductivityLog {
         peaksAndTroughs.put("trough", troughHours);
         return peaksAndTroughs;
     }
-    
-//    // EFFECTS: returns an arraylist of all the peak values, which are values where the hour before and after have
-//    //          lower levels
-//    public ArrayList<LocalTime> getPeakHours() {
-//        HashMap<String, TreeMap<LocalTime, Integer>> averageLog = getAverageLog();
-//
-//        ArrayList<LocalTime> peakHours = new ArrayList<>();
-//
-//        Map.Entry<LocalTime, Double> e1 = null;
-//        Map.Entry<LocalTime, Double> e2 = null;
-//
-//        for (Map.Entry<LocalTime, Double> e : averagedLog.entrySet()) {
-//            if (e1 != null && e2.getValue() >= e1.getValue() && e2.getValue() > e.getValue()) {
-//                peakHours.add(e2.getKey());
-//            }
-//            e1 = e2;
-//            e2 = e;
-//        }
-//        return peakHours;
-//    }
 
     public HashMap<String, TreeMap<LocalTime, ArrayList<Integer>>> getLog() {
         return log;

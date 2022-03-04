@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
+// code based on JsonSerializationDemo repository, link: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+// Reads data for user list from user.json
 public class JsonReadUserList extends JsonReader {
 
     public JsonReadUserList() {

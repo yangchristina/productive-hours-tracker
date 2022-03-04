@@ -5,13 +5,12 @@ import model.UserList;
 import model.exceptions.InvalidUserException;
 import persistence.JsonReadUserList;
 import persistence.JsonWriter;
-
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+// calls user list methods through scanner inputs
 public class UserListOperations {
     private static final List<String> OPS = Arrays.asList("register", "login", "show users", "quit");
 
@@ -111,7 +110,7 @@ public class UserListOperations {
             writer.write(users);
             writer.close();
         } catch (IOException e) {
-            // !!!
+            System.out.println("fight ");
         }
     }
 }

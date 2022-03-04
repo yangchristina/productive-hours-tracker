@@ -26,6 +26,7 @@ public class UserList implements Writable {
         users.put(user.getName(), user.getId());
     }
 
+    // EFFECTS: loads user from file by name and returns it
     public User loadUser(String name) throws InvalidUserException {
         UUID userID = getUserId(name); // throws InvalidUserException if name is invalid
 
@@ -33,8 +34,7 @@ public class UserList implements Writable {
         try {
             return reader.read();
         } catch (IOException e) {
-            // this exception shouldn't ever be caught cuz all valid users have a file
-            return null; // !!! might want to add an exception here
+            return null; // this exception shouldn't ever be caught cuz all valid users have a file
         }
     }
 

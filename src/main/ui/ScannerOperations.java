@@ -3,6 +3,7 @@ package ui;
 import java.util.List;
 import java.util.Scanner;
 
+// contains the scanner operations, returns the input if it is valid
 public class ScannerOperations {
     protected Scanner scanner;
 

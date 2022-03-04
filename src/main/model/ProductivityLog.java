@@ -30,25 +30,6 @@ public class ProductivityLog implements Writable {
         this.motivationEntries = motivationEntries;
     }
 
-    // get data by
-    // I want to be able to graph my energy levels, focus levels, and productivity levels throughout the day separately
-    // I want to be able see only my energy levels or focus, or motivation
-    // I want to be able to see my average energy level log, average focus level log, etc.
-    // I want to be able to see my average producitivity levels throughout the day (averaged of all three)
-//    private void updateDailyAverageLog() {
-//        //entry has
-//        // date
-//        // time
-//        // level
-//        // label
-//        // want to sort by label or time
-//        TreeMap<LocalTime, int> dailyEnergyMap
-////        dailyAverageLog.add
-//        for (ProductivityEntry entry : energyEntries) {
-//
-//        }
-//    }
-
     // MODIFIES: this
     // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
     public void add(ProductivityEntry entry) { //must add it to correct slot!!!
@@ -83,25 +64,12 @@ public class ProductivityLog implements Writable {
         }
     }
 
-
-//    // REQUIRES: label is "energy", "focus", or "motivation"
-//    // EFFECTS: returns the peak hours for the entry list selected
-//    public ArrayList<LocalTime> getPeakHours(String label) {
-//        switch (label) {
-//            case "energy":
-//                return energyAverages.getPeakHours();
-//            case "focus":
-//                return focusAverages.getPeakHours();
-//            default:
-//                return motivationAverages.getPeakHours();
-//        }
-//    }
-
     // EFFECTS: returns true if energyEntries, focusEntries, and motivationEntries are all empty
     public boolean isEmpty() {
         return energyEntries.isEmpty() && focusEntries.isEmpty() && motivationEntries.isEmpty();
     }
 
+    // EFFECTS: returns an array with all the values in energyEntries, focusEntries, and motivationEntries
     public ArrayList<ProductivityEntry> getAllEntries() {
         ArrayList<ProductivityEntry> combined = new ArrayList<>();
 
@@ -111,18 +79,6 @@ public class ProductivityLog implements Writable {
 
         return combined;
     }
-
-//    public DailyAverageLog getEnergyAverages() {
-//        return energyAverages;
-//    }
-//
-//    public DailyAverageLog getFocusAverages() {
-//        return focusAverages;
-//    }
-//
-//    public DailyAverageLog getMotivationAverages() {
-//        return motivationAverages;
-//    }
 
     public ArrayList<ProductivityEntry> getEnergyEntries() {
         return energyEntries;

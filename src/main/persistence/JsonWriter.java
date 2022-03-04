@@ -1,6 +1,5 @@
 package persistence;
 
-import model.User;
 import org.json.JSONObject;
 
 import java.io.File;

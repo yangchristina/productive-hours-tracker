@@ -2,6 +2,7 @@ package ui;
 
 import java.util.Scanner;
 
+// scanner operations used by UserListOperations
 public class UserListScanner extends ScannerOperations {
 
     // EFFECTS: constructs a scanner with given scanner
