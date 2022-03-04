@@ -33,7 +33,7 @@ these patterns.
 (cannot be done with console-based application)
 - As a user, I want to be able to log in and log out of my account 
 - As a user, I want to be able to save all my user information, which includes all my productivity logs, to file 
-- As a user, I want to be able to be able to load my user data from file
+- As a user, I want my user data to be loaded from file when I log in
 
 ### Sources for methods of tracking energy levels
 - https://alifeofproductivity.com/calculate-biological-prime-time/
