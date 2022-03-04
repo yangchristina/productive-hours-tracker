@@ -3,12 +3,11 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
 // Creates a new user
-public class User extends ProductivityLog implements Writable {
+public class User extends DailyAverageLog implements Writable {
     private String name;
     private UUID id;
 
@@ -40,13 +39,6 @@ public class User extends ProductivityLog implements Writable {
         json.put("name", name);
         json.put("id", id);
         json.put("log", super.toJson());
-        return json;
-    }
-
-    public JSONObject idToJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("id", id);
         return json;
     }
 }

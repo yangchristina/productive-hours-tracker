@@ -5,11 +5,16 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
+    private static final UUID USER_ID = UUID.randomUUID();
+
     private User user;
+    private User user2;
     private EnergyEntry energyEntry;
     private EnergyEntry energyEntry2;
     private FocusEntry focusEntry;
@@ -18,20 +23,30 @@ public class UserTest {
     @BeforeEach
     void runBefore() {
         user = new User("Chris");
-        energyEntry = new EnergyEntry(LocalDate.now(), LocalTime.now(), 9);
-        energyEntry2 = new EnergyEntry(LocalDate.now(), LocalTime.now(), 9);
-        focusEntry = new FocusEntry(LocalDate.now(), LocalTime.now(), 8);
-        motivationEntry = new MotivationEntry(LocalDate.now(), LocalTime.now(), 10);
+        user2 = new User("Tina", USER_ID, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+
+        energyEntry = new EnergyEntry(LocalDate.now(), LocalTime.of(10, 0), 9);
+        energyEntry2 = new EnergyEntry(LocalDate.now(), LocalTime.of(12, 0), 9);
+        focusEntry = new FocusEntry(LocalDate.now(), LocalTime.of(13, 0), 8);
+        motivationEntry = new MotivationEntry(LocalDate.now(), LocalTime.of(15, 0), 10);
     }
 
     @Test
-    void testConstructor() {
+    void testConstructorNoParams() {
         assertEquals("Chris", user.getName());
     }
 
     @Test
-    void testAddEntry() {
+    void testConstructorWithParams() {
+        assertEquals("Tina", user2.getName());
+        assertEquals(USER_ID, user2.getId());
+    }
+
+    @Test
+    void testAdd() {
         user.add(energyEntry);
+//        user.
+
         assertEquals(1, user.getEnergyEntries().size());
         assertEquals(energyEntry, user.getEnergyEntries().get(0));
 
@@ -79,9 +94,7 @@ public class UserTest {
     }
 
     @Test
-    void testGetPeakHours() {
-        assertNull(user.getPeakHours("energy"));
-        assertNull(user.getPeakHours("focus"));
-        assertNull(user.getPeakHours("motivation"));
+    void testIdToJson() {
+
     }
 }

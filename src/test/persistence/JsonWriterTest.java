@@ -1,10 +1,7 @@
 package persistence;
 
 
-import model.EnergyEntry;
-import model.FocusEntry;
-import model.MotivationEntry;
-import model.User;
+import model.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -30,7 +27,28 @@ class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterEmptyWorkroom() {
+    void testWriterUserList() {
+        JsonReadUserList reader = new JsonReadUserList();
+
+        try {
+            UserList users = new UserList(reader.read());
+            User user = new User("test");
+            users.add(user);
+
+            JsonWriter writer = new JsonWriter("users");
+            writer.open();
+            writer.write(users);
+            writer.close();
+
+            users = new UserList(reader.read());
+            assertTrue(users.getNames().contains(user.getName()));
+        } catch (IOException e) {
+            fail("file not found");
+        }
+    }
+
+    @Test
+    void testWriterEmptyUser() {
         try {
             User user = new User("chris");
 //            JsonWriter writer = new JsonWriter(user.getId().toString()); !!! normally do like this
@@ -64,14 +82,6 @@ class JsonWriterTest extends JsonTest {
             writer.write(user);
             writer.close();
 
-//            JsonReader reader = new JsonReader("testWriterGeneralWorkroom");
-//            user = reader.read();
-//            assertEquals("chris", user.getName());
-//
-//            List<Thingy> thingies = wr.getThingies();
-//            assertEquals(2, thingies.size());
-//            checkThingy("saw", Category.METALWORK, thingies.get(0));
-//            checkThingy("needle", Category.STITCHING, thingies.get(1));
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }

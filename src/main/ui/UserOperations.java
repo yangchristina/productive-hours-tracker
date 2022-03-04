@@ -14,6 +14,10 @@ import java.util.Scanner;
 
 // calls user methods through scanner inputs
 public class UserOperations {
+    private static final List<String> OPS = Arrays.asList(
+            "logout", "add", "peak", "show", "edit", "delete", "save", "help"
+    );
+
     private User user;
     private UserScanner input;
     private boolean wasSaved;
@@ -36,13 +40,10 @@ public class UserOperations {
     @SuppressWarnings("methodlength")
     // EFFECTS: calls a method depending on the input value
     private void processOperations() {
-        String[] inputOptions = new String[]{"logout", "add", "peak", "show", "edit", "delete", "save", "help"};
-        List<String> options = Arrays.asList(inputOptions);
-
         session:
         while (true) {
             System.out.println("Type command or enter help to see commands:");
-            String operation = input.validateInput(options);
+            String operation = input.validateInput(OPS);
 
             switch (operation) {
                 case "logout":
@@ -198,7 +199,7 @@ public class UserOperations {
     // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
     private void showPeakHours() {
         String label = input.entryType();
-        ArrayList<LocalTime> peakHours = user.getPeakHours(label);
+        ArrayList<LocalTime> peakHours = user.getPeaksAndTroughs(label).get("peaks");
         if (peakHours == null) {
             System.out.println("Not enough " + label + " entries");
         } else {

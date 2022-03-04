@@ -4,8 +4,6 @@ import model.exceptions.InvalidUserException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.JsonReadUser;
-import persistence.JsonReadUserList;
-import persistence.JsonWriter;
 import persistence.Writable;
 
 import java.io.IOException;
@@ -18,14 +16,8 @@ public class UserList implements Writable {
     private HashMap<String, UUID> users;
 
     // EFFECTS: constructs an empty user list
-    public UserList() {
-        JsonReadUserList reader = new JsonReadUserList();
-        try {
-            users = reader.read();
-        } catch (IOException e) {
-            //when does this happen???, shouldn't ever happen cuz data/users.json (should) always exist
-            users = new HashMap<>();
-        }
+    public UserList(HashMap<String, UUID> userList) {
+        users = userList;
     }
 
     // MODIFIES: this
@@ -53,6 +45,17 @@ public class UserList implements Writable {
             throw new InvalidUserException();
         }
         return id;
+    }
+
+    // EFFECTS: removes user and returns true if user is in list, else returns false
+    public boolean remove(User user) {
+        return remove(user.getName());
+    }
+
+    // EFFECTS: if name is in list, remove it and return true, else return false
+    public boolean remove(String name) {
+        UUID removed = users.remove(name);
+        return removed != null;
     }
 
     // EFFECTS: returns number of users

@@ -3,15 +3,17 @@ package ui;
 import model.User;
 import model.UserList;
 import model.exceptions.InvalidUserException;
+import persistence.JsonReadUserList;
 import persistence.JsonWriter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
 public class UserListOperations {
-    private static final List<String> OPTIONS = Arrays.asList(new String[]{"register", "login", "show users", "quit"});
+    private static final List<String> OPS = Arrays.asList("register", "login", "show users", "quit");
 
     private UserList users;
     private UserListScanner input;
@@ -20,7 +22,15 @@ public class UserListOperations {
     // EFFECTS: constructs an empty user list and initializes scanner and UserListScanner
     public UserListOperations() {
         scanner = new Scanner(System.in);
-        users = new UserList(); //!!! read data here
+
+        JsonReadUserList reader = new JsonReadUserList();
+        try {
+            users = new UserList(reader.read()); //!!! read data here
+        } catch (IOException e) {
+            //maybe write ome?
+            //when does this happen???, shouldn't ever happen cuz data/users.json (should) always exist
+        }
+
         input = new UserListScanner(scanner);
         processOperations();
     }
@@ -30,7 +40,7 @@ public class UserListOperations {
     private void processOperations() {
         session:
         while (true) {
-            String operation = input.validateInput(OPTIONS);
+            String operation = input.validateInput(OPS);
             User user = null;
             switch (operation) {
                 case "quit":  //end process
