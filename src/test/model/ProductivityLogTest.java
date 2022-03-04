@@ -93,6 +93,11 @@ public class ProductivityLogTest {
                 + log2.getMotivationEntries().size(), log2.getAllEntries().size());
     }
 
+    @Test
+    void testIsEmpty() {
+        assertTrue(log.isEmpty());
+    }
+
     // EFFECTS: creates and returns a sample energy list
     private ArrayList<ProductivityEntry> createEnergyList() {
         ArrayList<ProductivityEntry> list = new ArrayList<>();
