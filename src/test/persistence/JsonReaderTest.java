@@ -51,11 +51,11 @@ class JsonReaderTest extends JsonTest {
 
     @Test
     void testReaderGeneralUser() {
-        JsonReadUser reader = new JsonReadUser("testReaderGeneralUser");
+        JsonReadUser reader = new JsonReadUser("11111111-1111-1111-1111-111111111111");
         try {
             User user = reader.read();
             assertEquals("name testReaderGeneralUser", user.getName());
-            assertEquals(UUID.fromString("123e4567-e89b-12d3-a456-426614174001"), user.getId());
+            assertEquals(UUID.fromString("11111111-1111-1111-1111-111111111111"), user.getId());
             assertFalse(user.isEmpty());
 
             assertEquals(2, user.getEnergyEntries().size());
