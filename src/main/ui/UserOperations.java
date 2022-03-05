@@ -15,7 +15,7 @@ import java.util.Scanner;
 // calls user methods through scanner inputs
 public class UserOperations {
     private static final List<String> OPS = Arrays.asList(
-            "logout", "add", "peak", "show", "edit", "delete", "save", "help"
+            "logout", "add", "peak", "trough", "show", "edit", "delete", "save", "help"
     );
 
     private User user;
@@ -54,6 +54,9 @@ public class UserOperations {
                     break;
                 case "peak":
                     showPeakHours();
+                    break;
+                case "trough":
+                    showTroughHours();
                     break;
                 case "show":
                     processShowEntries();
@@ -199,11 +202,22 @@ public class UserOperations {
     // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
     private void showPeakHours() {
         String label = input.entryType();
-        ArrayList<LocalTime> peakHours = user.getPeaksAndTroughs(label).get("peaks");
-        if (peakHours == null) {
+        ArrayList<LocalTime> peakHours = user.getPeaksAndTroughs(label).get("peak");
+        if (peakHours.isEmpty()) {
             System.out.println("Not enough " + label + " entries");
         } else {
             System.out.println("Your peak " + label + " hours are at " + peakHours);
+        }
+    }
+
+    // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
+    private void showTroughHours() {
+        String label = input.entryType();
+        ArrayList<LocalTime> troughHours = user.getPeaksAndTroughs(label).get("trough");
+        if (troughHours.isEmpty()) {
+            System.out.println("Not enough " + label + " entries");
+        } else {
+            System.out.println("Your trough " + label + " hours are at " + troughHours);
         }
     }
 
