@@ -96,6 +96,8 @@ public class ProductivityLogTest {
     @Test
     void testIsEmpty() {
         assertTrue(log.isEmpty());
+        log.add(focusEntry);
+        assertFalse(log.isEmpty());
     }
 
     // EFFECTS: creates and returns a sample energy list
