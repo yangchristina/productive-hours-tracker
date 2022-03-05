@@ -79,8 +79,9 @@ public class UserListOperations {
             users.register(user);
         } catch (UserAlreadyExistsException e) {
             user = null;
+            System.out.println("User already exists");
+            System.out.println();
         }
-
         return user;
     }
 
