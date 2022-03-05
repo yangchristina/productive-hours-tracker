@@ -150,11 +150,7 @@ public class UserListTest {
 
     @Test
     void testIsEmpty() {
-        // clear users first
-        Set<String> names = new HashSet<>(users.getNames());
-        for (String name : names) {
-            users.remove(name);
-        }
+        clearUsers(users);
 
         assertTrue(users.isEmpty());
         users.add(user);
