@@ -11,80 +11,85 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class LoggedOutGUI {
-    private static final JLabel LABEL = new JLabel("Enter Text");
+
     private JTextField tf;
-    private JButton login;
-    private JButton register;
     private JPanel panel;
     private UserList users;
     private JFrame frame;
 
     public LoggedOutGUI() {
+        initUserList();
+        initPanel();
+        initFrame();
+    }
+
+    private void initUserList() {
         JsonReadUserList reader = new JsonReadUserList();
         try {
             users = new UserList(reader.read()); //!!! read data here
         } catch (IOException e) {
-            //maybe write ome?
-            //when does this happen???, shouldn't ever happen cuz data/users.json (should) always exist
+            // shouldn't ever happen cuz data/users.json (should) always exist, maybe rewrite user.json
         }
+    }
 
+    private void initPanel() {
         panel = new JPanel(); // the panel is not visible in output
+        initInput();
+        initButtons();
+    }
 
+    private void initInput() {
+        JLabel label = new JLabel("Enter Text");
         tf = new JTextField(10); // accepts up to 10 characters
+        panel.add(label);
+        panel.add(tf);
+    }
 
-        login = new JButton(new AbstractAction("Login") {
+    private void initButtons() {
+        JButton login = new JButton(new AbstractAction("Login") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(tf.getText());
                 loginUser(tf.getText());
             }
         });
+        panel.add(login);
 
-        register = new JButton(new AbstractAction("Register") {
+        JButton register = new JButton(new AbstractAction("Register") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 registerUser(tf.getText());
             }
         });
-
-        addComponentsToPanel();
-
-        frame = new JFrame("Testing");
-        initializeFrame(frame, panel);
+        panel.add(register);
     }
 
-    public void initializeFrame(JFrame frame, JPanel panel) {
+    private void initFrame() {
+        frame = new JFrame("Login page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(panel);
         frame.pack();
         frame.setSize(1200,900);
-        frame.setVisible(true);
-    }
 
-    public void addComponentsToPanel() {
-        panel.add(LABEL);
-        panel.add(tf);
-        panel.add(login);
-        panel.add(register);
+        frame.add(panel);
+        frame.setVisible(true);
     }
 
     // REQUIRES: user is not yet in user list, name is not the empty string
     // MODIFIES: this
     // EFFECTS: adds user to end of user list
-    public User registerUser(String name) { //put in UserList
+    private void registerUser(String name) { //put in UserList
         User user = new User(name);
         try {
             users.register(user);
+            startSession(user);
         } catch (UserAlreadyExistsException e) {
-            user = null;
             System.out.println("User already exists");
-            System.out.println();
+            JOptionPane.showMessageDialog(panel, "Name taken, please choose a different name");
         }
-        return user;
     }
 
     // EFFECTS: returns user with the given name, or null if there are no users with name in user list
-    public void loginUser(String name) {
+    private void loginUser(String name) {
         try {
             startSession(users.loadUser(name));
         } catch (InvalidUserException e) { // create this exception
@@ -94,11 +99,7 @@ public class LoggedOutGUI {
     }
 
     private void startSession(User user) {
-
-        JFrame testFrame = new JFrame("test");
-        JPanel testPanel = new JPanel();
-        initializeFrame(testFrame, testPanel);
-
+        new LoggedInGUI(user);
         frame.dispose();
     }
 }
