@@ -1,6 +1,6 @@
 package ui;
 
-import model.User;
+import model.*;
 import persistence.JsonWriter;
 
 import javax.swing.*;
@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class LoggedInGUI {
     private User user;
@@ -17,13 +19,14 @@ public class LoggedInGUI {
     private JFrame frame;
     private JPanel panel;
 
-    private JList energyList;
+    private JList entryList;
+    private DefaultListModel<ProductivityEntry> listModel;
 
     public LoggedInGUI(User user) {
-
         this.user = user;
         initPanel();
         initEnergyList();
+        initEntryButtons();
         initFrame();
     }
 
@@ -39,7 +42,7 @@ public class LoggedInGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("add clicked");
-                // make an input show up???
+                entryOptionForm();
             }
         });
         panel.add(add);
@@ -55,13 +58,25 @@ public class LoggedInGUI {
             }
         });
         panel.add(edit);
+
+        JButton delete = new JButton(new AbstractAction("Delete") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("delete clicked");
+                System.out.println(entryList.getSelectedIndex() + 1);
+            }
+        });
+        panel.add(delete);
     }
 
     private void initEnergyList() {
-        String[] testList = {"logout", "add", "peak", "trough", "show", "edit", "delete", "save", "help"};
-
-        energyList = new JList(testList);
-        initList(energyList);
+//        String[] testList = user.listEntries(user.getEnergyEntries());
+        listModel = new DefaultListModel<>();
+        for (ProductivityEntry val : user.getEntries()) {
+            listModel.addElement(val);
+        }
+        entryList = new JList(listModel);
+        initList(entryList);
     }
 
     private void initList(JList list) {
@@ -70,7 +85,7 @@ public class LoggedInGUI {
         list.setVisibleRowCount(5);
 
         JScrollPane pane = new JScrollPane(list);
-        pane.setPreferredSize(new Dimension(250, 80));
+        pane.setPreferredSize(new Dimension(300, 80));
         panel.add(pane);
     }
 
@@ -119,5 +134,70 @@ public class LoggedInGUI {
         } catch (IOException e) {
             // idk what yet, shouldn't every be thrown cuz no illegal file names, all filenames are uuid
         }
+    }
+
+    private void entryOptionForm() {
+        Object[] entryTypeOptions = {ProductivityEntry.Label.ENERGY, ProductivityEntry.Label.FOCUS,
+                ProductivityEntry.Label.MOTIVATION};
+        ProductivityEntry.Label entryType = (ProductivityEntry.Label) JOptionPane.showInputDialog(null,
+                "Which energy type?", "Option", JOptionPane.QUESTION_MESSAGE, null, entryTypeOptions,
+                ProductivityEntry.Label.ENERGY);
+        if (entryType == null) {
+            return;
+        }
+
+        Object[] levelOptions = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        Integer level = (Integer) JOptionPane.showInputDialog(null, "Level?",
+                "Option", JOptionPane.QUESTION_MESSAGE, null, levelOptions, 1);
+        if (level == null) {
+            return;
+        }
+
+        Object[] timeOptions = new Object[24];
+        for (int i = 0; i < 24; i++) {
+            timeOptions[i] = LocalTime.of(i, 0);
+        }
+        LocalTime time = (LocalTime) JOptionPane.showInputDialog(null, "Time?",
+                "Option", JOptionPane.QUESTION_MESSAGE, null, timeOptions, timeOptions[0]);
+        if (time == null) {
+            return;
+        }
+
+        addEntries(entryType, level, time);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes selected entry from the productivity log
+    public void removeEntry(ProductivityEntry entry) {
+        System.out.println("Operation: remove");
+        boolean isRemoved = user.remove(entry);
+
+        if (isRemoved) {
+            System.out.println("Removed " + entry.toString());
+        }
+    }
+
+    public boolean wasSaved() {
+        return wasSaved;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: lets the user enter values to create a new productivity entry, and add it  to the user's log
+    private void addEntries(ProductivityEntry.Label label, int level, LocalTime time) {
+        LocalDate date = LocalDate.now();
+
+        ProductivityEntry newEntry;
+        switch (label) {
+            case ENERGY:
+                newEntry = new EnergyEntry(date, time, level);
+                break;
+            case FOCUS:
+                newEntry = new FocusEntry(date, time, level);
+                break;
+            default:
+                newEntry = new MotivationEntry(date, time, level);
+        }
+        user.add(newEntry);
+        listModel.addElement(newEntry);
     }
 }

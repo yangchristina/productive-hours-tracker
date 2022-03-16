@@ -5,6 +5,7 @@ import model.UserList;
 import model.exceptions.InvalidUserException;
 import model.exceptions.UserAlreadyExistsException;
 import persistence.JsonReadUserList;
+import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -99,7 +100,23 @@ public class LoggedOutGUI {
     }
 
     private void startSession(User user) {
-        new LoggedInGUI(user);
+        LoggedInGUI operationRecord = new LoggedInGUI(user);
+        if (operationRecord.wasSaved()) {
+            save();
+        }
         frame.dispose();
+    }
+
+    // EFFECTS: saves user list to file
+    public void save() {
+        try {
+            JsonWriter writer = new JsonWriter("users");
+
+            writer.open();
+            writer.write(users);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("fight ");
+        }
     }
 }
