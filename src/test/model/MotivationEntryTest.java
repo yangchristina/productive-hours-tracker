@@ -17,6 +17,6 @@ public class MotivationEntryTest {
 
     @Test
     void testLabel() {
-        assertEquals("motivation", entry.getLabel());
+        assertEquals(ProductivityEntry.Label.MOTIVATION, entry.getLabel());
     }
 }

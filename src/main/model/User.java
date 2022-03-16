@@ -19,9 +19,8 @@ public class User extends DailyAverageLog implements Writable {
 
     // EFFECTS: constructs a user with given name, id, energy, focus and motivation lists, and
     //          a daily average log based on energy, focus, and motivation values
-    public User(String name, UUID id, ArrayList<ProductivityEntry> energy,
-                ArrayList<ProductivityEntry> focus, ArrayList<ProductivityEntry> motivation) {
-        super(energy, focus, motivation);
+    public User(String name, UUID id, ArrayList<ProductivityEntry> entries) {
+        super(entries);
         this.name = name;
         this.id = id;
     }
@@ -36,10 +35,9 @@ public class User extends DailyAverageLog implements Writable {
 
     @Override
     public JSONObject toJson() {
-        JSONObject json = new JSONObject();
+        JSONObject json = super.toJson();
         json.put("name", name);
         json.put("id", id);
-        json.put("log", super.toJson());
         return json;
     }
 }

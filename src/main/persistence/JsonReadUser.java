@@ -28,37 +28,37 @@ public class JsonReadUser extends JsonReader {
     private User parseUser(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         UUID id = UUID.fromString(jsonObject.getString("id"));
-        JSONObject log = jsonObject.getJSONObject("log");
+        ArrayList<ProductivityEntry> entries = parseLog(jsonObject.getJSONArray("entries"));
 
-        ArrayList<ProductivityEntry> energyLog = parseLog(log, "energy");
-        ArrayList<ProductivityEntry> focusLog = parseLog(log, "focus");
-        ArrayList<ProductivityEntry> motivationLog = parseLog(log, "motivation");
+//        ArrayList<ProductivityEntry> entries = parseLog(log, "entries");
 
-        return new User(name, id, energyLog, focusLog, motivationLog);
+//        ArrayList<ProductivityEntry> energyLog = parseLog(log, "energy");
+//        ArrayList<ProductivityEntry> focusLog = parseLog(log, "focus");
+//        ArrayList<ProductivityEntry> motivationLog = parseLog(log, "motivation");
+
+        return new User(name, id, entries);
     }
 
     // EFFECTS: parses entry list from JSON array from key of JSON object and returns it
-    private ArrayList<ProductivityEntry> parseLog(JSONObject log, String key) {
-        JSONArray jsonArray = log.getJSONArray(key);
+    private ArrayList<ProductivityEntry> parseLog(JSONArray log) {
         ArrayList<ProductivityEntry> list = new ArrayList<>();
-
-        for (Object json : jsonArray) {
+        for (Object json : log) {
             JSONObject entryObject = (JSONObject) json;
-            list.add(parseEntry(entryObject, key));
+            list.add(parseEntry(entryObject));
         }
         return list;
     }
 
     // EFFECTS: parses energy entry from JSON object and adds it to workroom
-    private ProductivityEntry parseEntry(JSONObject jsonObject, String key) {
+    private ProductivityEntry parseEntry(JSONObject jsonObject) {
         LocalDate date = LocalDate.parse(jsonObject.getString("date"));
         LocalTime time = LocalTime.parse(jsonObject.getString("time"));
         int level = jsonObject.getInt("level");
 
-        switch (key) {
-            case "energy":
+        switch (jsonObject.getString("label")) {
+            case "ENERGY":
                 return new EnergyEntry(date, time, level);
-            case "focus":
+            case "FOCUS":
                 return new FocusEntry(date, time, level);
             default:
                 return new MotivationEntry(date, time, level);

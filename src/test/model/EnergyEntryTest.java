@@ -28,19 +28,19 @@ public class EnergyEntryTest {
 
     @Test
     void testLabel() {
-        assertEquals("energy", entry.getLabel());
+        assertEquals(ProductivityEntry.Label.ENERGY, entry.getLabel());
     }
 
     @Test
     void testDescriptionWithoutKey() {
-        assertEquals("energy level of 5 at " + TIME + " on " + DATE
-                + ".", entry.description());
+        assertEquals("ENERGY level of 5 at " + TIME + " on " + DATE
+                + ".", entry.toString());
     }
 
     @Test
     void testDescriptionWithKey() {
-        assertEquals("energy level of 5 at " + TIME + " on " + DATE
-                + ". Key: 0", entry.description(0));
+        assertEquals("ENERGY level of 5 at " + TIME + " on " + DATE
+                + ". Key: 0", entry.toString(0));
     }
 
     @Test

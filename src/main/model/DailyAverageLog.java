@@ -14,12 +14,10 @@ public class DailyAverageLog extends ProductivityLog {
 
     // EFFECTS: constructs DailyAverageLog with a given list of productivity entries,
     //          and a log of levels by time of day, which is calculated from the productivity entries
-    public DailyAverageLog(ArrayList<ProductivityEntry> energy,
-                           ArrayList<ProductivityEntry> focus, 
-                           ArrayList<ProductivityEntry> motivation) {
-        super(energy, focus, motivation);
+    public DailyAverageLog(ArrayList<ProductivityEntry> entries) {
+        super(entries);
         log = createEmptyLog();
-        initiateLog(getAllEntries());
+        initiateLog(entries);
     }
 
     // EFFECTS: constructs an empty log, with energyType as the key

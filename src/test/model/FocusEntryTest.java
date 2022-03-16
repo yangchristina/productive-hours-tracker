@@ -17,6 +17,6 @@ public class FocusEntryTest {
 
     @Test
     void testLabel() {
-        assertEquals("focus", entry.getLabel());
+        assertEquals(ProductivityEntry.Label.FOCUS, entry.getLabel());
     }
 }

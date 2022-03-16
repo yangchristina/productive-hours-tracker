@@ -27,11 +27,11 @@ public class ProductivityLogTest {
         focusEntry = new FocusEntry(LocalDate.now(), LocalTime.of(7, 0), 8);
         motivationEntry = new MotivationEntry(LocalDate.now(), LocalTime.of(8, 0), 10);
 
-        ArrayList<ProductivityEntry> energy = createEnergyList();
-        ArrayList<ProductivityEntry> focus = createFocusList();
-        ArrayList<ProductivityEntry> motivation = createMotivationList();
+//        ArrayList<ProductivityEntry> energy = createEnergyList();
+//        ArrayList<ProductivityEntry> focus = createFocusList();
+//        ArrayList<ProductivityEntry> motivation = createMotivationList();
 
-        log2 = new ProductivityLog(energy, focus, motivation);
+        log2 = new ProductivityLog(createEntriesList());
     }
 
     @Test
@@ -42,56 +42,55 @@ public class ProductivityLogTest {
     @Test
     void testConstructorTwoParams() {
         assertFalse(log2.isEmpty());
-        assertEquals(createEnergyList(), log2.getEnergyEntries());
-        assertEquals(createFocusList(), log2.getFocusEntries());
-        assertEquals(createMotivationList() , log2.getMotivationEntries());
+        assertEquals(createEntriesList(), log2.getEntries());
+//        assertEquals(createFocusList(), log2.getFocusEntries());
+//        assertEquals(createMotivationList() , log2.getMotivationEntries());
     }
 
     @Test
     void testAdd() {
         log.add(energyEntry);
         log.add(energyEntry2);
-        assertEquals(2, log.getEnergyEntries().size());
-        assertEquals(energyEntry, log.getEnergyEntries().get(0));
-        assertEquals(energyEntry2, log.getEnergyEntries().get(1));
+        assertEquals(2, log.getEntries().size());
+        assertEquals(energyEntry, log.getEntries().get(0));
+        assertEquals(energyEntry2, log.getEntries().get(1));
 
         log.add(focusEntry);
-        assertEquals(1, log.getFocusEntries().size());
-        assertEquals(focusEntry, log.getFocusEntries().get(0));
+        assertEquals(3, log.getEntries().size());
+        assertEquals(focusEntry, log.getEntries().get(2));
 
         log.add(motivationEntry);
-        assertEquals(1, log.getMotivationEntries().size());
-        assertEquals(motivationEntry, log.getMotivationEntries().get(0));
+        assertEquals(4, log.getEntries().size());
+        assertEquals(motivationEntry, log.getEntries().get(3));
     }
 
     @Test
     void testRemoveInvalid() {
         assertFalse(log.remove(energyEntry));
-        assertTrue(log.getEnergyEntries().isEmpty());
+        assertTrue(log.isEmpty());
     }
 
     @Test
     void testRemoveGeneral() {
         log.add(energyEntry);
-        log.add(energyEntry2);
         log.add(focusEntry);
         log.add(motivationEntry);
 
         assertTrue(log.remove(energyEntry));
-        assertEquals(1, log.getEnergyEntries().size());
+        assertEquals(2, log.getEntries().size());
 
         assertTrue(log.remove(focusEntry));
-        assertEquals(0, log.getFocusEntries().size());
+        assertEquals(1, log.getEntries().size());
 
         assertTrue(log.remove(motivationEntry));
-        assertEquals(0, log.getMotivationEntries().size());
+        assertTrue(log.isEmpty());
     }
 
-    @Test
-    void testGetAllEntries() {
-        assertEquals(log2.getEnergyEntries().size() + log2.getFocusEntries().size()
-                + log2.getMotivationEntries().size(), log2.getAllEntries().size());
-    }
+//    @Test
+//    void testGetAllEntries() {
+//        assertEquals(log2.getEnergyEntries().size() + log2.getFocusEntries().size()
+//                + log2.getMotivationEntries().size(), log2.getAllEntries().size());
+//    }
 
     @Test
     void testIsEmpty() {
@@ -101,24 +100,27 @@ public class ProductivityLogTest {
     }
 
     // EFFECTS: creates and returns a sample energy list
-    private ArrayList<ProductivityEntry> createEnergyList() {
+    private ArrayList<ProductivityEntry> createEntriesList() {
         ArrayList<ProductivityEntry> list = new ArrayList<>();
         list.add(energyEntry);
         list.add(energyEntry2);
-        return list;
-    }
 
-    // EFFECTS: creates and returns a sample focus list
-    private ArrayList<ProductivityEntry> createFocusList() {
-        ArrayList<ProductivityEntry> list = new ArrayList<>();
         list.add(motivationEntry);
-        return list;
-    }
-
-    // EFFECTS: creates a sample motivation list
-    private ArrayList<ProductivityEntry> createMotivationList() {
-        ArrayList<ProductivityEntry> list = new ArrayList<>();
         list.add(focusEntry);
         return list;
     }
+
+//    // EFFECTS: creates and returns a sample focus list
+//    private ArrayList<ProductivityEntry> createFocusList() {
+//        ArrayList<ProductivityEntry> list = new ArrayList<>();
+//        list.add(motivationEntry);
+//        return list;
+//    }
+//
+//    // EFFECTS: creates a sample motivation list
+//    private ArrayList<ProductivityEntry> createMotivationList() {
+//        ArrayList<ProductivityEntry> list = new ArrayList<>();
+//        list.add(focusEntry);
+//        return list;
+//    }
 }

@@ -8,26 +8,18 @@ import java.util.ArrayList;
 
 // a log of all information related to productivity entries
 public class ProductivityLog implements Writable {
-    protected ArrayList<ProductivityEntry> energyEntries;
-    protected ArrayList<ProductivityEntry> motivationEntries;
-    protected ArrayList<ProductivityEntry> focusEntries;
+    protected ArrayList<ProductivityEntry> entries;
 
     // EFFECTS: constructs a ProductivityLog with an empty list of energy entries, focus entreis, and motivation entries
     //          creates a new DailyAverageLog for each of energy, focus, and motivation
     public ProductivityLog() {
-        energyEntries = new ArrayList<>();
-        focusEntries = new ArrayList<>();
-        motivationEntries = new ArrayList<>();
+        entries = new ArrayList<>();
     }
 
     // EFFECTS: constructs a ProductivityLog with an empty list of energy entries, focus entreis, and motivation entries
     //          creates a new DailyAverageLog for each of energy, focus, and motivation
-    public ProductivityLog(ArrayList<ProductivityEntry> energyEntries,
-                           ArrayList<ProductivityEntry> focusEntries,
-                           ArrayList<ProductivityEntry> motivationEntries) {
-        this.energyEntries = energyEntries;
-        this.focusEntries = focusEntries;
-        this.motivationEntries = motivationEntries;
+    public ProductivityLog(ArrayList<ProductivityEntry> entries) {
+        this.entries = entries;
     }
 
     // EFFECTS: returns an array with a description of each entry in specified list
@@ -35,7 +27,7 @@ public class ProductivityLog implements Writable {
         String[] list = new String[entries.size()];
         int key = 1;
         for (ProductivityEntry entry : entries) {
-            list[key - 1] = entry.description(key);
+            list[key - 1] = entry.toString(key);
             key++;
         }
         return list;
@@ -44,71 +36,29 @@ public class ProductivityLog implements Writable {
     // MODIFIES: this
     // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
     public void add(ProductivityEntry entry) { //must add it to correct slot!!!
-        ProductivityEntry.Label entryType = entry.getLabel();
-        switch (entryType) {
-            case ENERGY:
-                energyEntries.add(entry);
-                break;
-            case FOCUS:
-                focusEntries.add(entry);
-                break;
-            case MOTIVATION:
-                motivationEntries.add(entry);
-                break;
-        }
+        entries.add(entry);
     }
 
     // MODIFIES: this
     // EFFECTS: removes entry from list, and removes it to DailyAverageLog
     public boolean remove(ProductivityEntry entry) {
-        boolean isRemoved;
-        switch (entry.getLabel()) {
-            case ENERGY:
-                isRemoved = energyEntries.remove(entry);
-                return isRemoved;
-            case FOCUS:
-                isRemoved = focusEntries.remove(entry);
-                return isRemoved;
-            default:
-                isRemoved = motivationEntries.remove(entry);
-                return isRemoved;
-        }
+        return entries.remove(entry);
     }
 
     // EFFECTS: returns true if energyEntries, focusEntries, and motivationEntries are all empty
     public boolean isEmpty() {
-        return energyEntries.isEmpty() && focusEntries.isEmpty() && motivationEntries.isEmpty();
+        return entries.isEmpty();
+//        return energyEntries.isEmpty() && focusEntries.isEmpty() && motivationEntries.isEmpty();
     }
 
-    // EFFECTS: returns an array with all the values in energyEntries, focusEntries, and motivationEntries
-    public ArrayList<ProductivityEntry> getAllEntries() {
-        ArrayList<ProductivityEntry> combined = new ArrayList<>();
-
-        combined.addAll(energyEntries);
-        combined.addAll(focusEntries);
-        combined.addAll(motivationEntries);
-
-        return combined;
-    }
-
-    public ArrayList<ProductivityEntry> getEnergyEntries() {
-        return energyEntries;
-    }
-
-    public ArrayList<ProductivityEntry> getFocusEntries() {
-        return focusEntries;
-    }
-
-    public ArrayList<ProductivityEntry> getMotivationEntries() {
-        return motivationEntries;
+    public ArrayList<ProductivityEntry> getEntries() {
+        return entries;
     }
 
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("energy", logToJson(energyEntries));
-        json.put("focus", logToJson(focusEntries));
-        json.put("motivation", logToJson(motivationEntries));
+        json.put("entries", logToJson(entries));
         return json;
     }
 

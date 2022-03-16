@@ -27,7 +27,7 @@ public class DailyAverageLogTest {
         motivationEntry = new MotivationEntry(LocalDate.now(),LocalTime.of(3, 0), 6);
 
         log = new DailyAverageLog();
-        log2 = new DailyAverageLog(createEnergyList(), createFocusList(), createMotivationList());
+        log2 = new DailyAverageLog(createEntriesList());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class DailyAverageLogTest {
     }
 
     // EFFECTS: creates and returns a sample energy list
-    private ArrayList<ProductivityEntry> createEnergyList() {
+    private ArrayList<ProductivityEntry> createEntriesList() {
         ArrayList<ProductivityEntry> list = new ArrayList<>();
 
         // level goes up as time goes up
@@ -138,20 +138,23 @@ public class DailyAverageLogTest {
         for (int hour = 5, level = 1; hour < 7; hour++, level++) {
             list.add(new EnergyEntry(LocalDate.now(), LocalTime.of(hour, 0), level));
         }
-        return list;
-    }
 
-    // EFFECTS: creates and returns a sample focus list
-    private ArrayList<ProductivityEntry> createFocusList() {
-        ArrayList<ProductivityEntry> list = new ArrayList<>();
         list.add(focusEntry);
-        return list;
-    }
-
-    // EFFECTS: creates a sample motivation list
-    private ArrayList<ProductivityEntry> createMotivationList() {
-        ArrayList<ProductivityEntry> list = new ArrayList<>();
         list.add(motivationEntry);
         return list;
     }
+
+//    // EFFECTS: creates and returns a sample focus list
+//    private ArrayList<ProductivityEntry> createFocusList() {
+//        ArrayList<ProductivityEntry> list = new ArrayList<>();
+//        list.add(focusEntry);
+//        return list;
+//    }
+//
+//    // EFFECTS: creates a sample motivation list
+//    private ArrayList<ProductivityEntry> createMotivationList() {
+//        ArrayList<ProductivityEntry> list = new ArrayList<>();
+//        list.add(motivationEntry);
+//        return list;
+//    }
 }

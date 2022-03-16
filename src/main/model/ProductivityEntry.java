@@ -29,12 +29,12 @@ public abstract class ProductivityEntry implements Writable {
     public abstract Label getLabel();
 
     // EFFECTS: returns a string with a description of the entry with its key
-    public String description(int key) {
+    public String toString(int key) {
         return getLabel() + " level of " + level + " at " + time + " on " + date + ". Key: " + key;
     }
 
     // EFFECTS: returns a string with a description of the entry
-    public String description() {
+    public String toString() {
         return getLabel() + " level of " + level + " at " + time + " on " + date + ".";
     }
 
@@ -70,6 +70,7 @@ public abstract class ProductivityEntry implements Writable {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
+        json.put("label", getLabel());
         json.put("date", date);
         json.put("time", time);
         json.put("level", level);
