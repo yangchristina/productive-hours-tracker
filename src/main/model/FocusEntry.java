@@ -11,7 +11,7 @@ public class FocusEntry extends ProductivityEntry {
     }
 
     @Override
-    public String label() {
-        return "focus";
+    public Label getLabel() {
+        return Label.FOCUS;
     }
 }

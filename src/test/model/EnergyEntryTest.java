@@ -28,7 +28,7 @@ public class EnergyEntryTest {
 
     @Test
     void testLabel() {
-        assertEquals("energy", entry.label());
+        assertEquals("energy", entry.getLabel());
     }
 
     @Test

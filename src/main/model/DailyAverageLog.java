@@ -5,7 +5,7 @@ import java.util.*;
 
 // includes a log of all levels sorted by entry type and time of day
 public class DailyAverageLog extends ProductivityLog {
-    private HashMap<String, TreeMap<LocalTime, ArrayList<Integer>>> log;
+    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, ArrayList<Integer>>> log;
     
     // EFFECTS: constructs DailyAverageLog with an empty list of productivity entries and empty log
     public DailyAverageLog() {
@@ -24,7 +24,7 @@ public class DailyAverageLog extends ProductivityLog {
 
     // EFFECTS: constructs an empty log, with energyType as the key
     //          and a map with the time as the key and a list of levels as the values
-    private HashMap<String, TreeMap<LocalTime, ArrayList<Integer>>> createEmptyLog() {
+    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, ArrayList<Integer>>> createEmptyLog() {
         TreeMap<LocalTime, ArrayList<Integer>> energy = new TreeMap<>();
         TreeMap<LocalTime, ArrayList<Integer>> focus = new TreeMap<>();
         TreeMap<LocalTime, ArrayList<Integer>> motivation = new TreeMap<>();
@@ -35,16 +35,16 @@ public class DailyAverageLog extends ProductivityLog {
             motivation.put(LocalTime.of(i, 0), new ArrayList<>());
         }
 
-        HashMap<String, TreeMap<LocalTime, ArrayList<Integer>>> log = new HashMap<>();
-        log.put("energy", energy);
-        log.put("focus", focus);
-        log.put("motivation", motivation);
+        HashMap<ProductivityEntry.Label, TreeMap<LocalTime, ArrayList<Integer>>> log = new HashMap<>();
+        log.put(ProductivityEntry.Label.ENERGY, energy);
+        log.put(ProductivityEntry.Label.FOCUS, focus);
+        log.put(ProductivityEntry.Label.MOTIVATION, motivation);
         return log;
     }
 
     // MODIFIES: this
     // EFFECTS: constructs and returns a new array sorted by entry type, and containing all levels for each hour of day
-    private HashMap<String, TreeMap<LocalTime, ArrayList<Integer>>> initiateLog(ArrayList<ProductivityEntry> entries) {
+    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, ArrayList<Integer>>> initiateLog(ArrayList<ProductivityEntry> entries) {
         log = createEmptyLog();
 
         for (ProductivityEntry entry : entries) {
@@ -81,19 +81,19 @@ public class DailyAverageLog extends ProductivityLog {
 
     // EFFECTS: calls and returns the getLevels method with two parameters
     private ArrayList<Integer> getLevels(ProductivityEntry entry) {
-        return getLevels(entry.label(), entry.getTime());
+        return getLevels(entry.getLabel(), entry.getTime());
     }
 
     // EFFECTS: gets the array list of the given entryType and time from log
-    private ArrayList<Integer> getLevels(String entryType, LocalTime time) {
+    private ArrayList<Integer> getLevels(ProductivityEntry.Label entryType, LocalTime time) {
         return log.get(entryType).get(time);
     }
 
     // EFFECTS: returns a map of the average level for each time and entry type
-    public HashMap<String, TreeMap<LocalTime, Integer>> getAverageLog() {
-        HashMap<String, TreeMap<LocalTime, Integer>> averageLog = new HashMap<>();
+    public HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> getAverageLog() {
+        HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> averageLog = new HashMap<>();
 
-        for (Map.Entry<String, TreeMap<LocalTime, ArrayList<Integer>>> entry : log.entrySet()) {
+        for (Map.Entry<ProductivityEntry.Label, TreeMap<LocalTime, ArrayList<Integer>>> entry : log.entrySet()) {
             TreeMap<LocalTime, Integer> dailyAveragesOfEntryType = getDailyAverages(entry.getKey(), entry.getValue());
             averageLog.put(entry.getKey(), dailyAveragesOfEntryType);
         }
@@ -101,7 +101,7 @@ public class DailyAverageLog extends ProductivityLog {
     }
 
     // EFFECTS: returns map of tree where each value in array list is averaged
-    private TreeMap<LocalTime, Integer> getDailyAverages(String entryType, TreeMap<LocalTime,
+    private TreeMap<LocalTime, Integer> getDailyAverages(ProductivityEntry.Label entryType, TreeMap<LocalTime,
             ArrayList<Integer>> tree) {
         TreeMap<LocalTime, Integer> averagedTree = new TreeMap<>();
 
@@ -126,16 +126,16 @@ public class DailyAverageLog extends ProductivityLog {
     }
 
     // EFFECTS: gets peaks and troughs for all entry types
-    public HashMap<String, HashMap<String, ArrayList<LocalTime>>> getPeaksAndTroughs() {
-        HashMap<String, HashMap<String, ArrayList<LocalTime>>> peakTroughLog = new HashMap<>();
-        for (String entryType : getAverageLog().keySet()) {
+    public HashMap<ProductivityEntry.Label, HashMap<String, ArrayList<LocalTime>>> getPeaksAndTroughs() {
+        HashMap<ProductivityEntry.Label, HashMap<String, ArrayList<LocalTime>>> peakTroughLog = new HashMap<>();
+        for (ProductivityEntry.Label entryType : getAverageLog().keySet()) {
             peakTroughLog.put(entryType, getPeaksAndTroughs(entryType));
         }
         return peakTroughLog;
     }
 
     // EFFECTS: gets peaks and troughs of a certain entry type
-    public HashMap<String, ArrayList<LocalTime>> getPeaksAndTroughs(String entryType) {
+    public HashMap<String, ArrayList<LocalTime>> getPeaksAndTroughs(ProductivityEntry.Label entryType) {
         HashMap<String, ArrayList<LocalTime>> peaksAndTroughs = new HashMap<>();
         
         ArrayList<LocalTime> peakHours = new ArrayList<>();
@@ -161,7 +161,7 @@ public class DailyAverageLog extends ProductivityLog {
         return peaksAndTroughs;
     }
 
-    public HashMap<String, TreeMap<LocalTime, ArrayList<Integer>>> getLog() {
+    public HashMap<ProductivityEntry.Label, TreeMap<LocalTime, ArrayList<Integer>>> getLog() {
         return log;
     }
 }

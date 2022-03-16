@@ -32,7 +32,7 @@ public class DailyAverageLogTest {
 
     @Test
     void testConstructorNoParams() {
-        for (String entryType : log.getLog().keySet()) {
+        for (ProductivityEntry.Label entryType : log.getLog().keySet()) {
             assertEquals(24, log.getLog().get(entryType).size());
             for (ArrayList<Integer> arr : log.getLog().get(entryType).values()) {
                 assertTrue(arr.isEmpty());
@@ -42,11 +42,11 @@ public class DailyAverageLogTest {
 
     @Test
     void testConstructorWithParams() {
-        assertEquals(24, log2.getLog().get("energy").size());
+        assertEquals(24, log2.getLog().get(ProductivityEntry.Label.ENERGY).size());
 
-        ArrayList<Integer> energy = log2.getLog().get("energy").get(energyEntry.getTime());
-        ArrayList<Integer> focus = log2.getLog().get("focus").get(focusEntry.getTime());
-        ArrayList<Integer> motivation = log2.getLog().get("motivation").get(motivationEntry.getTime());
+        ArrayList<Integer> energy = log2.getLog().get(ProductivityEntry.Label.ENERGY).get(energyEntry.getTime());
+        ArrayList<Integer> focus = log2.getLog().get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime());
+        ArrayList<Integer> motivation = log2.getLog().get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime());
 
         assertEquals(1, energy.size());
         assertEquals(1, energy.get(0));
@@ -64,9 +64,9 @@ public class DailyAverageLogTest {
         log.add(focusEntry);
         log.add(motivationEntry);
 
-        ArrayList<Integer> list1 = log.getLog().get("energy").get(energyEntry.getTime());
-        ArrayList<Integer> list2 = log.getLog().get("focus").get(focusEntry.getTime());
-        ArrayList<Integer> list3 = log.getLog().get("motivation").get(motivationEntry.getTime());
+        ArrayList<Integer> list1 = log.getLog().get(ProductivityEntry.Label.ENERGY).get(energyEntry.getTime());
+        ArrayList<Integer> list2 = log.getLog().get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime());
+        ArrayList<Integer> list3 = log.getLog().get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime());
 
         assertEquals(1, list1.size());
         assertEquals(energyEntry.getLevel(), list1.get(0));
@@ -86,13 +86,13 @@ public class DailyAverageLogTest {
     @Test
     void testRemoveValid() {
         assertTrue(log2.remove(energyEntry));
-        assertTrue(log2.getLog().get("energy").get(energyEntry.getTime()).isEmpty());
+        assertTrue(log2.getLog().get(ProductivityEntry.Label.FOCUS).get(energyEntry.getTime()).isEmpty());
 
         assertTrue(log2.remove(focusEntry));
-        assertTrue(log2.getLog().get("focus").get(focusEntry.getTime()).isEmpty());
+        assertTrue(log2.getLog().get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime()).isEmpty());
 
         assertTrue(log2.remove(motivationEntry));
-        assertTrue(log2.getLog().get("motivation").get(motivationEntry.getTime()).isEmpty());
+        assertTrue(log2.getLog().get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime()).isEmpty());
     }
 
     @Test
@@ -100,16 +100,16 @@ public class DailyAverageLogTest {
         log2.add(new FocusEntry(LocalDate.now(), focusEntry.getTime(), focusEntry.getLevel()+2));
 
         // just averages all teh values in level
-        HashMap<String, TreeMap<LocalTime, Integer>> averageLog = log2.getAverageLog();
-        assertEquals(focusEntry.getLevel()+1, averageLog.get("focus").get(focusEntry.getTime()));
-        assertEquals(energyEntry.getLevel(), averageLog.get("energy").get(energyEntry.getTime()));
-        assertEquals(motivationEntry.getLevel(), averageLog.get("motivation").get(motivationEntry.getTime()));
+        HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> averageLog = log2.getAverageLog();
+        assertEquals(focusEntry.getLevel()+1, averageLog.get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime()));
+        assertEquals(energyEntry.getLevel(), averageLog.get(ProductivityEntry.Label.ENERGY).get(energyEntry.getTime()));
+        assertEquals(motivationEntry.getLevel(), averageLog.get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime()));
     }
 
     @Test
     void getPeaksAndTroughs() {
-        HashMap<String, ArrayList<LocalTime>> peakTrough = log2.getPeaksAndTroughs().get("energy");
-        assertEquals(peakTrough, log2.getPeaksAndTroughs("energy"));
+        HashMap<String, ArrayList<LocalTime>> peakTrough = log2.getPeaksAndTroughs().get(ProductivityEntry.Label.ENERGY);
+        assertEquals(peakTrough, log2.getPeaksAndTroughs(ProductivityEntry.Label.ENERGY));
 
         ArrayList<LocalTime> peakHours = peakTrough.get("peak");
         ArrayList<LocalTime> troughHours = peakTrough.get("trough");

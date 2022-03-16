@@ -17,6 +17,6 @@ public class MotivationEntryTest {
 
     @Test
     void testLabel() {
-        assertEquals("motivation", entry.label());
+        assertEquals("motivation", entry.getLabel());
     }
 }

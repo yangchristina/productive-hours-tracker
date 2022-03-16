@@ -17,6 +17,6 @@ public class FocusEntryTest {
 
     @Test
     void testLabel() {
-        assertEquals("focus", entry.label());
+        assertEquals("focus", entry.getLabel());
     }
 }

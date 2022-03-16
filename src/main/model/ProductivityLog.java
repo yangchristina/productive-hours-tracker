@@ -30,18 +30,29 @@ public class ProductivityLog implements Writable {
         this.motivationEntries = motivationEntries;
     }
 
+    // EFFECTS: returns an array with a description of each entry in specified list
+    public String[] listEntries(ArrayList<ProductivityEntry> entries) {
+        String[] list = new String[entries.size()];
+        int key = 1;
+        for (ProductivityEntry entry : entries) {
+            list[key - 1] = entry.description(key);
+            key++;
+        }
+        return list;
+    }
+
     // MODIFIES: this
     // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
     public void add(ProductivityEntry entry) { //must add it to correct slot!!!
-        String entryType = entry.label();
+        ProductivityEntry.Label entryType = entry.getLabel();
         switch (entryType) {
-            case "energy":
+            case ENERGY:
                 energyEntries.add(entry);
                 break;
-            case "focus":
+            case FOCUS:
                 focusEntries.add(entry);
                 break;
-            case "motivation":
+            case MOTIVATION:
                 motivationEntries.add(entry);
                 break;
         }
@@ -51,11 +62,11 @@ public class ProductivityLog implements Writable {
     // EFFECTS: removes entry from list, and removes it to DailyAverageLog
     public boolean remove(ProductivityEntry entry) {
         boolean isRemoved;
-        switch (entry.label()) {
-            case "energy":
+        switch (entry.getLabel()) {
+            case ENERGY:
                 isRemoved = energyEntries.remove(entry);
                 return isRemoved;
-            case "focus":
+            case FOCUS:
                 isRemoved = focusEntries.remove(entry);
                 return isRemoved;
             default:

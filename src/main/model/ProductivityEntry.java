@@ -12,6 +12,12 @@ public abstract class ProductivityEntry implements Writable {
     private LocalTime time;
     protected int level;
 
+    public enum Label {
+        ENERGY,
+        FOCUS,
+        MOTIVATION
+    }
+
     // EFFECTS: creates a new productivity entry with given values for date, time and level
     public ProductivityEntry(LocalDate localDate, LocalTime localTime, int level) {
         this.date = localDate; // cannot be modified
@@ -20,16 +26,16 @@ public abstract class ProductivityEntry implements Writable {
     }
 
     // EFFECTS: returns the type of entry as a string
-    public abstract String label();
+    public abstract Label getLabel();
 
     // EFFECTS: returns a string with a description of the entry with its key
     public String description(int key) {
-        return label() + " level of " + level + " at " + time + " on " + date + ". Key: " + key;
+        return getLabel() + " level of " + level + " at " + time + " on " + date + ". Key: " + key;
     }
 
     // EFFECTS: returns a string with a description of the entry
     public String description() {
-        return label() + " level of " + level + " at " + time + " on " + date + ".";
+        return getLabel() + " level of " + level + " at " + time + " on " + date + ".";
     }
 
     // REQUIRES: time.getMinute() == 0

@@ -10,7 +10,7 @@ public class EnergyEntry extends ProductivityEntry {
     }
 
     @Override
-    public String label() {
-        return "energy";
+    public Label getLabel() {
+        return Label.ENERGY;
     }
 }
