@@ -24,6 +24,12 @@ public class LoggedOutGUI {
         initFrame();
     }
 
+    public LoggedOutGUI(UserList users) {
+        this.users = users;
+        initPanel();
+        initFrame();
+    }
+
     private void initUserList() {
         JsonReadUserList reader = new JsonReadUserList();
         try {
@@ -100,10 +106,7 @@ public class LoggedOutGUI {
     }
 
     private void startSession(User user) {
-        LoggedInGUI operationRecord = new LoggedInGUI(user);
-        if (operationRecord.wasSaved()) {
-            save();
-        }
+        new LoggedInGUI(user, users);
         frame.dispose();
     }
 
