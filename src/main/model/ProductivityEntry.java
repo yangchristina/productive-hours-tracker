@@ -7,10 +7,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 // abstract class for productivity entries, which contain date, time of day, and level
-public abstract class ProductivityEntry implements Writable {
+public class ProductivityEntry implements Writable {
     private LocalDate date;
     private LocalTime time;
     protected int level;
+    private Label label;
 
     public enum Label {
         ENERGY,
@@ -19,18 +20,16 @@ public abstract class ProductivityEntry implements Writable {
     }
 
     // EFFECTS: creates a new productivity entry with given values for date, time and level
-    public ProductivityEntry(LocalDate localDate, LocalTime localTime, int level) {
+    public ProductivityEntry(Label label, LocalDate localDate, LocalTime localTime, int level) {
+        this.label = label;
         this.date = localDate; // cannot be modified
         this.time = localTime;
         this.level = level;
     }
 
     // EFFECTS: returns the type of entry as a string
-    public abstract Label getLabel();
-
-    // EFFECTS: returns a string with a description of the entry with its key
-    public String toString(int key) {
-        return getLabel() + " level of " + level + " at " + time + " on " + date + ". Key: " + key;
+    public Label getLabel() {
+        return label;
     }
 
     // EFFECTS: returns a string with a description of the entry
@@ -50,6 +49,12 @@ public abstract class ProductivityEntry implements Writable {
     // EFFECTS: sets the level to the given value
     public void editLevel(int level) {
         this.level = level;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the level to the given value
+    public void editLabel(Label label) {
+        this.label = label;
     }
 
     // EFFECTS: returns date of entry

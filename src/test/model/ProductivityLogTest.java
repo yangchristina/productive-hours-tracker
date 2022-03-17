@@ -13,23 +13,19 @@ public class ProductivityLogTest {
     private ProductivityLog log;
     private ProductivityLog log2;
 
-    private EnergyEntry energyEntry;
-    private EnergyEntry energyEntry2;
-    private FocusEntry focusEntry;
-    private MotivationEntry motivationEntry;
+    private ProductivityEntry energyEntry;
+    private ProductivityEntry energyEntry2;
+    private ProductivityEntry focusEntry;
+    private ProductivityEntry motivationEntry;
 
     @BeforeEach
     void runBefore() {
         log = new ProductivityLog();
 
-        energyEntry = new EnergyEntry(LocalDate.now(), LocalTime.of(5, 0), 9);
-        energyEntry2 = new EnergyEntry(LocalDate.now(), LocalTime.of(5, 0), 9);
-        focusEntry = new FocusEntry(LocalDate.now(), LocalTime.of(7, 0), 8);
-        motivationEntry = new MotivationEntry(LocalDate.now(), LocalTime.of(8, 0), 10);
-
-//        ArrayList<ProductivityEntry> energy = createEnergyList();
-//        ArrayList<ProductivityEntry> focus = createFocusList();
-//        ArrayList<ProductivityEntry> motivation = createMotivationList();
+        energyEntry = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 9);
+        energyEntry2 = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 9);
+        focusEntry = new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(), LocalTime.of(7, 0), 8);
+        motivationEntry = new ProductivityEntry(ProductivityEntry.Label.MOTIVATION, LocalDate.now(), LocalTime.of(8, 0), 10);
 
         log2 = new ProductivityLog(createEntriesList());
     }

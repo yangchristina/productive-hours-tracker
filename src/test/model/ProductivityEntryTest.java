@@ -8,15 +8,15 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EnergyEntryTest {
+public class ProductivityEntryTest {
     private static final LocalDate DATE = LocalDate.now();
     private static final LocalTime TIME = LocalTime.now();
 
-    private EnergyEntry entry;
+    private ProductivityEntry entry;
 
     @BeforeEach
     void runBefore() {
-        entry = new EnergyEntry(DATE, TIME, 5);
+        entry = new ProductivityEntry(ProductivityEntry.Label.ENERGY, DATE, TIME, 5);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class EnergyEntryTest {
     @Test
     void testDescriptionWithKey() {
         assertEquals("ENERGY level of 5 at " + TIME + " on " + DATE
-                + ". Key: 0", entry.toString(0));
+                + ".", entry.toString());
     }
 
     @Test

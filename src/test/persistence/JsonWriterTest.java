@@ -71,10 +71,10 @@ class JsonWriterTest extends JsonTest {
         try {
             User user = new User("chris");
 
-            user.add(new EnergyEntry(LocalDate.now(), LocalTime.of(5, 0), 8));
-            user.add(new EnergyEntry(LocalDate.now(), LocalTime.of(5, 0), 3));
-            user.add(new FocusEntry(LocalDate.now(), LocalTime.of(7, 0), 5));
-            user.add(new MotivationEntry(LocalDate.now(), LocalTime.of(1, 0), 9));
+            user.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 8));
+            user.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 3));
+            user.add(new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(), LocalTime.of(7, 0), 5));
+            user.add(new ProductivityEntry(ProductivityEntry.Label.MOTIVATION, LocalDate.now(), LocalTime.of(1, 0), 9));
 
             JsonWriter writer = new JsonWriter("testWriterGeneralUser"); //normally fileName is user.getId().toString()
 

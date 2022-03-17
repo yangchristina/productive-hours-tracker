@@ -22,17 +22,6 @@ public class ProductivityLog implements Writable {
         this.entries = entries;
     }
 
-    // EFFECTS: returns an array with a description of each entry in specified list
-    public String[] listEntries(ArrayList<ProductivityEntry> entries) {
-        String[] list = new String[entries.size()];
-        int key = 1;
-        for (ProductivityEntry entry : entries) {
-            list[key - 1] = entry.toString(key);
-            key++;
-        }
-        return list;
-    }
-
     // MODIFIES: this
     // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
     public void add(ProductivityEntry entry) { //must add it to correct slot!!!
@@ -48,7 +37,6 @@ public class ProductivityLog implements Writable {
     // EFFECTS: returns true if energyEntries, focusEntries, and motivationEntries are all empty
     public boolean isEmpty() {
         return entries.isEmpty();
-//        return energyEntries.isEmpty() && focusEntries.isEmpty() && motivationEntries.isEmpty();
     }
 
     public ArrayList<ProductivityEntry> getEntries() {

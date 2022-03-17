@@ -22,9 +22,9 @@ public class DailyAverageLogTest {
 
     @BeforeEach
     void runBefore() {
-        energyEntry = new EnergyEntry(LocalDate.now(),LocalTime.of(1, 0), 1);
-        focusEntry = new FocusEntry(LocalDate.now(),LocalTime.of(2, 0), 5);
-        motivationEntry = new MotivationEntry(LocalDate.now(),LocalTime.of(3, 0), 6);
+        energyEntry = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(),LocalTime.of(1, 0), 1);
+        focusEntry = new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(),LocalTime.of(2, 0), 5);
+        motivationEntry = new ProductivityEntry(ProductivityEntry.Label.MOTIVATION, LocalDate.now(),LocalTime.of(3, 0), 6);
 
         log = new DailyAverageLog();
         log2 = new DailyAverageLog(createEntriesList());
@@ -97,7 +97,7 @@ public class DailyAverageLogTest {
 
     @Test
     void testGetAverageLog() {
-        log2.add(new FocusEntry(LocalDate.now(), focusEntry.getTime(), focusEntry.getLevel()+2));
+        log2.add(new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(), focusEntry.getTime(), focusEntry.getLevel()+2));
 
         // just averages all teh values in level
         HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> averageLog = log2.getAverageLog();
@@ -128,15 +128,15 @@ public class DailyAverageLogTest {
         // level goes up as time goes up
         list.add(energyEntry);
         for (int hour = 2, level = 2; hour < 3; hour++, level++) {
-            list.add(new EnergyEntry(LocalDate.now(), LocalTime.of(hour, 0), level));
+            list.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(hour, 0), level));
         }
         // level goes down as time goes up
         for (int hour = 3, level = 3; hour < 5; hour++, level--) {
-            list.add(new EnergyEntry(LocalDate.now(), LocalTime.of(hour, 0), level));
+            list.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(hour, 0), level));
         }
         // level goes up as time goes up
         for (int hour = 5, level = 1; hour < 7; hour++, level++) {
-            list.add(new EnergyEntry(LocalDate.now(), LocalTime.of(hour, 0), level));
+            list.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(hour, 0), level));
         }
 
         list.add(focusEntry);

@@ -54,14 +54,7 @@ public class JsonReadUser extends JsonReader {
         LocalDate date = LocalDate.parse(jsonObject.getString("date"));
         LocalTime time = LocalTime.parse(jsonObject.getString("time"));
         int level = jsonObject.getInt("level");
-
-        switch (jsonObject.getString("label")) {
-            case "ENERGY":
-                return new EnergyEntry(date, time, level);
-            case "FOCUS":
-                return new FocusEntry(date, time, level);
-            default:
-                return new MotivationEntry(date, time, level);
-        }
+        ProductivityEntry.Label label = ProductivityEntry.Label.valueOf(jsonObject.getString("label"));
+        return new ProductivityEntry(label, date, time, level);
     }
 }
