@@ -1,6 +1,11 @@
 package ui;
 
 import model.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import persistence.JsonWriter;
 
 import javax.swing.*;
@@ -12,6 +17,10 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+
+//import org.jfree.chart;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class LoggedInGUI {
     private static final Object[] ENTRY_TYPE_OPTIONS = {ProductivityEntry.Label.ENERGY, ProductivityEntry.Label.FOCUS,
@@ -26,6 +35,7 @@ public class LoggedInGUI {
 
     private JFrame frame;
     private JPanel panel;
+    ChartPanel chartPanel;
 
     private JList<ListModel<ProductivityEntry>> entryList;
     private DefaultListModel<ProductivityEntry> listModel;
@@ -37,6 +47,7 @@ public class LoggedInGUI {
         this.userList = users;
         initPanel();
         initMenuBar();
+        initGraph();
         initEntryList();
         initAddEntryButton();
         initEditEntryButton();
@@ -50,6 +61,36 @@ public class LoggedInGUI {
         JLabel label = new JLabel("Energy entries:");
         panel.add(label);
     }
+
+    private void initGraph() {
+        // Create dataset
+        DefaultCategoryDataset dataset = createDataset();
+        // Create chart
+        JFreeChart chart = ChartFactory.createLineChart(
+                "Daily Productivity Levels", // Chart title
+                "Time", // X-Axis Label
+                "Level", // Y-Axis Label
+                dataset
+        );
+
+        CategoryPlot plot = chart.getCategoryPlot();
+
+        LineAndShapeRenderer renderer = new LineAndShapeRenderer();
+        plot.setRenderer(renderer);
+
+        chartPanel = new ChartPanel(chart);
+    }
+
+    private DefaultCategoryDataset createDataset() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (ProductivityEntry entry : user.getEntries()) {
+            dataset.addValue(entry.getLevel(), entry.getLabel(), entry.getTime());
+        }
+
+        return dataset;
+    }
+
 
     public void initMenuBar() {
         menuBar = new JMenuBar();
@@ -158,13 +199,13 @@ public class LoggedInGUI {
         frame.pack();
         frame.setSize(1200,900);
 
-        // Text Area at the Center - !!! change to graph later
-        JTextArea ta = new JTextArea();
+//        // Text Area at the Center - !!! change to graph later
+//        JTextArea ta = new JTextArea();
 
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, menuBar);
-        frame.getContentPane().add(BorderLayout.CENTER, ta);
+        frame.getContentPane().add(BorderLayout.CENTER, chartPanel);
 
         frame.setVisible(true);
         frame.addWindowListener(new WindowAdapter() {
@@ -280,4 +321,31 @@ public class LoggedInGUI {
             System.out.println("fight ");
         }
     }
+
+
+
+
+
+
+
+//    // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
+//    private void showPeakHours(ProductivityEntry.Label label) {
+//        ArrayList<LocalTime> peakHours = user.getPeaksAndTroughs(label).get("peak");
+//        if (peakHours.isEmpty()) {
+//            System.out.println("Not enough " + label + " entries");
+//        } else {
+//            System.out.println("Your peak " + label + " hours are at " + peakHours);
+//        }
+//    }
+//
+//    // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
+//    private void showTroughHours() {
+//        String label = input.entryType();
+//        ArrayList<LocalTime> troughHours = user.getPeaksAndTroughs(label).get("trough");
+//        if (troughHours.isEmpty()) {
+//            System.out.println("Not enough " + label + " entries");
+//        } else {
+//            System.out.println("Your trough " + label + " hours are at " + troughHours);
+//        }
+//    }
 }
