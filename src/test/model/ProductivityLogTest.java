@@ -62,7 +62,7 @@ public class ProductivityLogTest {
 
     @Test
     void testRemoveInvalid() {
-        assertFalse(log.remove(energyEntry));
+        assertNull(log.remove(energyEntry));
         assertTrue(log.isEmpty());
     }
 
@@ -72,13 +72,13 @@ public class ProductivityLogTest {
         log.add(focusEntry);
         log.add(motivationEntry);
 
-        assertTrue(log.remove(energyEntry));
+        assertNotNull(log.remove(energyEntry));
         assertEquals(2, log.getEntries().size());
 
-        assertTrue(log.remove(focusEntry));
+        assertNotNull(log.remove(focusEntry));
         assertEquals(1, log.getEntries().size());
 
-        assertTrue(log.remove(motivationEntry));
+        assertNotNull(log.remove(motivationEntry));
         assertTrue(log.isEmpty());
     }
 

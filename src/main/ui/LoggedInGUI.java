@@ -5,21 +5,27 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.time.*;
+import org.jfree.data.xy.XYDataset;
 import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Map;
 
 
-//import org.jfree.chart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class LoggedInGUI {
@@ -35,12 +41,18 @@ public class LoggedInGUI {
 
     private JFrame frame;
     private JPanel panel;
-    ChartPanel chartPanel;
+    private ChartPanel chartPanel;
+    private DefaultCategoryDataset dataset;
 
     private JList<ListModel<ProductivityEntry>> entryList;
     private DefaultListModel<ProductivityEntry> listModel;
 
     private JMenuBar menuBar;
+
+    private final Day today = new Day();
+    private TimeSeries energyTimeSeries;
+    private TimeSeries focusTimeSeries;
+    private TimeSeries motivationTimeSeries;
 
     public LoggedInGUI(User user, UserList users) {
         this.user = user;
@@ -64,32 +76,69 @@ public class LoggedInGUI {
 
     private void initGraph() {
         // Create dataset
-        DefaultCategoryDataset dataset = createDataset();
+        XYDataset dataset = createDataset();
         // Create chart
-        JFreeChart chart = ChartFactory.createLineChart(
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
                 "Daily Productivity Levels", // Chart title
                 "Time", // X-Axis Label
                 "Level", // Y-Axis Label
                 dataset
         );
 
-        CategoryPlot plot = chart.getCategoryPlot();
+        XYPlot plot = chart.getXYPlot();
+        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+        renderer.setDefaultShapesVisible(true);
+//        renderer.setBaseShapesVisible(true);
 
-        LineAndShapeRenderer renderer = new LineAndShapeRenderer();
-        plot.setRenderer(renderer);
+//        LineAndShapeRenderer renderer = new LineAndShapeRenderer();
+//        XYLineAndShapeRenderer r = (XYLineAndShapeRenderer) plot.getRenderer();
 
         chartPanel = new ChartPanel(chart);
     }
 
-    private DefaultCategoryDataset createDataset() {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    private XYDataset createDataset() {
+        TimeSeriesCollection tsc = new TimeSeriesCollection();
+        energyTimeSeries = createTimeSeries(ProductivityEntry.Label.ENERGY);
+        focusTimeSeries = createTimeSeries(ProductivityEntry.Label.FOCUS);
+        motivationTimeSeries = createTimeSeries(ProductivityEntry.Label.MOTIVATION);
+        tsc.addSeries(energyTimeSeries);
+        tsc.addSeries(focusTimeSeries);
+        tsc.addSeries(motivationTimeSeries);
+        return tsc;
+    }
 
-        for (ProductivityEntry entry : user.getEntries()) {
-            dataset.addValue(entry.getLevel(), entry.getLabel(), entry.getTime());
+    // !!! combine below three methods into one
+    private TimeSeries createTimeSeries(ProductivityEntry.Label label) {
+        TimeSeries series = new TimeSeries(label);
+
+        for (Map.Entry<LocalTime, Integer> entry
+                : user.getProductivityLog().getDailyAverageLog().getLog().get(label).entrySet()) {
+            series.add(new Hour(entry.getKey().getHour(), today), entry.getValue());
         }
 
-        return dataset;
+        return series;
     }
+
+//    private DefaultCategoryDataset createDataset() {
+//        dataset = new DefaultCategoryDataset();
+//
+//        for (Map.Entry<LocalTime, Integer> entry
+//                : user.getProductivityLog().getDailyAverageLog().getEnergyAverages().entrySet()) {
+//            dataset.addValue(entry.getValue(), ProductivityEntry.Label.ENERGY, entry.getKey());
+//        }
+//
+//        for (Map.Entry<LocalTime, Integer> entry
+//                : user.getProductivityLog().getDailyAverageLog().getFocusAverages().entrySet()) {
+//            dataset.addValue(entry.getValue(), ProductivityEntry.Label.FOCUS, entry.getKey());
+//        }
+//
+//        for (Map.Entry<LocalTime, Integer> entry
+//                : user.getProductivityLog().getDailyAverageLog().getMotivationAverages().entrySet()) {
+//            dataset.addValue(entry.getValue(), ProductivityEntry.Label.MOTIVATION, entry.getKey());
+//        }
+//
+//        return dataset;
+//    }
 
 
     public void initMenuBar() {
@@ -123,12 +172,29 @@ public class LoggedInGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("add clicked");
-                ProductivityEntry newEntry = entryOptionForm(createDefaultEntry());
-                user.add(newEntry);
-                listModel.addElement(newEntry);
+                ProductivityEntry entry = createDefaultEntry();
+                if (entryOptionForm(entry)) { // means nothing was added
+                    int newAverageLevel = user.getProductivityLog().add(entry);
+                    listModel.addElement(entry);
+                    updateTimeSeries(entry, newAverageLevel);
+                }
             }
         });
         panel.add(add);
+    }
+
+    private void updateTimeSeries(ProductivityEntry entry, Integer newAverageLevel) {
+        switch (entry.getLabel()) {
+            case ENERGY:
+                energyTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
+                break;
+            case FOCUS:
+                focusTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
+                break;
+            case MOTIVATION:
+                motivationTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
+                break;
+        }
     }
 
     // MODIFIES: this
@@ -138,11 +204,17 @@ public class LoggedInGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ProductivityEntry selected = (ProductivityEntry) entryList.getSelectedValue();
-
                 if (selected != null) {
-                    entryOptionForm(selected);
-                    JOptionPane.showMessageDialog(panel,"Entry changed to: " + selected);
-                } //does editing entry change it in both listModel and arrayList?
+                    ProductivityEntry old = new ProductivityEntry(selected.getLabel(), selected.getDate(),
+                            selected.getTime(), selected.getLevel());
+                    if (entryOptionForm(selected)) {
+                        int newRemovedAverageLevel = user.getProductivityLog().getDailyAverageLog().remove(old);
+                        int newAddedAverageLevel = user.getProductivityLog().getDailyAverageLog().add(selected);
+                        JOptionPane.showMessageDialog(panel,"Entry changed to: " + selected);
+                        updateTimeSeries(old, newRemovedAverageLevel);
+                        updateTimeSeries(selected, newAddedAverageLevel);
+                    }
+                } //does editing entry change it in both listModel and arrayList? yup it does
             }
         });
         panel.add(edit);
@@ -156,14 +228,16 @@ public class LoggedInGUI {
             public void actionPerformed(ActionEvent e) {
                 ProductivityEntry selected = (ProductivityEntry) entryList.getSelectedValue();
 
-                boolean isRemoved;
-                if (selected != null) {
-                    isRemoved = user.remove(selected);
-                    if (isRemoved) {
-                        String message = "Removed: " + selected;
-                        JOptionPane.showMessageDialog(panel, message);
-                        listModel.removeElement(selected);
-                    }
+                Integer newAverageLevel;
+                // !!! fix tests, get rid of not contained null, since its impossible
+                if (selected != null) { // two cases for null, one for not contained, other for after removing no average level for that time
+                    newAverageLevel = user.getProductivityLog().remove(selected);
+
+                    JOptionPane.showMessageDialog(panel, "Removed: " + selected);
+
+                    listModel.removeElement(selected);
+                    updateTimeSeries(selected, newAverageLevel);
+//                    dataset.removeValue(selected.getLabel(), selected.getTime());
                 }
             }
         });
@@ -175,7 +249,7 @@ public class LoggedInGUI {
     // EFFECTS: initializes entry list
     private void initEntryList() {
         listModel = new DefaultListModel<>();
-        for (ProductivityEntry val : user.getEntries()) {
+        for (ProductivityEntry val : user.getProductivityLog().getEntries()) {
             listModel.addElement(val);
         }
         entryList = new JList(listModel);
@@ -253,42 +327,40 @@ public class LoggedInGUI {
         }
     }
 
-    private ProductivityEntry entryOptionForm(ProductivityEntry entry) {
+    private boolean entryOptionForm(ProductivityEntry entry) {
         ProductivityEntry.Label entryType = (ProductivityEntry.Label) JOptionPane.showInputDialog(null,
                 "Which energy type?", "Option", JOptionPane.QUESTION_MESSAGE, null, ENTRY_TYPE_OPTIONS,
                 entry.getLabel());
         if (entryType == null) {
-            return null;
+            return false;
         }
 
         Integer level = (Integer) JOptionPane.showInputDialog(null, "Level?",
                 "Option", JOptionPane.QUESTION_MESSAGE, null, LEVEL_OPTIONS, entry.getLevel());
         if (level == null) {
-            return null;
+            return false;
         }
 
         LocalTime time = (LocalTime) JOptionPane.showInputDialog(null, "Time?",
                 "Option", JOptionPane.QUESTION_MESSAGE, null, TIME_OPTIONS, entry.getTime());
         if (time == null) {
-            return null;
+            return false;
         }
 
         entry.editLabel(entryType);
         entry.editLevel(level);
         entry.editTime(time);
 
-        return entry;
+        return true;
     }
 
     // MODIFIES: this
     // EFFECTS: removes selected entry from the productivity log
     public void removeEntry(ProductivityEntry entry) {
         System.out.println("Operation: remove");
-        boolean isRemoved = user.remove(entry);
+        Integer newAverageLevel = user.getProductivityLog().remove(entry);
 
-        if (isRemoved) {
-            System.out.println("Removed: " + entry.toString());
-        }
+        System.out.println("Removed: " + entry.toString());
     }
 
     public boolean getWasSaved() {

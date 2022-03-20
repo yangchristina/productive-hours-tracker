@@ -60,7 +60,7 @@ class JsonWriterTest extends JsonTest {
             JsonReadUser reader = new JsonReadUser("testWriterEmptyUser");
             user = reader.read();
             assertEquals("chris", user.getName());
-            assertTrue(user.isEmpty());
+            assertTrue(user.getProductivityLog().isEmpty());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -71,10 +71,10 @@ class JsonWriterTest extends JsonTest {
         try {
             User user = new User("chris");
 
-            user.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 8));
-            user.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 3));
-            user.add(new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(), LocalTime.of(7, 0), 5));
-            user.add(new ProductivityEntry(ProductivityEntry.Label.MOTIVATION, LocalDate.now(), LocalTime.of(1, 0), 9));
+            user.getProductivityLog().add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 8));
+            user.getProductivityLog().add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 3));
+            user.getProductivityLog().add(new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(), LocalTime.of(7, 0), 5));
+            user.getProductivityLog().add(new ProductivityEntry(ProductivityEntry.Label.MOTIVATION, LocalDate.now(), LocalTime.of(1, 0), 9));
 
             JsonWriter writer = new JsonWriter("testWriterGeneralUser"); //normally fileName is user.getId().toString()
 
