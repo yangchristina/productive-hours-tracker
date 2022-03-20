@@ -36,11 +36,8 @@ public class ProductivityLog implements Writable {
     // MODIFIES: this
     // EFFECTS: removes entry from list, and removes it to DailyAverageLog
     public Integer remove(ProductivityEntry entry) {
-        boolean isRemoved = entries.remove(entry);
-        if (isRemoved) {
-            return dailyAverageLog.remove(entry);
-        }
-        return null;
+        entries.remove(entry);
+        return dailyAverageLog.remove(entry);
     }
 
 //    // !!! where to call dailyAverageLog for edit

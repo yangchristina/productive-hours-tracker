@@ -41,7 +41,7 @@ public class DailyAverageLog {
     }
 
     // EFFECTS: returns a map of the average level for each time and entry type
-    public void initAverageLog(ArrayList<ProductivityEntry> entries) {
+    private void initAverageLog(ArrayList<ProductivityEntry> entries) {
         for (ProductivityEntry entry : entries) {
             add(entry);
         }
@@ -89,10 +89,10 @@ public class DailyAverageLog {
         return newAverage;
     }
 
-    public LocalTime[] getPeakAndTrough() {
-//        for () !!!
-        return new LocalTime[2];
-    }
+//    public LocalTime[] getPeakAndTrough() {
+////        for () !!!
+//        return new LocalTime[2];
+//    }
 
     public HashMap<ProductivityEntry.Label, HashMap<LocalTime, Integer>> getLog() {
         return averageLog;

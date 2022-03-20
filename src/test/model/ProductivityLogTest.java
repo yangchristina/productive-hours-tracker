@@ -22,8 +22,8 @@ public class ProductivityLogTest {
     void runBefore() {
         log = new ProductivityLog();
 
-        energyEntry = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 9);
-        energyEntry2 = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 9);
+        energyEntry = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 8);
+        energyEntry2 = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(5, 0), 4);
         focusEntry = new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(), LocalTime.of(7, 0), 8);
         motivationEntry = new ProductivityEntry(ProductivityEntry.Label.MOTIVATION, LocalDate.now(), LocalTime.of(8, 0), 10);
 
@@ -61,25 +61,19 @@ public class ProductivityLogTest {
     }
 
     @Test
-    void testRemoveInvalid() {
-        assertNull(log.remove(energyEntry));
-        assertTrue(log.isEmpty());
-    }
+    void testRemove() {
+        // initial size of log 2 is 4
+        assertNotNull(log2.remove(energyEntry));
+        assertEquals(3, log2.getEntries().size());
 
-    @Test
-    void testRemoveGeneral() {
-        log.add(energyEntry);
-        log.add(focusEntry);
-        log.add(motivationEntry);
+        assertNull(log2.remove(energyEntry2));
+        assertEquals(2, log2.getEntries().size());
 
-        assertNotNull(log.remove(energyEntry));
-        assertEquals(2, log.getEntries().size());
+        assertNull(log2.remove(focusEntry));
+        assertEquals(1, log2.getEntries().size());
 
-        assertNotNull(log.remove(focusEntry));
-        assertEquals(1, log.getEntries().size());
-
-        assertNotNull(log.remove(motivationEntry));
-        assertTrue(log.isEmpty());
+        assertNull(log2.remove(motivationEntry));
+        assertTrue(log2.isEmpty());
     }
 
 //    @Test

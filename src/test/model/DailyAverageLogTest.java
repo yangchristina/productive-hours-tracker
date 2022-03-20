@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,9 +20,9 @@ public class DailyAverageLogTest {
 
     @BeforeEach
     void runBefore() {
-        energyEntry = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(),LocalTime.of(1, 0), 1);
-        focusEntry = new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(),LocalTime.of(2, 0), 5);
-        motivationEntry = new ProductivityEntry(ProductivityEntry.Label.MOTIVATION, LocalDate.now(),LocalTime.of(3, 0), 6);
+        energyEntry = new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(),LocalTime.of(21, 0), 1);
+        focusEntry = new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(),LocalTime.of(22, 0), 5);
+        motivationEntry = new ProductivityEntry(ProductivityEntry.Label.MOTIVATION, LocalDate.now(),LocalTime.of(23, 0), 6);
 
         log = new DailyAverageLog();
         log2 = new DailyAverageLog(createEntriesList());
@@ -32,30 +30,19 @@ public class DailyAverageLogTest {
 
     @Test
     void testConstructorNoParams() {
-        for (ProductivityEntry.Label entryType : log.getLog().keySet()) {
-            assertEquals(24, log.getLog().get(entryType).size());
-            for (ArrayList<Integer> arr : log.getLog().get(entryType).values()) {
-                assertTrue(arr.isEmpty());
-            }
+        for (ProductivityEntry.Label label : ProductivityEntry.Label.values()) {
+            assertTrue(log.getLog().get(label).isEmpty());
         }
     }
 
     @Test
     void testConstructorWithParams() {
-        assertEquals(24, log2.getLog().get(ProductivityEntry.Label.ENERGY).size());
-
-        ArrayList<Integer> energy = log2.getLog().get(ProductivityEntry.Label.ENERGY).get(energyEntry.getTime());
-        ArrayList<Integer> focus = log2.getLog().get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime());
-        ArrayList<Integer> motivation = log2.getLog().get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime());
-
-        assertEquals(1, energy.size());
-        assertEquals(1, energy.get(0));
-
-        assertEquals(1, focus.size());
-        assertEquals(focusEntry.getLevel(), focus.get(0));
-
-        assertEquals(1, motivation.size());
-        assertEquals(motivationEntry.getLevel(), motivation.get(0));
+        for (ProductivityEntry.Label label : ProductivityEntry.Label.values()) {
+            assertEquals(1, log2.getLog().get(label).size());
+        }
+        assertEquals(energyEntry.getLevel(), log2.getLog().get(ProductivityEntry.Label.ENERGY).get(energyEntry.getTime()));
+        assertEquals(focusEntry.getLevel(), log2.getLog().get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime()));
+        assertEquals(motivationEntry.getLevel(), log2.getLog().get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime()));
     }
 
     @Test
@@ -64,83 +51,78 @@ public class DailyAverageLogTest {
         log.add(focusEntry);
         log.add(motivationEntry);
 
-        ArrayList<Integer> list1 = log.getLog().get(ProductivityEntry.Label.ENERGY).get(energyEntry.getTime());
-        ArrayList<Integer> list2 = log.getLog().get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime());
-        ArrayList<Integer> list3 = log.getLog().get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime());
+        for (ProductivityEntry.Label label : ProductivityEntry.Label.values()) {
+            assertEquals(1, log.getLog().get(label).size());
+        }
+        assertEquals(energyEntry.getLevel(), log.getLog().get(ProductivityEntry.Label.ENERGY).get(energyEntry.getTime()));
+        assertEquals(focusEntry.getLevel(), log.getLog().get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime()));
+        assertEquals(motivationEntry.getLevel(), log.getLog().get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime()));
 
-        assertEquals(1, list1.size());
-        assertEquals(energyEntry.getLevel(), list1.get(0));
+        LocalTime time = LocalTime.of(0, 0);
+        ProductivityEntry.Label label = ProductivityEntry.Label.ENERGY;
+        log.add(new ProductivityEntry(label, LocalDate.now(), time, 0));
+        assertEquals(0, log.getLog().get(label).get(time));
+        log.add(new ProductivityEntry(label, LocalDate.now(), time, 2));
+        assertEquals(1, log.getLog().get(label).get(time));
 
-        assertEquals(1, list2.size());
-        assertEquals(focusEntry.getLevel(), list2.get(0));
+        time = LocalTime.of(1, 0);
+        label = ProductivityEntry.Label.FOCUS;
+        log.add(new ProductivityEntry(label, LocalDate.now(), time, 1));
+        assertEquals(1, log.getLog().get(label).get(time));
+        log.add(new ProductivityEntry(label, LocalDate.now(), time, 3));
+        assertEquals(2, log.getLog().get(label).get(time));
+        log.add(new ProductivityEntry(label, LocalDate.now(), time, 5));
+        assertEquals(3, log.getLog().get(label).get(time));
 
-        assertEquals(1, list3.size());
-        assertEquals(motivationEntry.getLevel(), list3.get(0));
+        time = LocalTime.of(2, 0);
+        label = ProductivityEntry.Label.MOTIVATION;
+        log.add(new ProductivityEntry(label, LocalDate.now(), time, 0));
+        assertEquals(0, log.getLog().get(label).get(time));
+        log.add(new ProductivityEntry(label, LocalDate.now(), time, 2));
+        assertEquals(1, log.getLog().get(label).get(time));
     }
 
     @Test
-    void testRemoveInvalid() {
-        assertFalse(log.remove(energyEntry));
+    void testRemove() {
+        LocalTime time = LocalTime.of(0, 0);
+        ProductivityEntry.Label label = ProductivityEntry.Label.ENERGY;
+
+        ProductivityEntry entry1 = new ProductivityEntry(label, LocalDate.now(), time, 0);
+        ProductivityEntry entry2 = new ProductivityEntry(label, LocalDate.now(), time, 2);
+
+        log.add(entry1);
+        log.add(entry2);
+        assertEquals(2, log.remove(entry1));
+        assertNull(log.remove(entry2));
+
+        assertNull(log2.remove(energyEntry));
+        assertNull(log2.remove(focusEntry));
+        assertNull(log2.remove(motivationEntry));
     }
 
-    @Test
-    void testRemoveValid() {
-        assertTrue(log2.remove(energyEntry));
-        assertTrue(log2.getLog().get(ProductivityEntry.Label.FOCUS).get(energyEntry.getTime()).isEmpty());
-
-        assertTrue(log2.remove(focusEntry));
-        assertTrue(log2.getLog().get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime()).isEmpty());
-
-        assertTrue(log2.remove(motivationEntry));
-        assertTrue(log2.getLog().get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime()).isEmpty());
-    }
-
-    @Test
-    void testGetAverageLog() {
-        log2.add(new ProductivityEntry(ProductivityEntry.Label.FOCUS, LocalDate.now(), focusEntry.getTime(), focusEntry.getLevel()+2));
-
-        // just averages all teh values in level
-        HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> averageLog = log2.getAverageLog();
-        assertEquals(focusEntry.getLevel()+1, averageLog.get(ProductivityEntry.Label.FOCUS).get(focusEntry.getTime()));
-        assertEquals(energyEntry.getLevel(), averageLog.get(ProductivityEntry.Label.ENERGY).get(energyEntry.getTime()));
-        assertEquals(motivationEntry.getLevel(), averageLog.get(ProductivityEntry.Label.MOTIVATION).get(motivationEntry.getTime()));
-    }
-
-    @Test
-    void getPeaksAndTroughs() {
-        HashMap<String, ArrayList<LocalTime>> peakTrough = log2.getPeaksAndTroughs().get(ProductivityEntry.Label.ENERGY);
-        assertEquals(peakTrough, log2.getPeaksAndTroughs(ProductivityEntry.Label.ENERGY));
-
-        ArrayList<LocalTime> peakHours = peakTrough.get("peak");
-        ArrayList<LocalTime> troughHours = peakTrough.get("trough");
-
-        assertEquals(1, peakHours.size());
-        assertEquals(1, troughHours.size());
-
-        assertEquals(LocalTime.of(3, 0), peakHours.get(0));
-        assertEquals(LocalTime.of(5, 0), troughHours.get(0));
-    }
+//    @Test
+//    void getPeaksAndTroughs() {
+//        HashMap<String, ArrayList<LocalTime>> peakTrough = log2.getPeaksAndTroughs().get(ProductivityEntry.Label.ENERGY);
+//        assertEquals(peakTrough, log2.getPeaksAndTroughs(ProductivityEntry.Label.ENERGY));
+//
+//        ArrayList<LocalTime> peakHours = peakTrough.get("peak");
+//        ArrayList<LocalTime> troughHours = peakTrough.get("trough");
+//
+//        assertEquals(1, peakHours.size());
+//        assertEquals(1, troughHours.size());
+//
+//        assertEquals(LocalTime.of(3, 0), peakHours.get(0));
+//        assertEquals(LocalTime.of(5, 0), troughHours.get(0));
+//    }
 
     // EFFECTS: creates and returns a sample energy list
     private ArrayList<ProductivityEntry> createEntriesList() {
         ArrayList<ProductivityEntry> list = new ArrayList<>();
 
-        // level goes up as time goes up
         list.add(energyEntry);
-        for (int hour = 2, level = 2; hour < 3; hour++, level++) {
-            list.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(hour, 0), level));
-        }
-        // level goes down as time goes up
-        for (int hour = 3, level = 3; hour < 5; hour++, level--) {
-            list.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(hour, 0), level));
-        }
-        // level goes up as time goes up
-        for (int hour = 5, level = 1; hour < 7; hour++, level++) {
-            list.add(new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(), LocalTime.of(hour, 0), level));
-        }
-
         list.add(focusEntry);
         list.add(motivationEntry);
+
         return list;
     }
 
