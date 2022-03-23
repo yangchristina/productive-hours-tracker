@@ -42,7 +42,8 @@ public class LoggedInGUI {
     private JFrame frame;
     private JPanel panel;
     private ChartPanel chartPanel;
-    private DefaultCategoryDataset dataset;
+
+    private GraphPanel graphPanel;
 
     private JList<ListModel<ProductivityEntry>> entryList;
     private DefaultListModel<ProductivityEntry> listModel;
@@ -59,7 +60,8 @@ public class LoggedInGUI {
         this.userList = users;
         initPanel();
         initMenuBar();
-        initGraph();
+//        initGraph();
+        graphPanel =  new GraphPanel(user.getProductivityLog().getDailyAverageLog().getLog());
         initEntryList();
         initAddEntryButton();
         initEditEntryButton();
@@ -173,10 +175,12 @@ public class LoggedInGUI {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("add clicked");
                 ProductivityEntry entry = createDefaultEntry();
-                if (entryOptionForm(entry)) { // means nothing was added
+                if (entryOptionForm(entry)) { // true means added, false means not added
                     int newAverageLevel = user.getProductivityLog().add(entry);
                     listModel.addElement(entry);
                     updateTimeSeries(entry, newAverageLevel);
+                    graphPanel.revalidate();
+                    graphPanel.repaint();
                 }
             }
         });
@@ -184,17 +188,17 @@ public class LoggedInGUI {
     }
 
     private void updateTimeSeries(ProductivityEntry entry, Integer newAverageLevel) {
-        switch (entry.getLabel()) {
-            case ENERGY:
-                energyTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
-                break;
-            case FOCUS:
-                focusTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
-                break;
-            case MOTIVATION:
-                motivationTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
-                break;
-        }
+//        switch (entry.getLabel()) {
+//            case ENERGY:
+//                energyTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
+//                break;
+//            case FOCUS:
+//                focusTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
+//                break;
+//            case MOTIVATION:
+//                motivationTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
+//                break;
+//        }
     }
 
     // MODIFIES: this
@@ -208,11 +212,14 @@ public class LoggedInGUI {
                     ProductivityEntry old = new ProductivityEntry(selected.getLabel(), selected.getDate(),
                             selected.getTime(), selected.getLevel());
                     if (entryOptionForm(selected)) {
-                        int newRemovedAverageLevel = user.getProductivityLog().getDailyAverageLog().remove(old);
-                        int newAddedAverageLevel = user.getProductivityLog().getDailyAverageLog().add(selected);
+                        Integer newRemovedAverageLevel = user.getProductivityLog().getDailyAverageLog().remove(old);
+                        Integer newAddedAverageLevel = user.getProductivityLog().getDailyAverageLog().add(selected);
                         JOptionPane.showMessageDialog(panel,"Entry changed to: " + selected);
-                        updateTimeSeries(old, newRemovedAverageLevel);
-                        updateTimeSeries(selected, newAddedAverageLevel);
+//                        graphPanel.updateUI();
+                        graphPanel.revalidate();
+                        graphPanel.repaint();
+//                        updateTimeSeries(old, newRemovedAverageLevel);
+//                        updateTimeSeries(selected, newAddedAverageLevel);
                     }
                 } //does editing entry change it in both listModel and arrayList? yup it does
             }
@@ -237,6 +244,8 @@ public class LoggedInGUI {
 
                     listModel.removeElement(selected);
                     updateTimeSeries(selected, newAverageLevel);
+                    graphPanel.revalidate();
+                    graphPanel.repaint();
 //                    dataset.removeValue(selected.getLabel(), selected.getTime());
                 }
             }
@@ -279,7 +288,8 @@ public class LoggedInGUI {
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, menuBar);
-        frame.getContentPane().add(BorderLayout.CENTER, chartPanel);
+//        frame.getContentPane().add(BorderLayout.CENTER, chartPanel);
+        frame.getContentPane().add(BorderLayout.CENTER, graphPanel);
 
         frame.setVisible(true);
         frame.addWindowListener(new WindowAdapter() {
