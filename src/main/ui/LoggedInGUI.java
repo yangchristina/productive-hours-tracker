@@ -1,15 +1,7 @@
 package ui;
 
 import model.*;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.time.*;
-import org.jfree.data.xy.XYDataset;
+
 import persistence.JsonWriter;
 
 import javax.swing.*;
@@ -18,15 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.Map;
-
-
-import org.jfree.data.category.DefaultCategoryDataset;
 
 public class LoggedInGUI {
     private static final Object[] ENTRY_TYPE_OPTIONS = {ProductivityEntry.Label.ENERGY, ProductivityEntry.Label.FOCUS,
@@ -34,34 +19,24 @@ public class LoggedInGUI {
     private static final Object[] LEVEL_OPTIONS = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     private static final Object[] TIME_OPTIONS = createTimeOptions();
 
-
     private User user;
     private UserList userList;
     private boolean wasSaved;
 
     private JFrame frame;
-    private JPanel panel;
-    private ChartPanel chartPanel;
-
+    private JPanel listPanel;
     private GraphPanel graphPanel;
+    private JMenuBar menuBar;
 
     private JList<ListModel<ProductivityEntry>> entryList;
     private DefaultListModel<ProductivityEntry> listModel;
 
-    private JMenuBar menuBar;
-
-    private final Day today = new Day();
-    private TimeSeries energyTimeSeries;
-    private TimeSeries focusTimeSeries;
-    private TimeSeries motivationTimeSeries;
-
     public LoggedInGUI(User user, UserList users) {
         this.user = user;
         this.userList = users;
-        initPanel();
+        initListPanel();
         initMenuBar();
-//        initGraph();
-        graphPanel =  new GraphPanel(user.getProductivityLog().getDailyAverageLog().getLog());
+        initGraph();
         initEntryList();
         initAddEntryButton();
         initEditEntryButton();
@@ -69,81 +44,18 @@ public class LoggedInGUI {
         initFrame();
     }
 
-    private void initPanel() {
-        panel = new JPanel();
-//        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); //makes scrollable stop working
-        JLabel label = new JLabel("Energy entries:");
-        panel.add(label);
-    }
-
     private void initGraph() {
-        // Create dataset
-        XYDataset dataset = createDataset();
-        // Create chart
-        JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "Daily Productivity Levels", // Chart title
-                "Time", // X-Axis Label
-                "Level", // Y-Axis Label
-                dataset
-        );
-
-        XYPlot plot = chart.getXYPlot();
-        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
-        renderer.setDefaultShapesVisible(true);
-//        renderer.setBaseShapesVisible(true);
-
-//        LineAndShapeRenderer renderer = new LineAndShapeRenderer();
-//        XYLineAndShapeRenderer r = (XYLineAndShapeRenderer) plot.getRenderer();
-
-        chartPanel = new ChartPanel(chart);
+        graphPanel =  new GraphPanel(user.getProductivityLog().getDailyAverageLog().getLog());
     }
 
-    private XYDataset createDataset() {
-        TimeSeriesCollection tsc = new TimeSeriesCollection();
-        energyTimeSeries = createTimeSeries(ProductivityEntry.Label.ENERGY);
-        focusTimeSeries = createTimeSeries(ProductivityEntry.Label.FOCUS);
-        motivationTimeSeries = createTimeSeries(ProductivityEntry.Label.MOTIVATION);
-        tsc.addSeries(energyTimeSeries);
-        tsc.addSeries(focusTimeSeries);
-        tsc.addSeries(motivationTimeSeries);
-        return tsc;
+    private void initListPanel() {
+        listPanel = new JPanel();
+        JLabel label = new JLabel("Energy entries:");
+        listPanel.add(label);
     }
 
-    // !!! combine below three methods into one
-    private TimeSeries createTimeSeries(ProductivityEntry.Label label) {
-        TimeSeries series = new TimeSeries(label);
 
-        for (Map.Entry<LocalTime, Integer> entry
-                : user.getProductivityLog().getDailyAverageLog().getLog().get(label).entrySet()) {
-            series.add(new Hour(entry.getKey().getHour(), today), entry.getValue());
-        }
-
-        return series;
-    }
-
-//    private DefaultCategoryDataset createDataset() {
-//        dataset = new DefaultCategoryDataset();
-//
-//        for (Map.Entry<LocalTime, Integer> entry
-//                : user.getProductivityLog().getDailyAverageLog().getEnergyAverages().entrySet()) {
-//            dataset.addValue(entry.getValue(), ProductivityEntry.Label.ENERGY, entry.getKey());
-//        }
-//
-//        for (Map.Entry<LocalTime, Integer> entry
-//                : user.getProductivityLog().getDailyAverageLog().getFocusAverages().entrySet()) {
-//            dataset.addValue(entry.getValue(), ProductivityEntry.Label.FOCUS, entry.getKey());
-//        }
-//
-//        for (Map.Entry<LocalTime, Integer> entry
-//                : user.getProductivityLog().getDailyAverageLog().getMotivationAverages().entrySet()) {
-//            dataset.addValue(entry.getValue(), ProductivityEntry.Label.MOTIVATION, entry.getKey());
-//        }
-//
-//        return dataset;
-//    }
-
-
-    public void initMenuBar() {
+    private void initMenuBar() {
         menuBar = new JMenuBar();
 
         JMenu m1 = new JMenu("FILE");
@@ -176,29 +88,14 @@ public class LoggedInGUI {
                 System.out.println("add clicked");
                 ProductivityEntry entry = createDefaultEntry();
                 if (entryOptionForm(entry)) { // true means added, false means not added
-                    int newAverageLevel = user.getProductivityLog().add(entry);
+                    user.getProductivityLog().add(entry);
                     listModel.addElement(entry);
-                    updateTimeSeries(entry, newAverageLevel);
                     graphPanel.revalidate();
                     graphPanel.repaint();
                 }
             }
         });
-        panel.add(add);
-    }
-
-    private void updateTimeSeries(ProductivityEntry entry, Integer newAverageLevel) {
-//        switch (entry.getLabel()) {
-//            case ENERGY:
-//                energyTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
-//                break;
-//            case FOCUS:
-//                focusTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
-//                break;
-//            case MOTIVATION:
-//                motivationTimeSeries.addOrUpdate(new Hour(entry.getTime().getHour(), today), newAverageLevel);
-//                break;
-//        }
+        listPanel.add(add);
     }
 
     // MODIFIES: this
@@ -212,19 +109,16 @@ public class LoggedInGUI {
                     ProductivityEntry old = new ProductivityEntry(selected.getLabel(), selected.getDate(),
                             selected.getTime(), selected.getLevel());
                     if (entryOptionForm(selected)) {
-                        Integer newRemovedAverageLevel = user.getProductivityLog().getDailyAverageLog().remove(old);
-                        Integer newAddedAverageLevel = user.getProductivityLog().getDailyAverageLog().add(selected);
-                        JOptionPane.showMessageDialog(panel,"Entry changed to: " + selected);
-//                        graphPanel.updateUI();
+                        user.getProductivityLog().getDailyAverageLog().remove(old);
+                        user.getProductivityLog().getDailyAverageLog().add(selected);
+                        JOptionPane.showMessageDialog(listPanel,"Entry changed to: " + selected);
                         graphPanel.revalidate();
                         graphPanel.repaint();
-//                        updateTimeSeries(old, newRemovedAverageLevel);
-//                        updateTimeSeries(selected, newAddedAverageLevel);
                     }
-                } //does editing entry change it in both listModel and arrayList? yup it does
+                }
             }
         });
-        panel.add(edit);
+        listPanel.add(edit);
     }
 
     // MODIFIES: this
@@ -235,24 +129,17 @@ public class LoggedInGUI {
             public void actionPerformed(ActionEvent e) {
                 ProductivityEntry selected = (ProductivityEntry) entryList.getSelectedValue();
 
-                Integer newAverageLevel;
-                // !!! fix tests, get rid of not contained null, since its impossible
-                if (selected != null) { // two cases for null, one for not contained, other for after removing no average level for that time
-                    newAverageLevel = user.getProductivityLog().remove(selected);
-
-                    JOptionPane.showMessageDialog(panel, "Removed: " + selected);
-
+                if (selected != null) { // null if after removing no average level for that time
+                    user.getProductivityLog().remove(selected);
+                    JOptionPane.showMessageDialog(listPanel, "Removed: " + selected);
                     listModel.removeElement(selected);
-                    updateTimeSeries(selected, newAverageLevel);
                     graphPanel.revalidate();
                     graphPanel.repaint();
-//                    dataset.removeValue(selected.getLabel(), selected.getTime());
                 }
             }
         });
-        panel.add(delete);
+        listPanel.add(delete);
     }
-
 
     // MODIFIES: this
     // EFFECTS: initializes entry list
@@ -272,7 +159,7 @@ public class LoggedInGUI {
 
         JScrollPane pane = new JScrollPane(list);
         pane.setPreferredSize(new Dimension(300, 80));
-        panel.add(pane);
+        listPanel.add(pane);
     }
 
     private void initFrame() {
@@ -282,13 +169,9 @@ public class LoggedInGUI {
         frame.pack();
         frame.setSize(1200,900);
 
-//        // Text Area at the Center - !!! change to graph later
-//        JTextArea ta = new JTextArea();
-
         //Adding Components to the frame.
-        frame.getContentPane().add(BorderLayout.SOUTH, panel);
+        frame.getContentPane().add(BorderLayout.SOUTH, listPanel);
         frame.getContentPane().add(BorderLayout.NORTH, menuBar);
-//        frame.getContentPane().add(BorderLayout.CENTER, chartPanel);
         frame.getContentPane().add(BorderLayout.CENTER, graphPanel);
 
         frame.setVisible(true);
@@ -373,10 +256,6 @@ public class LoggedInGUI {
         System.out.println("Removed: " + entry.toString());
     }
 
-    public boolean getWasSaved() {
-        return wasSaved;
-    }
-
     // EFFECTS: creates a default energy entry with a label of ENERGY, today's date, time of 0:0 and level of 0.
     private ProductivityEntry createDefaultEntry() {
         return new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(),
@@ -403,10 +282,6 @@ public class LoggedInGUI {
             System.out.println("fight ");
         }
     }
-
-
-
-
 
 
 
