@@ -6,9 +6,9 @@ import persistence.Writable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-// abstract class for productivity entries, which contain date, time of day, and level
+// class for productivity entries, which contain label, date, time of day, and level
 public class ProductivityEntry implements Writable {
-    private LocalDate date;
+    private final LocalDate date;
     private LocalTime time;
     protected int level;
     private Label label;
@@ -19,7 +19,7 @@ public class ProductivityEntry implements Writable {
         MOTIVATION
     }
 
-    // EFFECTS: creates a new productivity entry with given values for date, time and level
+    // EFFECTS: creates a new productivity entry with given values for label, date, time and level
     public ProductivityEntry(Label label, LocalDate localDate, LocalTime localTime, int level) {
         this.label = label;
         this.date = localDate; // cannot be modified
@@ -27,47 +27,35 @@ public class ProductivityEntry implements Writable {
         this.level = level;
     }
 
-    // EFFECTS: returns the type of entry as a string
-    public Label getLabel() {
-        return label;
-    }
-
     // EFFECTS: returns a string with a description of the entry
     public String toString() {
         return getLabel() + " level of " + level + " at " + time + " on " + date + ".";
     }
 
-    // REQUIRES: time.getMinute() == 0
-    // MODIFIES: this
-    // EFFECTS: sets the time to the given value
     public void editTime(LocalTime time) {
         this.time = time;
     }
 
-    // REQUIRES: 0 <= level <= 10
-    // MODIFIES: this
-    // EFFECTS: sets the level to the given value
     public void editLevel(int level) {
         this.level = level;
     }
 
-    // MODIFIES: this
-    // EFFECTS: sets the level to the given value
     public void editLabel(Label label) {
         this.label = label;
     }
 
-    // EFFECTS: returns date of entry
+    public Label getLabel() {
+        return label;
+    }
+
     public LocalDate getDate() {
         return date;
     }
 
-    // EFFECTS: returns time of day of entry
     public LocalTime getTime() {
         return time;
     }
 
-    // EFFECTS: returns level of the entry
     public int getLevel() {
         return level;
     }
