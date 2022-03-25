@@ -1,9 +1,6 @@
 {
-  "log": {
-    "motivation": [],
-    "focus": [],
-    "energy": []
-  },
-  "name": "name testReaderEmptyUser",
+
+  "entries": [],
+  "name": "testReaderEmptyUser",
   "id": "00000000-0000-0000-0000-000000000000"
 }
