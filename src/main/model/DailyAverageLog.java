@@ -6,7 +6,7 @@ import java.util.*;
 // includes a log of all levels sorted by entry type and time of day
 public class DailyAverageLog {
 
-    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> averageLog;
+    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> averageLog;
 
     private HashMap<ProductivityEntry.Label, int[]> counts;
 
@@ -24,8 +24,8 @@ public class DailyAverageLog {
         initAverageLog(entries);
     }
 
-    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> createEmptyLog() {
-        HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> emptyLog = new HashMap<>();
+    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> createEmptyLog() {
+        HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> emptyLog = new HashMap<>();
         for (ProductivityEntry.Label label : ProductivityEntry.Label.values()) {
             emptyLog.put(label, new TreeMap<>());
         }
@@ -49,19 +49,19 @@ public class DailyAverageLog {
 
     // MODIFIES: log
     // EFFECTS:
-    public int add(ProductivityEntry entry) {
+    public Double add(ProductivityEntry entry) {
         LocalTime time = entry.getTime();
         int level = entry.getLevel();
         ProductivityEntry.Label label = entry.getLabel();
 
-        Integer oldAverage = averageLog.get(label).get(time);
-        int newAverage;
+        Double oldAverage = averageLog.get(label).get(time);
+        Double newAverage;
 
         int newCount = ++counts.get(label)[time.getHour()];
         if (oldAverage != null) {
             newAverage = oldAverage + ((level - oldAverage) / newCount);
         } else {
-            newAverage = level;
+            newAverage = (double) level;
         }
         averageLog.get(label).put(time, newAverage);
         return newAverage;
@@ -70,26 +70,26 @@ public class DailyAverageLog {
     // REQUIRES: entry is in log
     // MODIFIES: log, counts
     // EFFECTS: updates the log for the removal of this entry
-    public Integer remove(ProductivityEntry entry) {
+    public Double remove(ProductivityEntry entry) {
         LocalTime time = entry.getTime();
         int level = entry.getLevel();
         ProductivityEntry.Label label = entry.getLabel();
 
-        Integer oldAverage = averageLog.get(label).get(time);
+        Double oldAverage = averageLog.get(label).get(time);
         int newCount = --counts.get(label)[time.getHour()];
 
-        int newAverage;
+        double newAverage;
         if (newCount == 0) {
             averageLog.get(label).remove(time);
             return null;
         }
 
-        newAverage = oldAverage + (oldAverage - level) / newCount;
+        newAverage = oldAverage + (oldAverage - level) / newCount; //!!! fix tests
         averageLog.get(label).put(time, newAverage);
         return newAverage;
     }
 
-    public HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> getLog() {
+    public HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> getLog() {
         return averageLog;
     }
 }

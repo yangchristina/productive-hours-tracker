@@ -134,7 +134,7 @@ public class LoggedInGUI {
                     JOptionPane.showMessageDialog(listPanel, "Removed: " + selected);
                     listModel.removeElement(selected);
                     graphPanel.revalidate();
-                    graphPanel.repaint();
+                    graphPanel.repaint(); //!!! not being updated
                 }
             }
         });
@@ -251,7 +251,7 @@ public class LoggedInGUI {
     // EFFECTS: removes selected entry from the productivity log
     public void removeEntry(ProductivityEntry entry) {
         System.out.println("Operation: remove");
-        Integer newAverageLevel = user.getProductivityLog().remove(entry);
+        user.getProductivityLog().remove(entry);
 
         System.out.println("Removed: " + entry.toString());
     }

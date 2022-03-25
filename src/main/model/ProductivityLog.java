@@ -28,14 +28,14 @@ public class ProductivityLog implements Writable {
 
     // MODIFIES: this
     // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
-    public int add(ProductivityEntry entry) { //must add it to correct slot!!!
+    public Double add(ProductivityEntry entry) { //must add it to correct slot!!!
         entries.add(entry);
         return dailyAverageLog.add(entry);
     }
 
     // MODIFIES: this
     // EFFECTS: removes entry from list, and removes it to DailyAverageLog
-    public Integer remove(ProductivityEntry entry) {
+    public Double remove(ProductivityEntry entry) {
         entries.remove(entry);
         return dailyAverageLog.remove(entry);
     }

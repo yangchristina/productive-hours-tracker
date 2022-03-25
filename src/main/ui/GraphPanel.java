@@ -5,6 +5,7 @@ import model.ProductivityEntry;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -24,10 +25,10 @@ public class GraphPanel extends JPanel {
     private int scaleY; // means __ pixels in one X unit
     private int pointRadius;
 
-    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> averageLog;
+    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> averageLog;
 
     // EFFECTS: constructs a graph panel with a given averageLog
-    public GraphPanel(HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> averageLog) {
+    public GraphPanel(HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> averageLog) {
         this.averageLog = averageLog;
     }
 
@@ -107,17 +108,17 @@ public class GraphPanel extends JPanel {
     // EFFECTS: plots data points as points and as line
     private void plotData() {
         int count = 0;
-        for (Map.Entry<ProductivityEntry.Label, TreeMap<LocalTime, Integer>> mapSet : averageLog.entrySet()) {
+        for (Map.Entry<ProductivityEntry.Label, TreeMap<LocalTime, Double>> mapSet : averageLog.entrySet()) {
             g2d.setColor(DATA_COLORS[count]);
 
             int prevX = -1;
-            int prevY = -1;
-            for (Map.Entry<LocalTime, Integer> entry : mapSet.getValue().entrySet()) {
+            double prevY = -1.0;
+            for (Map.Entry<LocalTime, Double> entry : mapSet.getValue().entrySet()) {
                 //legend, !!! change pos of legend, this place should be time axis label instead
                 g2d.drawString(mapSet.getKey().toString(), getWidth() / 2 - (count - 1) * 2 * scaleX, scaleY * 11 + 40);
 
                 int posX = entry.getKey().getHour() + 1;
-                int posY = 11 - entry.getValue();
+                double posY = 11 - entry.getValue();
 
                 drawEllipse(posX, posY);
                 drawLineBetweenPoints(prevX, prevY, posX, posY);
@@ -131,8 +132,8 @@ public class GraphPanel extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: draws ellipse onto graph to create a scatterplot
-    private void drawEllipse(int posX, int posY) {
-        Ellipse2D dot = new Ellipse2D.Float(
+    private void drawEllipse(int posX, double posY) {
+        Ellipse2D dot = new Ellipse2D.Double(
                 posX * scaleX - pointRadius,
                 posY * scaleY - pointRadius,
                 2 * pointRadius, 2 * pointRadius
@@ -142,14 +143,22 @@ public class GraphPanel extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: connects ellipses on graph together to create a line graph
-    private void drawLineBetweenPoints(int prevX, int prevY, int posX, int posY) {
+    private void drawLineBetweenPoints(int prevX, double prevY, int posX, double posY) {
         if (prevX > 0) {
-            g2d.drawLine(
+            Shape l = new Line2D.Double(
                     prevX * scaleX,
                     prevY * scaleY,
                     posX * scaleX,
                     posY * scaleY
             );
+            g2d.draw(l);
+
+//            g2d.drawLine(
+//                    prevX * scaleX,
+//                    prevY * scaleY,
+//                    posX * scaleX,
+//                    posY * scaleY
+//            );
         }
     }
 
