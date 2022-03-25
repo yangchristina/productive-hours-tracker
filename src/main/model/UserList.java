@@ -16,9 +16,9 @@ public class UserList implements Writable {
 
     private HashMap<String, UUID> users;
 
-    // EFFECTS: constructs an empty user list
-    public UserList(HashMap<String, UUID> userList) {
-        users = userList;
+    // EFFECTS: constructs a user list with a given users
+    public UserList(HashMap<String, UUID> users) {
+        this.users = users;
     }
 
     // EFFECTS: if user is not in users, then call add method to add it to users, else throw UserAlreadyExistsException
@@ -56,16 +56,6 @@ public class UserList implements Writable {
         return id;
     }
 
-    // EFFECTS: removes user and returns true if user is in list, else returns false
-    public boolean remove(User user) {
-        return remove(user.getName());
-    }
-
-    // EFFECTS: if name is in list, remove it and return true, else return false
-    public boolean remove(String name) {
-        UUID removed = users.remove(name);
-        return removed != null;
-    }
 
     // EFFECTS: returns number of users
     public int size() {
