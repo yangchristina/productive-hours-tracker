@@ -9,11 +9,12 @@ import java.awt.geom.Line2D;
 import java.time.LocalTime;
 import java.util.*;
 
+// creates a graph (line and scatter plot) of the daily averages of all productivity entries
 public class GraphPanel extends JPanel {
 
     private static final Color[] DATA_COLORS = new Color[]{
-        new Color(255, 0, 0), // Energy
-        new Color(100, 255, 0), // Focus
+        new Color(255, 0, 0), // ENERGY
+        new Color(100, 255, 0), // FOCUS
         new Color(0, 200, 255) // MOTIVATION
     };
 
@@ -21,8 +22,8 @@ public class GraphPanel extends JPanel {
 
     private Graphics2D g2d;
 
-    private int scaleX; // means __ pixels in one X unit
-    private int scaleY; // means __ pixels in one X unit
+    private int scaleX; // means scaleX pixels in one X unit
+    private int scaleY; // means scaleY pixels in one Y unit
     private int pointRadius;
 
     private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> averageLog;
@@ -33,7 +34,7 @@ public class GraphPanel extends JPanel {
     }
 
     // MODIFIES: this
-    // EFFECTS: paints graph
+    // EFFECTS: calls methods to paint graph
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -91,6 +92,8 @@ public class GraphPanel extends JPanel {
         g2d.drawLine(0, scaleY * 11, getWidth(), scaleY * 11);
     }
 
+    // MODIFIES: this
+    // EFFECTS: draws a title for the graph
     private void setTitle() {
         g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, g2d.getFont().getSize() * 2));
         g2d.drawString("Productivity Levels Over Time", getWidth() / 2 - 150, getHeight() / 20);
@@ -98,7 +101,7 @@ public class GraphPanel extends JPanel {
     }
 
     // MODIFIES: this
-    // EFFECTS: makes the background white
+    // EFFECTS: makes the graph background white
     private void setBackgroundColor() {
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -131,7 +134,7 @@ public class GraphPanel extends JPanel {
     }
 
     // MODIFIES: this
-    // EFFECTS: draws ellipse onto graph to create a scatterplot
+    // EFFECTS: draws ellipse onto graph to create a scatter-plot
     private void drawEllipse(int posX, double posY) {
         Ellipse2D dot = new Ellipse2D.Double(
                 posX * scaleX - pointRadius,
@@ -152,14 +155,6 @@ public class GraphPanel extends JPanel {
                     posY * scaleY
             );
             g2d.draw(l);
-
-//            g2d.drawLine(
-//                    prevX * scaleX,
-//                    prevY * scaleY,
-//                    posX * scaleX,
-//                    posY * scaleY
-//            );
         }
     }
-
 }
