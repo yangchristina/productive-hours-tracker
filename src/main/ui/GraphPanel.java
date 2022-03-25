@@ -4,6 +4,7 @@ import model.ProductivityEntry;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.time.LocalTime;
@@ -88,8 +89,20 @@ public class GraphPanel extends JPanel {
     private void drawAxis() {
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
-        g2d.drawLine(scaleX, 0, scaleX, getHeight());
-        g2d.drawLine(0, scaleY * 11, getWidth(), scaleY * 11);
+
+        g2d.drawLine(scaleX, 0, scaleX, getHeight()); // y-axis
+        g2d.drawLine(0, scaleY * 11, getWidth(), scaleY * 11); // x-axis
+
+        // label for y-axis
+        AffineTransform affineTransform = new AffineTransform();
+        affineTransform.rotate(Math.toRadians(-90), 0, 0);
+        Font rotatedFont = g2d.getFont().deriveFont(affineTransform);
+        g2d.setFont(rotatedFont);
+        g2d.drawString("Level", scaleX / 2, getHeight() / 2);
+        g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, g2d.getFont().getSize()));
+
+        // label for x-axis
+        g2d.drawString("Time", getWidth() / 2, scaleY * 11 + 35);
     }
 
     // MODIFIES: this
@@ -118,7 +131,7 @@ public class GraphPanel extends JPanel {
             double prevY = -1.0;
             for (Map.Entry<LocalTime, Double> entry : mapSet.getValue().entrySet()) {
                 //legend, !!! change pos of legend, this place should be time axis label instead
-                g2d.drawString(mapSet.getKey().toString(), getWidth() / 2 - (count - 1) * 2 * scaleX, scaleY * 11 + 40);
+                g2d.drawString(mapSet.getKey().toString(), getWidth() / 2 - (count - 1) * 2 * scaleX, scaleY * 12);
 
                 int posX = entry.getKey().getHour() + 1;
                 double posY = 11 - entry.getValue();
