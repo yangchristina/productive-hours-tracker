@@ -29,8 +29,7 @@ these patterns.
 - As a user, I want to be able to view my past logs, ordered by date of log
 - As a user, I want to be able to edit and delete my past productivity entry logs
 - As a user, I want to be able to view my peak and trough productivity times
-- As a user, I want to be able to visualize patterns in my energy levels through graphs 
-(cannot be done with console-based application)
+- As a user, I want to be able to visualize patterns in my energy levels through graphs
 - As a user, I want to be able to log in and log out of my account 
 - As a user, I want to be able to save all my user information, which includes all my productivity logs, to file 
 - As a user, I want my user data to be loaded from file when I log in
