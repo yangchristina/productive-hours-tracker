@@ -85,7 +85,7 @@ public class LoggedInGUI {
     }
 
     // MODIFIES: this
-    // EFFECTS: revaluates and repaints the graph to update the ui
+    // EFFECTS: update the graph to new dailyAverageLog values
     private void updateGraph() {
         graphPanel.revalidate();
         graphPanel.repaint();
