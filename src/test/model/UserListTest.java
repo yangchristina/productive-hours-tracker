@@ -5,12 +5,10 @@ import model.exceptions.UserAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReadUserList;
-import ui.exceptions.InvalidInputException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +17,7 @@ public class UserListTest {
     private static final UUID USER2_ID = UUID.randomUUID();
 
     private UserList users;
+    private UserList emptyList;
     private User user;
     private User user2;
     private User userInFile;
@@ -27,15 +26,18 @@ public class UserListTest {
     void runBefore() {
         JsonReadUserList reader = new JsonReadUserList();
         try {
-            users = new UserList(reader.read()); //!!! read data here
+            users = new UserList(reader.read());
         } catch (IOException e) {
             fail("file missing");
         }
 
+        emptyList = new UserList(new HashMap<>());
+
         user = new User("test user 1");
-        user2 = new User("test user 2", USER2_ID, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        userInFile = new User("name testReaderEmptyUser", UUID.fromString("00000000-0000-0000-0000-000000000000"),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        user2 = new User("test user 2", USER2_ID, new ArrayList<>());
+
+        userInFile = new User("testReaderEmptyUser", UUID.fromString("00000000-0000-0000-0000-000000000000"),
+                new ArrayList<>());
     }
 
     @Test
@@ -62,12 +64,9 @@ public class UserListTest {
 
     @Test
     void testRegisterNewUser() {
-        clearUsers(users);
-
         try {
             users.register(user);
             assertTrue(users.getNames().contains(user.getName()));
-            assertEquals(1, users.size());
         } catch (UserAlreadyExistsException e) {
             fail("user already there");
         }
@@ -114,47 +113,10 @@ public class UserListTest {
     }
 
     @Test
-    void testRemoveValidName() {
-        users.add(user);
-        users.add(user2);
-
-        Set<String> names = new HashSet<>(users.getNames());
-        for (String name : names) {
-            assertTrue(users.remove(name));
-        }
-
-        assertTrue(users.isEmpty());
-    }
-
-    @Test
-    void testRemoveValidUser() {
-        users.add(user);
-        users.add(user2);
-        assertTrue(users.remove(user));
-        assertTrue(users.remove(user2));
-    }
-
-    @Test
-    void testRemoveInvalidName() {
-        users.add(user);
-        users.remove(user.getName());
-        assertFalse(users.remove(user.getName()));
-    }
-
-    @Test
-    void testRemoveInvalidUser() {
-        users.add(user);
-        users.remove(user);
-        assertFalse(users.remove(user));
-    }
-
-    @Test
     void testIsEmpty() {
-        clearUsers(users);
-
-        assertTrue(users.isEmpty());
-        users.add(user);
-        assertFalse(users.isEmpty());
+        assertTrue(emptyList.isEmpty());
+        emptyList.add(user);
+        assertFalse(emptyList.isEmpty());
     }
 
     @Test
@@ -192,18 +154,6 @@ public class UserListTest {
     private void usersIdentical(User user1, User user2) {
         assertEquals(user1.getName(), user2.getName());
         assertEquals(user1.getId(), user2.getId());
-        assertEquals(user1.getLog(), user2.getLog());
-        assertEquals(user1.getEnergyEntries(), user2.getEnergyEntries());
-        assertEquals(user1.getFocusEntries(), user2.getFocusEntries());
-        assertEquals(user1.getMotivationEntries(), user2.getMotivationEntries());
-    }
-
-    // MODIFIES: users
-    // EFFECTS: empties given user list
-    private void clearUsers(UserList users) {
-        Set<String> names = new HashSet<>(users.getNames());
-        for (String name : names) {
-            assertTrue(users.remove(name));
-        }
+        assertEquals(user1.getProductivityLog().getEntries(), user2.getProductivityLog().getEntries());
     }
 }

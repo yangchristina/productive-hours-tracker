@@ -45,13 +45,13 @@ public class ProductivityEntryTest {
 
     @Test
     void testEditTime() {
-        entry.editTime(LocalTime.of(4, 0));
+        entry.setTime(LocalTime.of(4, 0));
         assertEquals(4, entry.getTime().getHour());
     }
 
     @Test
     void testEditLevel() {
-        entry.editLevel(2);
+        entry.setLevel(2);
         assertEquals(2, entry.getLevel());
     }
 }

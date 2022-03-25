@@ -99,18 +99,4 @@ public class ProductivityLogTest {
         list.add(focusEntry);
         return list;
     }
-
-//    // EFFECTS: creates and returns a sample focus list
-//    private ArrayList<ProductivityEntry> createFocusList() {
-//        ArrayList<ProductivityEntry> list = new ArrayList<>();
-//        list.add(motivationEntry);
-//        return list;
-//    }
-//
-//    // EFFECTS: creates a sample motivation list
-//    private ArrayList<ProductivityEntry> createMotivationList() {
-//        ArrayList<ProductivityEntry> list = new ArrayList<>();
-//        list.add(focusEntry);
-//        return list;
-//    }
 }

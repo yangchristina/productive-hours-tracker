@@ -78,8 +78,8 @@ public class DailyAverageLogTest {
         label = ProductivityEntry.Label.MOTIVATION;
         log.add(new ProductivityEntry(label, LocalDate.now(), time, 0));
         assertEquals(0, log.getLog().get(label).get(time));
-        log.add(new ProductivityEntry(label, LocalDate.now(), time, 2));
-        assertEquals(1, log.getLog().get(label).get(time));
+        log.add(new ProductivityEntry(label, LocalDate.now(), time, 1));
+        assertEquals(0.5, log.getLog().get(label).get(time));
     }
 
     @Test
@@ -100,22 +100,7 @@ public class DailyAverageLogTest {
         assertNull(log2.remove(motivationEntry));
     }
 
-//    @Test
-//    void getPeaksAndTroughs() {
-//        HashMap<String, ArrayList<LocalTime>> peakTrough = log2.getPeaksAndTroughs().get(ProductivityEntry.Label.ENERGY);
-//        assertEquals(peakTrough, log2.getPeaksAndTroughs(ProductivityEntry.Label.ENERGY));
-//
-//        ArrayList<LocalTime> peakHours = peakTrough.get("peak");
-//        ArrayList<LocalTime> troughHours = peakTrough.get("trough");
-//
-//        assertEquals(1, peakHours.size());
-//        assertEquals(1, troughHours.size());
-//
-//        assertEquals(LocalTime.of(3, 0), peakHours.get(0));
-//        assertEquals(LocalTime.of(5, 0), troughHours.get(0));
-//    }
-
-    // EFFECTS: creates and returns a sample energy list
+    // EFFECTS: constructs and returns a sample energy list
     private ArrayList<ProductivityEntry> createEntriesList() {
         ArrayList<ProductivityEntry> list = new ArrayList<>();
 
@@ -125,18 +110,4 @@ public class DailyAverageLogTest {
 
         return list;
     }
-
-//    // EFFECTS: creates and returns a sample focus list
-//    private ArrayList<ProductivityEntry> createFocusList() {
-//        ArrayList<ProductivityEntry> list = new ArrayList<>();
-//        list.add(focusEntry);
-//        return list;
-//    }
-//
-//    // EFFECTS: creates a sample motivation list
-//    private ArrayList<ProductivityEntry> createMotivationList() {
-//        ArrayList<ProductivityEntry> list = new ArrayList<>();
-//        list.add(motivationEntry);
-//        return list;
-//    }
 }
