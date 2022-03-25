@@ -38,9 +38,9 @@ public class LoggedOutGUI {
     private void initUserList() {
         JsonReadUserList reader = new JsonReadUserList();
         try {
-            users = new UserList(reader.read()); //!!! read data here
+            users = new UserList(reader.read()); //
         } catch (IOException e) {
-            // shouldn't ever happen cuz data/users.json (should) always exist, maybe rewrite user.json
+            // shouldn't ever happen cuz data/users.json (should) always exist
         }
     }
 

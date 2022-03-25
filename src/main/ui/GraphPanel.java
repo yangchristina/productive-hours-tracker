@@ -130,7 +130,6 @@ public class GraphPanel extends JPanel {
             int prevX = -1;
             double prevY = -1.0;
             for (Map.Entry<LocalTime, Double> entry : mapSet.getValue().entrySet()) {
-                //legend, !!! change pos of legend, this place should be time axis label instead
                 g2d.drawString(mapSet.getKey().toString(), getWidth() / 2 - (count - 1) * 2 * scaleX, scaleY * 12);
 
                 int posX = entry.getKey().getHour() + 1;

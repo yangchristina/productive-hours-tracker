@@ -86,7 +86,7 @@ public class DailyAverageLog {
             return null;
         }
 
-        newAverage = oldAverage + (oldAverage - level) / newCount; //!!! fix tests
+        newAverage = oldAverage + (oldAverage - level) / newCount;
         averageLog.get(label).put(time, newAverage);
         return newAverage;
     }
