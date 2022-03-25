@@ -4,23 +4,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 // a log of all information related to productivity entries
 public class ProductivityLog implements Writable {
     protected ArrayList<ProductivityEntry> entries;
-    private DailyAverageLog dailyAverageLog;
+    private final DailyAverageLog dailyAverageLog;
 
-    // EFFECTS: constructs a ProductivityLog with an empty list of energy entries, focus entreis, and motivation entries
-    //          creates a new DailyAverageLog for each of energy, focus, and motivation
+    // EFFECTS: constructs a ProductivityLog with an empty list of entries and an empty dailyAverageLog
     public ProductivityLog() {
         entries = new ArrayList<>();
         dailyAverageLog = new DailyAverageLog();
     }
 
-    // EFFECTS: constructs a ProductivityLog with an empty list of energy entries, focus entreis, and motivation entries
-    //          creates a new DailyAverageLog for each of energy, focus, and motivation
+    // EFFECTS: constructs a ProductivityLog with an given list of entries and a dailyAverageLog with these entries
     public ProductivityLog(ArrayList<ProductivityEntry> entries) {
         this.entries = entries;
         dailyAverageLog = new DailyAverageLog(entries);
@@ -40,16 +37,7 @@ public class ProductivityLog implements Writable {
         return dailyAverageLog.remove(entry);
     }
 
-//    // !!! where to call dailyAverageLog for edit
-//    public void edit(ProductivityEntry entry, ProductivityEntry.Label label, int level, LocalTime time) {
-//        dailyAverageLog.remove(entry);
-//        entry.editLabel(label);
-//        entry.editLevel(level);
-//        entry.editTime(time);
-//        dailyAverageLog.add(entry);
-//    }
-
-    // EFFECTS: returns true if energyEntries, focusEntries, and motivationEntries are all empty
+    // EFFECTS: returns true if entries is empty
     public boolean isEmpty() {
         return entries.isEmpty();
     }
@@ -61,15 +49,15 @@ public class ProductivityLog implements Writable {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("entries", logToJson(entries));
+        json.put("entries", logToJson());
         return json;
     }
 
-    // EFFECTS: returns items in this log as a JSON array
-    private JSONArray logToJson(ArrayList<ProductivityEntry> log) {
+    // EFFECTS: returns entries as a JSON array
+    private JSONArray logToJson() {
         JSONArray jsonArray = new JSONArray();
 
-        for (ProductivityEntry entry : log) {
+        for (ProductivityEntry entry : entries) {
             jsonArray.put(entry.toJson());
         }
 
