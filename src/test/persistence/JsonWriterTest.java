@@ -51,7 +51,6 @@ class JsonWriterTest extends JsonTest {
     void testWriterEmptyUser() {
         try {
             User user = new User("chris");
-//            JsonWriter writer = new JsonWriter(user.getId().toString()); !!! normally do like this
             JsonWriter writer = new JsonWriter("testWriterEmptyUser");
             writer.open();
             writer.write(user);
