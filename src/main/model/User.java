@@ -6,21 +6,20 @@ import persistence.Writable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-// Creates a new user
+// A user, with a productivityLog, name and id
 public class User implements Writable {
     private String name;
     private UUID id;
     private ProductivityLog productivityLog;
 
-    // EFFECTS: constructs a user with given name, a random id, and empty energy, focus and motivation lists
+    // EFFECTS: constructs a user with given name, a random id, and an empty ProductivityLog
     public User(String name) {
         this.name = name;
         id = UUID.randomUUID();
         productivityLog = new ProductivityLog();
     }
 
-    // EFFECTS: constructs a user with given name, id, energy, focus and motivation lists, and
-    //          a daily average log based on energy, focus, and motivation values
+    // EFFECTS: constructs a user with given name and id, and a productivityLog with the given entries
     public User(String name, UUID id, ArrayList<ProductivityEntry> entries) {
         this.name = name;
         this.id = id;

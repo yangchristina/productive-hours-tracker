@@ -21,7 +21,7 @@ public class UserList implements Writable {
         users = userList;
     }
 
-    // EFFECTS: if user is not in users, then add it to users, else throw
+    // EFFECTS: if user is not in users, then call add method to add it to users, else throw UserAlreadyExistsException
     public void register(User user) throws UserAlreadyExistsException {
         if (users.get(user.getName()) != null) {
             throw new UserAlreadyExistsException();
@@ -30,7 +30,7 @@ public class UserList implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds user's name and id to end of users
+    // EFFECTS: adds an entry to users where the user's name is the key, and the user's id is the value
     public void add(User user) {
         users.put(user.getName(), user.getId());
     }

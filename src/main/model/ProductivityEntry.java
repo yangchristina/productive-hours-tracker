@@ -32,15 +32,15 @@ public class ProductivityEntry implements Writable {
         return getLabel() + " level of " + level + " at " + time + " on " + date + ".";
     }
 
-    public void editTime(LocalTime time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
-    public void editLevel(int level) {
+    public void setLevel(int level) {
         this.level = level;
     }
 
-    public void editLabel(Label label) {
+    public void setLabel(Label label) {
         this.label = label;
     }
 
