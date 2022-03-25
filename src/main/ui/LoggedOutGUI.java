@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
+// the application page for a user before they log on. Allows them to login or register
 public class LoggedOutGUI {
 
     private JTextField tf;
@@ -18,18 +19,22 @@ public class LoggedOutGUI {
     private UserList users;
     private JFrame frame;
 
+    // EFFECTS: constructs a loggedOutGUI
     public LoggedOutGUI() {
         initUserList();
         initPanel();
         initFrame();
     }
 
+    // EFFECTS: constructs a loggedOutGUI with a given users
     public LoggedOutGUI(UserList users) {
         this.users = users;
         initPanel();
         initFrame();
     }
 
+    // MODIFIES: this
+    // EFFECTS: reads the userList from file and assigns it to users
     private void initUserList() {
         JsonReadUserList reader = new JsonReadUserList();
         try {
@@ -39,12 +44,16 @@ public class LoggedOutGUI {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes panel
     private void initPanel() {
         panel = new JPanel(); // the panel is not visible in output
         initInput();
         initButtons();
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds input to panel
     private void initInput() {
         JLabel label = new JLabel("Enter Text");
         tf = new JTextField(10); // accepts up to 10 characters
@@ -52,6 +61,8 @@ public class LoggedOutGUI {
         panel.add(tf);
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds login and register buttons to panel
     private void initButtons() {
         JButton login = new JButton(new AbstractAction("Login") {
             @Override
@@ -71,6 +82,8 @@ public class LoggedOutGUI {
         panel.add(register);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes frame and adds panel to it
     private void initFrame() {
         frame = new JFrame("Login page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,30 +94,29 @@ public class LoggedOutGUI {
         frame.setVisible(true);
     }
 
-    // REQUIRES: user is not yet in user list, name is not the empty string
     // MODIFIES: this
-    // EFFECTS: adds user to end of user list
+    // EFFECTS: registers a user if user is not already in users, else show message to try again
     private void registerUser(String name) { //put in UserList
         User user = new User(name);
         try {
             users.register(user);
             startSession(user);
         } catch (UserAlreadyExistsException e) {
-            System.out.println("User already exists");
             JOptionPane.showMessageDialog(panel, "Name taken, please choose a different name");
         }
     }
 
-    // EFFECTS: returns user with the given name, or null if there are no users with name in user list
+    // EFFECTS: logs in user with given name or shows message if no user with name in users
     private void loginUser(String name) {
         try {
             startSession(users.loadUser(name));
         } catch (InvalidUserException e) { // create this exception
-            System.out.println("User not found");
             JOptionPane.showMessageDialog(panel, "User not found");
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: switches to the loggedInGUI frame and disposes current frame
     private void startSession(User user) {
         new LoggedInGUI(user, users);
         frame.dispose();

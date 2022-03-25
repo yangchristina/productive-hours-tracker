@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+// application page for a user that has logged in
 public class LoggedInGUI {
     private static final Object[] ENTRY_TYPE_OPTIONS = {ProductivityEntry.Label.ENERGY, ProductivityEntry.Label.FOCUS,
             ProductivityEntry.Label.MOTIVATION};
@@ -31,6 +32,7 @@ public class LoggedInGUI {
     private JList<ListModel<ProductivityEntry>> entryList;
     private DefaultListModel<ProductivityEntry> listModel;
 
+    // EFFECTS: Constructs a gui for a logged in user, with a given user and user list
     public LoggedInGUI(User user, UserList users) {
         this.user = user;
         this.userList = users;
@@ -44,29 +46,32 @@ public class LoggedInGUI {
         initFrame();
     }
 
+    // MODIFIES: this
+    // EFFECTS: initiates the graphPanel with the logged-in user's dailyAverageLog
     private void initGraph() {
         graphPanel =  new GraphPanel(user.getProductivityLog().getDailyAverageLog().getLog());
     }
 
+    // MODIFIES: this
+    // EFFECTS: initiates the listPanel with an empty JPanel that has a label
     private void initListPanel() {
         listPanel = new JPanel();
-        JLabel label = new JLabel("Energy entries:");
+        JLabel label = new JLabel("Entries:");
         listPanel.add(label);
     }
 
-
+    // MODIFIES: this
+    // EFFECTS: constructs the menu bar with options for save and logout under FILE
     private void initMenuBar() {
         menuBar = new JMenuBar();
 
         JMenu m1 = new JMenu("FILE");
-        JMenu m2 = new JMenu("Help");
         menuBar.add(m1);
-        menuBar.add(m2);
 
         JMenuItem m11 = new JMenuItem("Logout");
         m11.addActionListener(ev -> {
             endUserSession();
-            new LoggedOutGUI();
+            new LoggedOutGUI(userList);
             frame.dispose();
         });
 
@@ -80,18 +85,23 @@ public class LoggedInGUI {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds button to panel which adds an entry on click
+    // EFFECTS: revaluates and repaints the graph to update the ui
+    private void updateGraph() {
+        graphPanel.revalidate();
+        graphPanel.repaint();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds button to panel which adds an entry on click and updates the graph for the new entry
     private void initAddEntryButton() {
         JButton add = new JButton(new AbstractAction("Add") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("add clicked");
                 ProductivityEntry entry = createDefaultEntry();
                 if (entryOptionForm(entry)) { // true means added, false means not added
                     user.getProductivityLog().add(entry);
                     listModel.addElement(entry);
-                    graphPanel.revalidate();
-                    graphPanel.repaint();
+                    updateGraph();
                 }
             }
         });
@@ -99,7 +109,7 @@ public class LoggedInGUI {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds button to panel which edits selected entry on click
+    // EFFECTS: adds button to panel which edits selected entry on click and updates the graph
     private void initEditEntryButton() {
         JButton edit = new JButton(new AbstractAction("Edit") {
             @Override
@@ -112,8 +122,7 @@ public class LoggedInGUI {
                         user.getProductivityLog().getDailyAverageLog().remove(old);
                         user.getProductivityLog().getDailyAverageLog().add(selected);
                         JOptionPane.showMessageDialog(listPanel,"Entry changed to: " + selected);
-                        graphPanel.revalidate();
-                        graphPanel.repaint();
+                        updateGraph();
                     }
                 }
             }
@@ -122,19 +131,17 @@ public class LoggedInGUI {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds button to panel which deletes selected entry on click
+    // EFFECTS: adds button to panel which deletes selected entry on click, and updates graph
     private void initDeleteEntryButton() {
         JButton delete = new JButton(new AbstractAction("Delete") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ProductivityEntry selected = (ProductivityEntry) entryList.getSelectedValue();
-
                 if (selected != null) { // null if after removing no average level for that time
                     user.getProductivityLog().remove(selected);
                     JOptionPane.showMessageDialog(listPanel, "Removed: " + selected);
                     listModel.removeElement(selected);
-                    graphPanel.revalidate();
-                    graphPanel.repaint(); //!!! not being updated
+                    updateGraph();
                 }
             }
         });
@@ -142,7 +149,7 @@ public class LoggedInGUI {
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes entry list
+    // EFFECTS: initializes entry list with all entries from user's productivity log
     private void initEntryList() {
         listModel = new DefaultListModel<>();
         for (ProductivityEntry val : user.getProductivityLog().getEntries()) {
@@ -152,6 +159,8 @@ public class LoggedInGUI {
         initList(entryList);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes layout of listPanel and makes it scrollable
     private void initList(JList<ListModel<ProductivityEntry>> list) {
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
@@ -162,6 +171,8 @@ public class LoggedInGUI {
         listPanel.add(pane);
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes JFrame and adds panels to it
     private void initFrame() {
         frame = new JFrame("Application");
 
@@ -182,26 +193,20 @@ public class LoggedInGUI {
         });
     }
 
+    // MODIFIES: this
+    // EFFECTS: calls promptSave method and saves user to userList if wasSaved is true
     private void endUserSession() {
         promptSave();
         if (wasSaved) {
-            System.out.println("was saved, now saving user list");
             saveUserList();
         }
     }
 
-    // asks user if they would like to save their session
-    // EFFECTS: if user inputs true, save session, if false don't save, else ask again
+    // EFFECTS: asks user if they would like to save their session and saves if they answer yes
     private void promptSave() {
-        System.out.println("Would you like to save?");
         if (JOptionPane.showConfirmDialog(frame, "Would you like to save?", "WARNING",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            // yes option
             save();
-            System.out.println("You said yes");
-        } else {
-            // no option
-            System.out.println("not saved");
         }
     }
 
@@ -220,6 +225,8 @@ public class LoggedInGUI {
         }
     }
 
+    // EFFECTS: shows form where user can input select changes to entry
+    //          returns false if user cancels form, true otherwise
     private boolean entryOptionForm(ProductivityEntry entry) {
         ProductivityEntry.Label entryType = (ProductivityEntry.Label) JOptionPane.showInputDialog(null,
                 "Which energy type?", "Option", JOptionPane.QUESTION_MESSAGE, null, ENTRY_TYPE_OPTIONS,
@@ -240,34 +247,17 @@ public class LoggedInGUI {
             return false;
         }
 
-        entry.editLabel(entryType);
-        entry.editLevel(level);
-        entry.editTime(time);
+        entry.setLabel(entryType);
+        entry.setLevel(level);
+        entry.setTime(time);
 
         return true;
     }
 
-    // MODIFIES: this
-    // EFFECTS: removes selected entry from the productivity log
-    public void removeEntry(ProductivityEntry entry) {
-        System.out.println("Operation: remove");
-        user.getProductivityLog().remove(entry);
-
-        System.out.println("Removed: " + entry.toString());
-    }
-
-    // EFFECTS: creates a default energy entry with a label of ENERGY, today's date, time of 0:0 and level of 0.
+    // EFFECTS: returns a default energy entry with a label of ENERGY, today's date, current time of day and level of 5
     private ProductivityEntry createDefaultEntry() {
         return new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(),
                 LocalTime.of(LocalTime.now().getHour(), 0),5);
-    }
-
-    private static Object[] createTimeOptions() {
-        Object[] timeOptions = new Object[24];
-        for (int i = 0; i < 24; i++) {
-            timeOptions[i] = LocalTime.of(i, 0);
-        }
-        return timeOptions;
     }
 
     // EFFECTS: saves user list to file
@@ -279,30 +269,16 @@ public class LoggedInGUI {
             writer.write(userList);
             writer.close();
         } catch (IOException e) {
-            System.out.println("fight ");
+            // exception should never be thrown
         }
     }
 
-
-
-//    // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
-//    private void showPeakHours(ProductivityEntry.Label label) {
-//        ArrayList<LocalTime> peakHours = user.getPeaksAndTroughs(label).get("peak");
-//        if (peakHours.isEmpty()) {
-//            System.out.println("Not enough " + label + " entries");
-//        } else {
-//            System.out.println("Your peak " + label + " hours are at " + peakHours);
-//        }
-//    }
-//
-//    // EFFECTS: shows the user's peak hours for either focus, energy, or motivation, depending on the user's input
-//    private void showTroughHours() {
-//        String label = input.entryType();
-//        ArrayList<LocalTime> troughHours = user.getPeaksAndTroughs(label).get("trough");
-//        if (troughHours.isEmpty()) {
-//            System.out.println("Not enough " + label + " entries");
-//        } else {
-//            System.out.println("Your trough " + label + " hours are at " + troughHours);
-//        }
-//    }
+    // EFFECTS: returns a time options object with an entry for each hour of the day [00:00-23:00]
+    private static Object[] createTimeOptions() {
+        Object[] timeOptions = new Object[24];
+        for (int i = 0; i < 24; i++) {
+            timeOptions[i] = LocalTime.of(i, 0);
+        }
+        return timeOptions;
+    }
 }
