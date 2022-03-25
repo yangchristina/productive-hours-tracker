@@ -121,7 +121,7 @@ public class LoggedInGUI {
                     if (entryOptionForm(selected)) {
                         user.getProductivityLog().getDailyAverageLog().remove(old);
                         user.getProductivityLog().getDailyAverageLog().add(selected);
-                        JOptionPane.showMessageDialog(listPanel,"Entry changed to: " + selected);
+                        JOptionPane.showMessageDialog(frame,"Entry changed to: " + selected);
                         updateGraph();
                     }
                 }
@@ -139,7 +139,7 @@ public class LoggedInGUI {
                 ProductivityEntry selected = (ProductivityEntry) entryList.getSelectedValue();
                 if (selected != null) { // null if after removing no average level for that time
                     user.getProductivityLog().remove(selected);
-                    JOptionPane.showMessageDialog(listPanel, "Removed: " + selected);
+                    JOptionPane.showMessageDialog(frame, "Removed: " + selected);
                     listModel.removeElement(selected);
                     updateGraph();
                 }
@@ -167,7 +167,7 @@ public class LoggedInGUI {
         list.setVisibleRowCount(5);
 
         JScrollPane pane = new JScrollPane(list);
-        pane.setPreferredSize(new Dimension(300, 80));
+        pane.setPreferredSize(new Dimension(320, 80));
         listPanel.add(pane);
     }
 

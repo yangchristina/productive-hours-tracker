@@ -33,14 +33,14 @@ public class ProductivityLogTest {
     @Test
     void testConstructorNoParams() {
         assertTrue(log.isEmpty());
+        assertNotNull(log.getDailyAverageLog().getLog());
     }
 
     @Test
     void testConstructorTwoParams() {
         assertFalse(log2.isEmpty());
         assertEquals(createEntriesList(), log2.getEntries());
-//        assertEquals(createFocusList(), log2.getFocusEntries());
-//        assertEquals(createMotivationList() , log2.getMotivationEntries());
+        assertNotNull(log.getDailyAverageLog());
     }
 
     @Test
@@ -75,12 +75,6 @@ public class ProductivityLogTest {
         assertNull(log2.remove(motivationEntry));
         assertTrue(log2.isEmpty());
     }
-
-//    @Test
-//    void testGetAllEntries() {
-//        assertEquals(log2.getEnergyEntries().size() + log2.getFocusEntries().size()
-//                + log2.getMotivationEntries().size(), log2.getAllEntries().size());
-//    }
 
     @Test
     void testIsEmpty() {
