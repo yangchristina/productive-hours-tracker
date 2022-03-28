@@ -27,6 +27,7 @@ public class ProductivityLog implements Writable {
     // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
     public Double add(ProductivityEntry entry) {
         entries.add(entry);
+        EventLog.getInstance().logEvent(new Event("Added entry: " + entry.toString()));
         return dailyAverageLog.add(entry);
     }
 
@@ -34,6 +35,7 @@ public class ProductivityLog implements Writable {
     // EFFECTS: removes entry from list, and removes it to DailyAverageLog
     public Double remove(ProductivityEntry entry) {
         entries.remove(entry);
+        EventLog.getInstance().logEvent(new Event("Removed entry: " + entry.toString()));
         return dailyAverageLog.remove(entry);
     }
 

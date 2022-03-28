@@ -2,6 +2,7 @@ package ui;
 
 import model.*;
 
+import model.Event;
 import persistence.JsonWriter;
 
 import javax.swing.*;
@@ -200,6 +201,9 @@ public class LoggedInGUI {
         if (wasSaved) {
             saveUserList();
         }
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString() + "\n");
+        }
     }
 
     // EFFECTS: asks user if they would like to save their session and saves if they answer yes
@@ -221,7 +225,9 @@ public class LoggedInGUI {
 
             wasSaved = true;
         } catch (IOException e) {
-            // idk what yet, shouldn't every be thrown cuz no illegal file names, all filenames are uuid
+            JOptionPane.showMessageDialog(null, e.getMessage(), "System Error",
+                    JOptionPane.ERROR_MESSAGE);
+            // shouldn't every be thrown cuz no illegal file names, all filenames are uuid
         }
     }
 
@@ -269,6 +275,8 @@ public class LoggedInGUI {
             writer.write(userList);
             writer.close();
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "System Error",
+                    JOptionPane.ERROR_MESSAGE);
             // exception should never be thrown
         }
     }

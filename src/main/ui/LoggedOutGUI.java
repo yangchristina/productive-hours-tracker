@@ -40,6 +40,8 @@ public class LoggedOutGUI {
         try {
             users = new UserList(reader.read()); //
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "System Error",
+                    JOptionPane.ERROR_MESSAGE);
             // shouldn't ever happen cuz data/users.json (should) always exist
         }
     }
@@ -131,7 +133,8 @@ public class LoggedOutGUI {
             writer.write(users);
             writer.close();
         } catch (IOException e) {
-            System.out.println("fight ");
+            JOptionPane.showMessageDialog(null, e.getMessage(), "System Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }
