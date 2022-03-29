@@ -7,7 +7,7 @@ import persistence.Writable;
 import java.util.ArrayList;
 
 // a log of all information related to productivity entries
-public class ProductivityLog implements Writable {
+public class ProductivityLog implements Writable, Observer {
     protected ArrayList<ProductivityEntry> entries;
     private final DailyAverageLog dailyAverageLog;
 
@@ -28,6 +28,7 @@ public class ProductivityLog implements Writable {
     public Double add(ProductivityEntry entry) {
         entries.add(entry);
         EventLog.getInstance().logEvent(new Event("Added entry: " + entry.toString()));
+        entry.addObserver(this);
         return dailyAverageLog.add(entry);
     }
 
@@ -36,6 +37,7 @@ public class ProductivityLog implements Writable {
     public Double remove(ProductivityEntry entry) {
         entries.remove(entry);
         EventLog.getInstance().logEvent(new Event("Removed entry: " + entry.toString()));
+        entry.removeObserver(this);
         return dailyAverageLog.remove(entry);
     }
 
@@ -68,5 +70,12 @@ public class ProductivityLog implements Writable {
 
     public DailyAverageLog getDailyAverageLog() {
         return dailyAverageLog;
+    }
+
+    @Override
+    public void update(ProductivityEntry curr, ProductivityEntry old) {
+        dailyAverageLog.remove(old);
+        dailyAverageLog.add(curr);
+        EventLog.getInstance().logEvent(new Event("Edited entry: \n" + old + " –––>\n" + curr));
     }
 }

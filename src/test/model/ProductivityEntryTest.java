@@ -44,26 +44,20 @@ public class ProductivityEntryTest {
     }
 
     @Test
-    void testSetTime() {
-        entry.setTime(LocalTime.of(4, 0));
-        assertEquals(4, entry.getTime().getHour());
-    }
-
-    @Test
-    void testSetLevel() {
-        entry.setLevel(2);
-        assertEquals(2, entry.getLevel());
-    }
-
-    @Test
-    void testSetLabel() {
-        entry.setLabel(ProductivityEntry.Label.MOTIVATION);
+    void testEdit() {
+        entry.edit(ProductivityEntry.Label.MOTIVATION, LocalTime.of(4, 0), 6);
         assertEquals(ProductivityEntry.Label.MOTIVATION, entry.getLabel());
+        assertEquals(4, entry.getTime().getHour());
+        assertEquals(6, entry.getLevel());
 
-        entry.setLabel(ProductivityEntry.Label.FOCUS);
+        entry.edit(ProductivityEntry.Label.FOCUS, LocalTime.of(0, 0), 1);
         assertEquals(ProductivityEntry.Label.FOCUS, entry.getLabel());
+        assertEquals(0, entry.getTime().getHour());
+        assertEquals(2, 1);
 
-        entry.setLabel(ProductivityEntry.Label.ENERGY);
+        entry.edit(ProductivityEntry.Label.ENERGY, LocalTime.of(23, 0), 7);
         assertEquals(ProductivityEntry.Label.ENERGY, entry.getLabel());
+        assertEquals(23, entry.getTime().getHour());
+        assertEquals(2, 7);
     }
 }

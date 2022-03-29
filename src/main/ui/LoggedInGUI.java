@@ -117,11 +117,11 @@ public class LoggedInGUI {
             public void actionPerformed(ActionEvent e) {
                 ProductivityEntry selected = (ProductivityEntry) entryList.getSelectedValue();
                 if (selected != null) {
-                    ProductivityEntry old = new ProductivityEntry(selected.getLabel(), selected.getDate(),
-                            selected.getTime(), selected.getLevel());
+//                    ProductivityEntry old = new ProductivityEntry(selected.getLabel(), selected.getDate(),
+//                            selected.getTime(), selected.getLevel());
                     if (entryOptionForm(selected)) {
-                        user.getProductivityLog().getDailyAverageLog().remove(old);
-                        user.getProductivityLog().getDailyAverageLog().add(selected);
+//                        user.getProductivityLog().getDailyAverageLog().remove(old);
+//                        user.getProductivityLog().getDailyAverageLog().add(selected);
                         JOptionPane.showMessageDialog(frame,"Entry changed to: " + selected);
                         updateGraph();
                     }
@@ -253,9 +253,7 @@ public class LoggedInGUI {
             return false;
         }
 
-        entry.setLabel(entryType);
-        entry.setLevel(level);
-        entry.setTime(time);
+        entry.edit(entryType, time, level);
 
         return true;
     }

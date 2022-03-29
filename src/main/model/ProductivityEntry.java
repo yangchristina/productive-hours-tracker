@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 // class for productivity entries, which contain label, date, time of day, and level
-public class ProductivityEntry implements Writable {
+public class ProductivityEntry extends Subject implements Writable  {
     private final LocalDate date;
     private LocalTime time;
     protected int level;
@@ -27,20 +27,32 @@ public class ProductivityEntry implements Writable {
         this.level = level;
     }
 
+    @Override
     // EFFECTS: returns a string with a description of the entry
     public String toString() {
         return getLabel() + " level of " + level + " at " + time + " on " + date + ".";
     }
 
-    public void setTime(LocalTime time) {
+    // EFFECTS: calls setter methods to edit productivity entry
+    public void edit(Label label, LocalTime time, int level) {
+        ProductivityEntry old = new ProductivityEntry(this.label, this.date, this.time, this.level);
+
+        setLabel(label);
+        setTime(time);
+        setLevel(level);
+
+        super.notifyObservers(this, old);
+    }
+
+    private void setTime(LocalTime time) {
         this.time = time;
     }
 
-    public void setLevel(int level) {
+    private void setLevel(int level) {
         this.level = level;
     }
 
-    public void setLabel(Label label) {
+    private void setLabel(Label label) {
         this.label = label;
     }
 
