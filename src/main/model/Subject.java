@@ -10,16 +10,21 @@ public abstract class Subject {
         observers = new ArrayList<>();
     }
 
+    // MODIFIES: this
+    // EFFECTS: if o is not already in observers, add o to observers
     public void addObserver(Observer o) {
         if (!observers.contains(o)) {
             observers.add(o);
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: if o is in observers, remove o from observers
     public void removeObserver(Observer o) {
         observers.remove(o);
     }
 
+    // EFFECTS: calls update method on each observer in observers
     public void notifyObservers(ProductivityEntry curr, ProductivityEntry old) {
         for (Observer o : observers) {
             o.update(curr, old);
