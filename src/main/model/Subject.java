@@ -25,9 +25,9 @@ public abstract class Subject {
     }
 
     // EFFECTS: calls update method on each observer in observers
-    public void notifyObservers(ProductivityEntry curr, ProductivityEntry old) {
+    public void notifyObservers(ProductivityEntry curr, ProductivityEntry prev) {
         for (Observer o : observers) {
-            o.update(curr, old);
+            o.update(curr, prev);
         }
     }
 }

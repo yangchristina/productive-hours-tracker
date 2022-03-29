@@ -80,9 +80,9 @@ public class ProductivityLog implements Writable, Observer {
     }
 
     @Override
-    public void update(ProductivityEntry curr, ProductivityEntry old) {
-        dailyAverageLog.remove(old);
+    public void update(ProductivityEntry curr, ProductivityEntry prev) {
+        dailyAverageLog.remove(prev);
         dailyAverageLog.add(curr);
-        EventLog.getInstance().logEvent(new Event(user.getName() + " edited entry: \n" + old + " –––>\n" + curr));
+        EventLog.getInstance().logEvent(new Event(user.getName() + " edited entry: \n" + prev + " –––>\n" + curr));
     }
 }
