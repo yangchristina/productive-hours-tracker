@@ -1,5 +1,7 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.User;
 import model.UserList;
 import model.exceptions.InvalidUserException;
@@ -9,6 +11,8 @@ import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 // the application page for a user before they log on. Allows them to login or register
@@ -69,7 +73,6 @@ public class LoggedOutGUI {
         JButton login = new JButton(new AbstractAction("Login") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(tf.getText());
                 loginUser(tf.getText());
             }
         });
@@ -94,6 +97,19 @@ public class LoggedOutGUI {
 
         frame.add(panel);
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                printEventLog();
+            }
+        });
+    }
+
+    // EFFECTS: prints event log in console
+    private void printEventLog() {
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString() + "\n");
+        }
     }
 
     // MODIFIES: this

@@ -190,6 +190,7 @@ public class LoggedInGUI {
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 endUserSession();
+                printEventLog();
             }
         });
     }
@@ -200,9 +201,6 @@ public class LoggedInGUI {
         promptSave();
         if (wasSaved) {
             saveUserList();
-        }
-        for (Event event : EventLog.getInstance()) {
-            System.out.println(event.toString() + "\n");
         }
     }
 
@@ -286,5 +284,12 @@ public class LoggedInGUI {
             timeOptions[i] = LocalTime.of(i, 0);
         }
         return timeOptions;
+    }
+
+    // EFFECTS: prints event log in console
+    private void printEventLog() {
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString() + "\n");
+        }
     }
 }
