@@ -16,14 +16,14 @@ public class User implements Writable {
     public User(String name) {
         this.name = name;
         id = UUID.randomUUID();
-        productivityLog = new ProductivityLog();
+        productivityLog = new ProductivityLog(this);
     }
 
     // EFFECTS: constructs a user with given name and id, and a productivityLog with the given entries
     public User(String name, UUID id, ArrayList<ProductivityEntry> entries) {
         this.name = name;
         this.id = id;
-        productivityLog = new ProductivityLog(entries);
+        productivityLog = new ProductivityLog(this, entries);
     }
 
     public String getName() {
