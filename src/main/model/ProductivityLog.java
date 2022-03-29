@@ -10,24 +10,27 @@ import java.util.ArrayList;
 public class ProductivityLog implements Writable, Observer {
     protected ArrayList<ProductivityEntry> entries;
     private final DailyAverageLog dailyAverageLog;
+    private User user; // !!! implement bi-conditional
 
     // EFFECTS: constructs a ProductivityLog with an empty list of entries and an empty dailyAverageLog
-    public ProductivityLog() {
+    public ProductivityLog(User user) {
         entries = new ArrayList<>();
         dailyAverageLog = new DailyAverageLog();
+        this.user = user;
     }
 
     // EFFECTS: constructs a ProductivityLog with an given list of entries and a dailyAverageLog with these entries
-    public ProductivityLog(ArrayList<ProductivityEntry> entries) {
+    public ProductivityLog(User user, ArrayList<ProductivityEntry> entries) {
         this.entries = entries;
         dailyAverageLog = new DailyAverageLog(entries);
+        this.user = user;
     }
 
     // MODIFIES: this
     // EFFECTS: add given entry to the array it belongs in, and adds it to DailyAverageLog
     public Double add(ProductivityEntry entry) {
         entries.add(entry);
-        EventLog.getInstance().logEvent(new Event("Added entry: " + entry.toString()));
+        EventLog.getInstance().logEvent(new Event(user.getName() + " added entry: " + entry.toString()));
         entry.addObserver(this);
         return dailyAverageLog.add(entry);
     }
@@ -36,7 +39,7 @@ public class ProductivityLog implements Writable, Observer {
     // EFFECTS: removes entry from list, and removes it to DailyAverageLog
     public Double remove(ProductivityEntry entry) {
         entries.remove(entry);
-        EventLog.getInstance().logEvent(new Event("Removed entry: " + entry.toString()));
+        EventLog.getInstance().logEvent(new Event(user.getName() + " removed entry: " + entry.toString()));
         entry.removeObserver(this);
         return dailyAverageLog.remove(entry);
     }
@@ -72,10 +75,14 @@ public class ProductivityLog implements Writable, Observer {
         return dailyAverageLog;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public void update(ProductivityEntry curr, ProductivityEntry old) {
         dailyAverageLog.remove(old);
         dailyAverageLog.add(curr);
-        EventLog.getInstance().logEvent(new Event("Edited entry: \n" + old + " –––>\n" + curr));
+        EventLog.getInstance().logEvent(new Event(user.getName() + " edited entry: \n" + old + " –––>\n" + curr));
     }
 }
