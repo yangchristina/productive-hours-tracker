@@ -37,3 +37,24 @@ these patterns.
 ### Sources for methods of tracking energy levels
 - https://alifeofproductivity.com/calculate-biological-prime-time/
 - https://www.makeuseof.com/tag/discover-productive-hours-simple-method/
+
+### Phase 4: Task 2
+Mon Mar 28 19:43:48 PDT 2022  
+Sally added entry: ENERGY level of 5 at 19:00 on 2022-03-28.
+
+Mon Mar 28 19:43:54 PDT 2022  
+Sally edited entry:  
+ENERGY level of 5 at 19:00 on 2022-03-28. –––>  
+ENERGY level of 3 at 19:00 on 2022-03-28. 
+
+Mon Mar 28 19:43:56 PDT 2022  
+Sally removed entry: ENERGY level of 3 at 19:00 on 2022-03-28.  
+
+Mon Mar 28 19:44:12 PDT 2022  
+Sam added entry: MOTIVATION level of 5 at 19:00 on 2022-03-28.  
+
+Mon Mar 28 19:44:20 PDT 2022  
+Sam added entry: FOCUS level of 1 at 17:00 on 2022-03-28.
+
+Mon Mar 28 19:44:24 PDT 2022  
+Sam removed entry: MOTIVATION level of 5 at 19:00 on 2022-03-28.  
