@@ -37,23 +37,11 @@ public class ProductivityEntry extends Subject implements Writable  {
     public void edit(Label label, LocalTime time, int level) {
         ProductivityEntry old = new ProductivityEntry(this.label, this.date, this.time, this.level);
 
-        setLabel(label);
-        setTime(time);
-        setLevel(level);
+        this.label = label;
+        this.time = time;
+        this.level = level;
 
         super.notifyObservers(this, old);
-    }
-
-    private void setTime(LocalTime time) {
-        this.time = time;
-    }
-
-    private void setLevel(int level) {
-        this.level = level;
-    }
-
-    private void setLabel(Label label) {
-        this.label = label;
     }
 
     public Label getLabel() {

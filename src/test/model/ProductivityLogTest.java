@@ -34,14 +34,14 @@ public class ProductivityLogTest {
 
     @Test
     void testConstructorNoParams() {
-        assertTrue(log.isEmpty());
+        assertTrue(log.getEntries().isEmpty());
         assertNotNull(log.getDailyAverageLog().getLog());
         assertEquals(user, log.getUser());
     }
 
     @Test
     void testConstructorTwoParams() {
-        assertFalse(log2.isEmpty());
+        assertFalse(log2.getEntries().isEmpty());
         assertEquals(createEntriesList(), log2.getEntries());
         assertNotNull(log.getDailyAverageLog());
         assertEquals(user, log.getUser());
@@ -77,14 +77,14 @@ public class ProductivityLogTest {
         assertEquals(1, log2.getEntries().size());
 
         assertNull(log2.remove(motivationEntry));
-        assertTrue(log2.isEmpty());
+        assertTrue(log2.getEntries().isEmpty());
     }
 
     @Test
     void testIsEmpty() {
-        assertTrue(log.isEmpty());
+        assertTrue(log.getEntries().isEmpty());
         log.add(focusEntry);
-        assertFalse(log.isEmpty());
+        assertFalse(log.getEntries().isEmpty());
     }
 
     @Test

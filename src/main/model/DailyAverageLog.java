@@ -25,7 +25,7 @@ public class DailyAverageLog {
     }
 
     // EFFECTS: returns a hashMap with a key for all productivity entries and empty int[] as values
-    private HashMap<ProductivityEntry.Label, int[]> createEmptyCounts() {
+    private static HashMap<ProductivityEntry.Label, int[]> createEmptyCounts() {
         HashMap<ProductivityEntry.Label, int[]> counts = new HashMap<>();
         for (ProductivityEntry.Label label : ProductivityEntry.Label.values()) {
             counts.put(label, new int[24]);
@@ -34,7 +34,7 @@ public class DailyAverageLog {
     }
 
     // EFFECTS: returns a hashMap with a key for all productivity entries and empty TreeMap as values
-    private HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> createEmptyLog() {
+    private static HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> createEmptyLog() {
         HashMap<ProductivityEntry.Label, TreeMap<LocalTime, Double>> emptyLog = new HashMap<>();
         for (ProductivityEntry.Label label : ProductivityEntry.Label.values()) {
             emptyLog.put(label, new TreeMap<>());

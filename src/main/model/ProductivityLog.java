@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 // a log of all information related to productivity entries
 public class ProductivityLog implements Writable, Observer {
-    protected ArrayList<ProductivityEntry> entries;
+    private ArrayList<ProductivityEntry> entries;
     private final DailyAverageLog dailyAverageLog;
-    private User user; // !!! implement bi-conditional
+    private User user;
 
     // EFFECTS: constructs a ProductivityLog with an empty list of entries and an empty dailyAverageLog
     public ProductivityLog(User user) {
@@ -44,31 +44,20 @@ public class ProductivityLog implements Writable, Observer {
         return dailyAverageLog.remove(entry);
     }
 
-    // EFFECTS: returns true if entries is empty
-    public boolean isEmpty() {
-        return entries.isEmpty();
-    }
-
-    public ArrayList<ProductivityEntry> getEntries() {
-        return entries;
-    }
-
     @Override
     public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("entries", logToJson());
-        return json;
-    }
-
-    // EFFECTS: returns entries as a JSON array
-    private JSONArray logToJson() {
         JSONArray jsonArray = new JSONArray();
-
         for (ProductivityEntry entry : entries) {
             jsonArray.put(entry.toJson());
         }
 
-        return jsonArray;
+        JSONObject json = new JSONObject();
+        json.put("entries", jsonArray);
+        return json;
+    }
+
+    public ArrayList<ProductivityEntry> getEntries() {
+        return entries;
     }
 
     public DailyAverageLog getDailyAverageLog() {

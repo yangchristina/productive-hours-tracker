@@ -44,7 +44,7 @@ class JsonReaderTest extends JsonTest {
             User user = reader.read();
             assertEquals("testReaderEmptyUser", user.getName());
             assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), user.getId());
-            assertTrue(user.getProductivityLog().isEmpty());
+            assertTrue(user.getProductivityLog().getEntries().isEmpty());
         } catch (IOException e) {
             fail("Couldn't read from file");
         }
@@ -57,7 +57,7 @@ class JsonReaderTest extends JsonTest {
             User user = reader.read();
             assertEquals("testReaderGeneralUser", user.getName());
             assertEquals(UUID.fromString("11111111-1111-1111-1111-111111111111"), user.getId());
-            assertFalse(user.getProductivityLog().isEmpty());
+            assertFalse(user.getProductivityLog().getEntries().isEmpty());
 
             assertEquals(3, user.getProductivityLog().getEntries().size());
 

@@ -59,7 +59,7 @@ class JsonWriterTest extends JsonTest {
             JsonReadUser reader = new JsonReadUser("testWriterEmptyUser");
             user = reader.read();
             assertEquals("chris", user.getName());
-            assertTrue(user.getProductivityLog().isEmpty());
+            assertTrue(user.getProductivityLog().getEntries().isEmpty());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
