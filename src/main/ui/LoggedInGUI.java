@@ -257,7 +257,7 @@ public class LoggedInGUI {
     }
 
     // EFFECTS: returns a default energy entry with a label of ENERGY, today's date, current time of day and level of 5
-    private ProductivityEntry createDefaultEntry() {
+    private static ProductivityEntry createDefaultEntry() {
         return new ProductivityEntry(ProductivityEntry.Label.ENERGY, LocalDate.now(),
                 LocalTime.of(LocalTime.now().getHour(), 0),5);
     }

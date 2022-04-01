@@ -39,22 +39,33 @@ these patterns.
 - https://www.makeuseof.com/tag/discover-productive-hours-simple-method/
 
 ### Phase 4: Task 2
-Mon Mar 28 19:43:48 PDT 2022  
-Sally added entry: ENERGY level of 5 at 19:00 on 2022-03-28.
+Fri Apr 01 15:09:18 PDT 2022
+Bob added entry: ENERGY level of 5 at 15:00 on 2022-04-01.
 
-Mon Mar 28 19:43:54 PDT 2022  
-Sally edited entry:  
-ENERGY level of 5 at 19:00 on 2022-03-28. –––>  
-ENERGY level of 3 at 19:00 on 2022-03-28. 
+Fri Apr 01 15:09:34 PDT 2022
+Bob edited entry:
+ENERGY level of 5 at 15:00 on 2022-04-01. –––>
+FOCUS level of 3 at 22:00 on 2022-04-01.
 
-Mon Mar 28 19:43:56 PDT 2022  
-Sally removed entry: ENERGY level of 3 at 19:00 on 2022-03-28.  
+Fri Apr 01 15:09:36 PDT 2022
+Bob removed entry: FOCUS level of 3 at 22:00 on 2022-04-01.
 
-Mon Mar 28 19:44:12 PDT 2022  
-Sam added entry: MOTIVATION level of 5 at 19:00 on 2022-03-28.  
+Fri Apr 01 15:10:02 PDT 2022
+Sally added entry: MOTIVATION level of 7 at 14:00 on 2022-04-01.
 
-Mon Mar 28 19:44:20 PDT 2022  
-Sam added entry: FOCUS level of 1 at 17:00 on 2022-03-28.
+Fri Apr 01 15:10:05 PDT 2022
+Sally removed entry: MOTIVATION level of 7 at 14:00 on 2022-04-01.
 
-Mon Mar 28 19:44:24 PDT 2022  
-Sam removed entry: MOTIVATION level of 5 at 19:00 on 2022-03-28.  
+### Phase 4: Task 3
+- Create an association between GraphPanel and DailyAverageLog (give GraphPanel a field of type DailyAverageLog)
+  - Currently, the GraphPanel class has a field in DailyAverageLog as its field, which is can be
+    quite confusing, so it would make more sense to just access that field in DailyAverageLog directly from a 
+  DailyAverageLog object
+- Create a GUI class and have LoggedInGUI and LoggedOutGUI extend it to deal with code duplication in these two classes
+  - There is some duplication between these classes, such as the such as the save, promptSave, and printLog methods, 
+  which can simply be put in the GUI class. LoggedInGUI and LoggedOutGUI having the same superclass would also make
+  sense as they are structured quite similarly in the first place (ex. both have a field called frame that is of type
+ JFrame which can also be made into a protected field in GUI)
+- Replace the Subject class and Observer interface with the Observable and Observer classes from the Java library
+  - Did not have time to do this, as I added these classes before we learned about the Observable and Observer classes
+  from the Java library
