@@ -1,6 +1,6 @@
-# My Personal Project
+# Productive hours tracker
 
-## Energy level tracker
+## Track your energy, focus, and motivations levels throught the day
 
 *What will the application do?*
 
@@ -38,7 +38,7 @@ these patterns.
 - https://alifeofproductivity.com/calculate-biological-prime-time/
 - https://www.makeuseof.com/tag/discover-productive-hours-simple-method/
 
-### Phase 4: Task 2
+### Example of what is printed in console after the application quits
 Fri Apr 01 15:09:18 PDT 2022
 Bob added entry: ENERGY level of 5 at 15:00 on 2022-04-01.
 
@@ -56,7 +56,7 @@ Sally added entry: MOTIVATION level of 7 at 14:00 on 2022-04-01.
 Fri Apr 01 15:10:05 PDT 2022
 Sally removed entry: MOTIVATION level of 7 at 14:00 on 2022-04-01.
 
-### Phase 4: Task 3
+### Possible future improvements
 - Create an association between GraphPanel and DailyAverageLog (give GraphPanel a field of type DailyAverageLog)
   - Currently, the GraphPanel class has a field in DailyAverageLog as its field, which is can be
     quite confusing, so it would make more sense to just access that field in DailyAverageLog directly from a 
