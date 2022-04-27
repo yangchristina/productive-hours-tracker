@@ -59,7 +59,7 @@ Sally added entry: MOTIVATION level of 7 at 14:00 on 2022-04-01.
 Fri Apr 01 15:10:05 PDT 2022
 Sally removed entry: MOTIVATION level of 7 at 14:00 on 2022-04-01.
 
-### Possible future improvements
+### Areas to refactor
 - Create an association between GraphPanel and DailyAverageLog (give GraphPanel a field of type DailyAverageLog)
   - Currently, the GraphPanel class has a field in DailyAverageLog as its field, which is can be
     quite confusing, so it would make more sense to just access that field in DailyAverageLog directly from a 
