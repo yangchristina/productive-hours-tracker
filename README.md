@@ -2,6 +2,8 @@
 
 ## Track your energy, focus, and motivations levels throught the day
 
+![Example](./productive-hours-example.png)
+
 *What will the application do?*
 
 The application will allow the user to log their energy, focus and motivation levels every hour,
