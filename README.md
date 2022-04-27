@@ -21,9 +21,10 @@ such as checking emails into a time when energy levels are the lowest.
 
 *Why is this project of interest to you?*
 
-This projects interests me as i read the book *When: The Scientific Secrets of Perfect Timing* by Daniel H. Pink, 
-which made me want to track my energy levels so that I can use my time more efficiently by planning my day around 
-these patterns.
+My interest for this project stemmed from the book *When: The Scientific Secrets of Perfect Timing* by Daniel H. Pink.
+In this book, the author talks about the benefits of tracking energy levels to increase one's productivity and efficiency. 
+I made this application in order to track my energy levels so that I can use my time more efficiently by plan my day according 
+to my productivity levels.
 
 ## User Stories
 - As a user, I want to be able to log energy, focus and motivation levels out of 10 for a certain time of day
