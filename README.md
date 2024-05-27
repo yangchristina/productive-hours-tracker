@@ -1,6 +1,6 @@
 # Productive hours tracker
 
-## Track your energy, focus, and motivations levels throught the day
+## Track your energy, focus, and motivations levels throughout the day
 
 ![Example](./productive-hours-example.png)
 
