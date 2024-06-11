@@ -1,5 +1,7 @@
 # Productive hours tracker
 
+Console version written in C#, using MySQL for storage at [yangchristina/ProductiveHoursTracker-V2](https://github.com/yangchristina/ProductiveHoursTracker-V2)
+
 ## Track your energy, focus, and motivations levels throughout the day
 
 ![Example](./productive-hours-example.png)
